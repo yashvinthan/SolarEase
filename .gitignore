@@ -1,0 +1,93 @@
+# =========================
+# Android / Gradle
+# =========================
+*.iml
+.gradle/
+.kotlin/
+local.properties
+
+/build/
+/app/build/
+/captures/
+.externalNativeBuild/
+.cxx/
+
+# Build artifacts
+*.apk
+*.aab
+*.ap_
+
+# Android Studio & IDEs
+.idea/
+*.iws
+.vscode/
+
+# Agent & tooling metadata
+.agents/
+skills-lock.json
+ui-ux-pro-max/
+
+# =========================
+# Environment / Secrets (CRITICAL)
+# =========================
+*.jks
+*.keystore
+*.p12
+debug.keystore
+keystore.properties
+signing-config.properties
+secrets/
+credentials/
+
+.env
+.env.*
+*.env
+*.env.*
+!.env.example
+
+firebase-adminsdk.json
+*service-account*.json
+*service_account*.json
+
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# =========================
+# Python tooling / cache
+# =========================
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# =========================
+# OS
+# =========================
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# =========================
+# Local artifacts, temp & binary documents
+# =========================
+.artifacts/
+backend/alembic_out.txt
+tmp/
+temp/
+output/
+lib/
+*.zip
+
+# Large binary documentation & datasets (belong in Cloud Storage / Team Drive)
+/*.pdf
+/*.docx
+/processed_solar_qa.json

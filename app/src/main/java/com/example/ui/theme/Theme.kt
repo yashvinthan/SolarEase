@@ -9,6 +9,7 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.foundation.isSystemInDarkTheme
 
 private val DarkColorScheme =
   darkColorScheme(
@@ -58,7 +59,7 @@ private val LightColorScheme =
 
 @Composable
 fun SolarEaseTheme(
-  darkTheme: Boolean = false, // Force light theme
+  darkTheme: Boolean = isSystemInDarkTheme(),
   // Dynamic color is available on Android 12+
   dynamicColor: Boolean = false, // Force custom theme
   content: @Composable () -> Unit,

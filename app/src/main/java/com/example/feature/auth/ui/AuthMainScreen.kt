@@ -167,12 +167,12 @@ fun AuthMainRoute(
     }
 
     // SolarEase Visual Tokens
-    val primaryGreen = Color(0xFF386A20)
-    val backgroundCream = Color(0xFFFBFCF3)
-    val textPrimary = Color(0xFF191C18)
-    val textSecondary = Color(0xFF525651)
-    val outlineBorder = Color(0xFFDDE4D5)
-    val inputBackground = Color(0xFFFFFFFF)
+    val primaryGreen = MaterialTheme.colorScheme.primary
+    val backgroundCream = MaterialTheme.colorScheme.background
+    val textPrimary = MaterialTheme.colorScheme.onBackground
+    val textSecondary = MaterialTheme.colorScheme.onSurfaceVariant
+    val outlineBorder = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f)
+    val inputBackground = MaterialTheme.colorScheme.surface
 
     Scaffold(
         containerColor = backgroundCream
@@ -273,8 +273,8 @@ fun AuthMainRoute(
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
                     .widthIn(max = 440.dp),
-                shape = RoundedCornerShape(18.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 border = BorderStroke(1.dp, outlineBorder),
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {

@@ -330,9 +330,9 @@ fun ExpandableSection(
     
     Card(
         modifier = Modifier.fillMaxWidth().animateContentSize(),
-        shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        border = androidx.compose.foundation.BorderStroke(1.dp, androidx.compose.ui.graphics.Color(0xFFDDE4D5)),
+        shape = MaterialTheme.shapes.large,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.55f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         onClick = { expanded = !expanded }
     ) {
@@ -361,7 +361,7 @@ fun ExpandableSection(
             
             if (expanded) {
                 Spacer(modifier = Modifier.height(16.dp))
-                HorizontalDivider(color = androidx.compose.ui.graphics.Color(0xFFE2E8F0))
+                HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.45f))
                 Spacer(modifier = Modifier.height(16.dp))
                 content()
             }
@@ -522,7 +522,7 @@ fun DocumentsContent(docs: List<DocumentShortcut>) {
                 Icon(Icons.Default.Download, contentDescription = "Download", tint = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             if (doc != docs.last()) {
-                HorizontalDivider(color = androidx.compose.ui.graphics.Color(0xFFE2E8F0))
+                HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.45f))
             }
         }
     }

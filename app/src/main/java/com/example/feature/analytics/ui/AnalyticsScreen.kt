@@ -122,8 +122,15 @@ fun AnalyticsScreen(
                     .padding(innerPadding)
             ) {
                 if (uiState.isLoading) {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator(color = StitchPrimaryContainer)
+                    Column(
+                        modifier = Modifier.fillMaxSize().padding(20.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        Box(Modifier.fillMaxWidth(0.55f).height(28.dp).clip(MaterialTheme.shapes.small).background(MaterialTheme.colorScheme.surfaceVariant))
+                        Box(Modifier.fillMaxWidth().height(180.dp).clip(MaterialTheme.shapes.large).background(MaterialTheme.colorScheme.surfaceVariant))
+                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                            repeat(2) { Box(Modifier.weight(1f).height(104.dp).clip(MaterialTheme.shapes.medium).background(MaterialTheme.colorScheme.surfaceVariant)) }
+                        }
                     }
                 } else if (!uiState.hasData) {
                     EmptyAnalyticsView(

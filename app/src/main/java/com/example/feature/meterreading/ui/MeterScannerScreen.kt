@@ -92,8 +92,8 @@ import com.google.accompanist.permissions.rememberPermissionState
 import java.util.concurrent.Executors
 import kotlinx.coroutines.delay
 
-private val BrandGreen = Color(0xFF386A20)
-private val ReticleColor = Color(0xFF10B981)
+private val BrandGreen = Color(0xFF245B3A)
+private val ReticleColor = Color(0xFF3D8A5A)
 
 @OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -146,13 +146,13 @@ fun MeterScannerScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFF0F172A))
+                .background(Color(0xFF193126))
                 .padding(24.dp),
             contentAlignment = Alignment.Center
         ) {
             Surface(
                 shape = RoundedCornerShape(20.dp),
-                color = Color.White,
+                color = MaterialTheme.colorScheme.surface,
                 modifier = Modifier
                     .widthIn(max = 480.dp)
                     .fillMaxWidth()
@@ -180,13 +180,13 @@ fun MeterScannerScreen(
                         text = "Camera Permission Required",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1E293B)
+                            color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Text(
                         text = "SolarEase needs camera access to photograph and extract your electricity meter reading on-device.",
                         fontSize = 13.sp,
-                        color = Color(0xFF475569),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                         textAlign = TextAlign.Center
                     )
 
@@ -204,7 +204,7 @@ fun MeterScannerScreen(
                         colors = ButtonDefaults.textButtonColors(),
                         modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
                     ) {
-                        Text("Enter Reading Manually", color = Color(0xFF475569))
+                        Text("Enter Reading Manually", color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
             }
@@ -215,7 +215,7 @@ fun MeterScannerScreen(
     Scaffold(
         topBar = {
             Surface(
-                color = Color(0xFF0F172A).copy(alpha = 0.85f),
+                color = Color(0xFF193126).copy(alpha = 0.90f),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(

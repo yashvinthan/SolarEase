@@ -295,14 +295,14 @@ private fun RecommendsHeroHeader() {
             text = "Recommends",
             fontSize = 24.sp,
             fontWeight = FontWeight.ExtraBold,
-            color = Color(0xFF0F172A),
+            color = StitchOnSurface,
             letterSpacing = (-0.3).sp
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = "Follow the 9 Energy-Saving Mantras and build your energy-saving journey.",
             fontSize = 12.sp,
-            color = Color(0xFF525651),
+            color = StitchOnSurfaceVariant,
             lineHeight = 16.sp
         )
     }
@@ -332,9 +332,9 @@ private fun SolarEaseCoinsCard(
         modifier = Modifier
             .fillMaxWidth()
             .animateContentSize(),
-        shape = RoundedCornerShape(16.dp),
-        color = Color(0xFFFBFCF3),
-        border = BorderStroke(1.dp, Color(0xFFDDE5D6)),
+        shape = RoundedCornerShape(20.dp),
+        color = StitchSurfaceContainerLow,
+        border = BorderStroke(1.dp, StitchOutline.copy(alpha = 0.65f)),
         shadowElevation = 1.dp
     ) {
         Column(

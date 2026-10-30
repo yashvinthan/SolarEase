@@ -37,15 +37,15 @@ import com.example.core.legal.LegalSection
 import com.example.feature.ebservice.util.formatConsumerNumber
 
 // Official SolarEase Design Palette
-private val SolarEaseEmerald = Color(0xFF386A20)
-private val SolarEaseEmeraldDark = Color(0xFF2D5518)
-private val SolarEaseEmeraldContainer = Color(0xFFE5F2D9)
-private val SoftBackground = Color(0xFFFBFCF3)
-private val InfoBlueContainer = Color(0xFFEAF3FF)
-private val InfoBlueText = Color(0xFF18324B)
-private val CardBorderColor = Color(0xFFDDE4D5)
-private val TextDark = Color(0xFF191C18)
-private val TextMuted = Color(0xFF525651)
+private val SolarEaseEmerald = Color(0xFF245B3A)
+private val SolarEaseEmeraldDark = Color(0xFF1E4C32)
+private val SolarEaseEmeraldContainer = Color(0xFFDDEFD9)
+private val SoftBackground = Color(0xFFF8F8F2)
+private val InfoBlueContainer = Color(0xFFE7F2F3)
+private val InfoBlueText = Color(0xFF1D5156)
+private val CardBorderColor = Color(0xFFD2DBD1)
+private val TextDark = Color(0xFF17201B)
+private val TextMuted = Color(0xFF4F5A52)
 private val ErrorContainer = Color(0xFFFFDAD6)
 private val ErrorText = Color(0xFFBA1A1A)
 

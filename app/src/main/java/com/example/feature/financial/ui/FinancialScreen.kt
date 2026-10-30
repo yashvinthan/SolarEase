@@ -291,7 +291,7 @@ fun MetricCard(title: String, value: String, icon: ImageVector, modifier: Modifi
         modifier = modifier,
         shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        border = androidx.compose.foundation.BorderStroke(1.dp, androidx.compose.ui.graphics.Color(0xFFDDE4D5)),
+        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.55f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -309,7 +309,7 @@ fun BillComparisonSection(comparison: BillComparison, format: NumberFormat) {
         modifier = Modifier.fillMaxWidth(),
         shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        border = androidx.compose.foundation.BorderStroke(1.dp, androidx.compose.ui.graphics.Color(0xFFDDE4D5)),
+        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.55f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -331,7 +331,7 @@ fun BillComparisonSection(comparison: BillComparison, format: NumberFormat) {
             }
             
             Spacer(modifier = Modifier.height(20.dp))
-            HorizontalDivider(color = androidx.compose.ui.graphics.Color(0xFFE2E8F0))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.45f))
             Spacer(modifier = Modifier.height(16.dp))
             
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -370,7 +370,7 @@ fun RoiSection(roi: RoiSummary, format: NumberFormat) {
         modifier = Modifier.fillMaxWidth(),
         shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        border = androidx.compose.foundation.BorderStroke(1.dp, androidx.compose.ui.graphics.Color(0xFFDDE4D5)),
+        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.55f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -421,7 +421,7 @@ fun RoiSection(roi: RoiSummary, format: NumberFormat) {
             }
             
             Spacer(modifier = Modifier.height(16.dp))
-            HorizontalDivider(color = androidx.compose.ui.graphics.Color(0xFFE2E8F0))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.45f))
             Spacer(modifier = Modifier.height(16.dp))
             
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -447,7 +447,7 @@ fun SavingsHistorySection(history: SavingsHistory) {
         modifier = Modifier.fillMaxWidth(),
         shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        border = androidx.compose.foundation.BorderStroke(1.dp, androidx.compose.ui.graphics.Color(0xFFDDE4D5)),
+        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.55f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -573,7 +573,7 @@ fun TwentyFiveYearSavingsSection(savings: Projectedsavings, format: NumberFormat
         modifier = Modifier.fillMaxWidth(),
         shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        border = androidx.compose.foundation.BorderStroke(1.dp, androidx.compose.ui.graphics.Color(0xFFDDE4D5)),
+        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.55f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -585,7 +585,7 @@ fun TwentyFiveYearSavingsSection(savings: Projectedsavings, format: NumberFormat
             Text(format.format(savings.netProfit), style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
             
             Spacer(modifier = Modifier.height(16.dp))
-            HorizontalDivider(color = androidx.compose.ui.graphics.Color(0xFFE2E8F0))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.45f))
             Spacer(modifier = Modifier.height(16.dp))
             
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -607,7 +607,7 @@ fun IncentivesSection(subsidy: SubsidyInformation, format: NumberFormat) {
         modifier = Modifier.fillMaxWidth(),
         shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        border = androidx.compose.foundation.BorderStroke(1.dp, androidx.compose.ui.graphics.Color(0xFFDDE4D5)),
+        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.55f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -657,7 +657,7 @@ fun SmartRecommendationsSection(recommendations: List<FinancialInsight>) {
                 modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
                 shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                border = androidx.compose.foundation.BorderStroke(1.dp, androidx.compose.ui.graphics.Color(0xFFDDE4D5)),
+                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.55f)),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
                 Row(modifier = Modifier.fillMaxWidth().padding(12.dp), verticalAlignment = Alignment.CenterVertically) {

@@ -35,28 +35,37 @@ fun StepProgress(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 16.dp)
+            .clip(MaterialTheme.shapes.medium)
+            .padding(vertical = 12.dp)
             .semantics(mergeDescendants = true) {
                 contentDescription = "Step $currentStep of $totalSteps"
                 stateDescription = "${((currentStep.toFloat() / totalSteps.toFloat()) * 100).toInt()} percent complete"
             }
     ) {
-        Text(
-            text = "Step $currentStep of $totalSteps",
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-        LinearProgressIndicator(
-            progress = { currentStep.toFloat() / totalSteps.toFloat() },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(6.dp),
-            color = MaterialTheme.colorScheme.primary,
-            trackColor = MaterialTheme.colorScheme.surfaceVariant,
-            strokeCap = androidx.compose.ui.graphics.StrokeCap.Round
-        )
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            color = MaterialTheme.colorScheme.primaryContainer,
+            shape = MaterialTheme.shapes.medium
+        ) {
+            Column(Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("Your solar plan", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onPrimaryContainer, fontWeight = FontWeight.SemiBold)
+                    Text("$currentStep / $totalSteps", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                }
+                Spacer(Modifier.height(8.dp))
+                LinearProgressIndicator(
+                    progress = { currentStep.toFloat() / totalSteps.toFloat() },
+                    modifier = Modifier.fillMaxWidth().height(6.dp),
+                    color = MaterialTheme.colorScheme.primary,
+                    trackColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.14f),
+                    strokeCap = androidx.compose.ui.graphics.StrokeCap.Round
+                )
+            }
+        }
     }
 }
 
@@ -71,7 +80,7 @@ fun SelectableCard(
     modifier: Modifier = Modifier
 ) {
     val containerColor by animateColorAsState(
-        targetValue = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant,
+        targetValue = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface,
         label = "containerColor"
     )
     val contentColor by animateColorAsState(
@@ -100,7 +109,7 @@ fun SelectableCard(
             contentColor = contentColor
         ),
         border = BorderStroke(if (selected) 2.dp else 1.dp, if (selected) borderColor else MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)),
-        elevation = CardDefaults.cardElevation(defaultElevation = if (selected) 2.dp else 0.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = if (selected) 1.dp else 0.dp)
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
@@ -153,7 +162,7 @@ fun SelectableCard(
 @Composable
 fun Modifier.subtleTopRightGradient(
     shape: Shape = RoundedCornerShape(16.dp),
-    tint: Color = if (isSystemInDarkTheme()) Color(0xFFB0D49A).copy(alpha = 0.12f) else Color(0xFF386A20).copy(alpha = 0.10f),
+    tint: Color = if (isSystemInDarkTheme()) Color(0xFFB0D49A).copy(alpha = 0.14f) else Color(0xFF245B3A).copy(alpha = 0.12f),
     radiusMultiplier: Float = 0.75f
 ): Modifier = this
     .clip(shape)

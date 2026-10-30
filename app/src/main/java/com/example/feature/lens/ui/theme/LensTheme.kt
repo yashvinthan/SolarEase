@@ -15,52 +15,52 @@ val HankenGroteskFontFamily: FontFamily = FontFamily.Default
 
 object LensColors {
     // Primary Emerald Tier
-    val Primary = Color(0xFF047857)
-    val PrimaryHover = Color(0xFF059669)
-    val PrimaryLive = Color(0xFF10B981)
-    val PrimaryFixed = Color(0xFF97F5CC)
-    val PrimaryFixedDim = Color(0xFF7BD8B1)
+    val Primary = Color(0xFF245B3A)
+    val PrimaryHover = Color(0xFF2E7048)
+    val PrimaryLive = Color(0xFF3D8A5A)
+    val PrimaryFixed = Color(0xFFDDEFD9)
+    val PrimaryFixedDim = Color(0xFFC9E1C5)
     val OnPrimary = Color(0xFFFFFFFF)
-    val OnPrimaryFixed = Color(0xFF002115)
-    val PrimaryContainer = Color(0xFF047857)
-    val OnPrimaryContainer = Color(0xFF9FFDD3)
+    val OnPrimaryFixed = Color(0xFF123B27)
+    val PrimaryContainer = Color(0xFF245B3A)
+    val OnPrimaryContainer = Color(0xFFDDEFD9)
 
     // Secondary & Industrial Slate Tier (WCAG 2.1 AA 4.5:1+ compliant on #F8F9FF)
     val SlateDark = Color(0xFF0F172A)
-    val SlateText = Color(0xFF0B1C30)
-    val SlateMuted = Color(0xFF475569)
-    val SlateVariant = Color(0xFF3E4943)
-    val SlateCaption = Color(0xFF475569)
+    val SlateText = Color(0xFF17201B)
+    val SlateMuted = Color(0xFF4F5A52)
+    val SlateVariant = Color(0xFF4F5A52)
+    val SlateCaption = Color(0xFF4F5A52)
 
     // Standard Stitch Color Aliases
     val OnSurface = SlateText
     val OnSurfaceVariant = SlateVariant
     val Secondary = SlateMuted
-    val SecondaryFixed = Color(0xFFDAE2FD)
-    val SecondaryFixedDim = Color(0xFFBEC6E0)
-    val SecondaryContainer = Color(0xFFDAE2FD)
+    val SecondaryFixed = Color(0xFFE7F2F3)
+    val SecondaryFixedDim = Color(0xFFC6E0E2)
+    val SecondaryContainer = Color(0xFFE7F2F3)
 
     // Tertiary Cyan Tier
-    val Tertiary = Color(0xFF005683)
-    val TertiaryContainer = Color(0xFF006FA8)
-    val TertiaryFixed = Color(0xFFCCE5FF)
-    val TertiaryFixedDim = Color(0xFF93CCFF)
+    val Tertiary = Color(0xFF276A70)
+    val TertiaryContainer = Color(0xFF1F7378)
+    val TertiaryFixed = Color(0xFFE7F2F3)
+    val TertiaryFixedDim = Color(0xFFC6E0E2)
     val OnTertiary = Color(0xFFFFFFFF)
 
     // Surfaces & Spatial Elevation
-    val Background = Color(0xFFF8F9FF)
-    val Surface = Color(0xFFF8F9FF)
+    val Background = Color(0xFFF8F8F2)
+    val Surface = Color(0xFFF8F8F2)
     val SurfaceContainerLowest = Color(0xFFFFFFFF)
-    val SurfaceContainerLow = Color(0xFFEFF4FF)
-    val SurfaceContainer = Color(0xFFE5EEFF)
-    val SurfaceContainerHigh = Color(0xFFDCE9FF)
-    val SurfaceContainerHighest = Color(0xFFD3E4FE)
-    val Outline = Color(0xFFE2E8F0)
-    val OutlineVariant = Color(0xFFCBD5E1)
+    val SurfaceContainerLow = Color(0xFFF4F6F0)
+    val SurfaceContainer = Color(0xFFEEF2E9)
+    val SurfaceContainerHigh = Color(0xFFE6ECE1)
+    val SurfaceContainerHighest = Color(0xFFDDE5D9)
+    val Outline = Color(0xFFD2DBD1)
+    val OutlineVariant = Color(0xFFC5CFC3)
 
     // Dark HUD & Inverted Surfaces
-    val InverseSurface = Color(0xFF213145)
-    val InverseOnSurface = Color(0xFFEAF1FF)
+    val InverseSurface = Color(0xFF193126)
+    val InverseOnSurface = Color(0xFFE8F1E6)
 
     // Status & Warnings
     val Error = Color(0xFFBA1A1A)

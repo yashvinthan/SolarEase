@@ -215,7 +215,7 @@ fun LifetimeImpactSection(lifetime: LifetimeImpact) {
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
-            border = BorderStroke(1.dp, Color(0xFFDDE4D5)),
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.55f)),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
@@ -230,7 +230,7 @@ fun LifetimeImpactSection(lifetime: LifetimeImpact) {
                     }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
-                HorizontalDivider(color = Color(0xFFE2E8F0))
+                HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.45f))
                 Spacer(modifier = Modifier.height(16.dp))
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                     Column(modifier = Modifier.weight(1f)) {
@@ -260,18 +260,18 @@ fun EnvironmentalComparisonSection(comparison: EnvironmentalComparison) {
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
-            border = BorderStroke(1.dp, Color(0xFFDDE4D5)),
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.55f)),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 ComparisonRow(icon = Icons.Default.Park, text = "${comparison.treesPlanted} Trees Planted")
-                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), color = Color(0xFFE2E8F0))
+                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), color = MaterialTheme.colorScheme.outline.copy(alpha = 0.45f))
                 ComparisonRow(icon = Icons.Default.DirectionsCar, text = "${comparison.carsRemoved} Cars Removed from Roads")
-                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), color = Color(0xFFE2E8F0))
+                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), color = MaterialTheme.colorScheme.outline.copy(alpha = 0.45f))
                 ComparisonRow(icon = Icons.Default.Factory, text = "${comparison.coalNotBurnedKg} kg Coal Not Burned")
-                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), color = Color(0xFFE2E8F0))
+                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), color = MaterialTheme.colorScheme.outline.copy(alpha = 0.45f))
                 ComparisonRow(icon = Icons.Default.LocalGasStation, text = "${comparison.petrolSavedLiters} Liters Petrol Saved")
-                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), color = Color(0xFFE2E8F0))
+                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), color = MaterialTheme.colorScheme.outline.copy(alpha = 0.45f))
                 ComparisonRow(icon = Icons.Default.Home, text = "${comparison.homesPowered} Homes Powered (1 year)")
             }
         }
@@ -297,7 +297,7 @@ fun MetricCard(title: String, value: String, icon: ImageVector, modifier: Modifi
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(16.dp),
-        border = BorderStroke(1.dp, Color(0xFFDDE4D5)),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.55f)),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -321,7 +321,7 @@ fun MonthlyImpactSection(history: ImpactHistory) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        border = BorderStroke(1.dp, Color(0xFFDDE4D5)),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.55f)),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -413,7 +413,7 @@ fun SustainabilityGoalsSection(goals: List<EnvironmentalMilestone>) {
             Card(
                 modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
                 shape = RoundedCornerShape(16.dp),
-                border = BorderStroke(1.dp, if (goal.isCompleted) Color(0xFFC8E6C9) else Color(0xFFDDE4D5)),
+                border = BorderStroke(1.dp, if (goal.isCompleted) MaterialTheme.colorScheme.primary.copy(alpha = 0.45f) else MaterialTheme.colorScheme.outline.copy(alpha = 0.55f)),
                 colors = CardDefaults.cardColors(
                     containerColor = if (goal.isCompleted) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface
                 )
@@ -465,7 +465,7 @@ fun AchievementsSection(achievements: List<EnvironmentalAchievement>) {
             Card(
                 modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
                 shape = RoundedCornerShape(16.dp),
-                border = BorderStroke(1.dp, Color(0xFFDDE4D5)),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.55f)),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
             ) {
                 Row(modifier = Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -502,7 +502,7 @@ fun SmartInsightsSection(insights: List<EnvironmentalInsight>) {
             Card(
                 modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
                 shape = RoundedCornerShape(16.dp),
-                border = BorderStroke(1.dp, Color(0xFFDDE4D5)),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.55f)),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
             ) {
                 Row(modifier = Modifier.fillMaxWidth().padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -528,7 +528,7 @@ fun ImpactTimelineSection(timeline: ImpactTimeline) {
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
-            border = BorderStroke(1.dp, Color(0xFFDDE4D5)),
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.55f)),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
         ) {
             Column(modifier = Modifier.padding(16.dp)) {

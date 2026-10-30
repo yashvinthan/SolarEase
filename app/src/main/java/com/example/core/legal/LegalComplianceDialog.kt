@@ -22,6 +22,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.example.ui.theme.StitchOnSurface
+import com.example.ui.theme.StitchOnSurfaceVariant
+import com.example.ui.theme.StitchOutline
+import com.example.ui.theme.StitchPrimaryContainer
+import com.example.ui.theme.StitchSurfaceContainerLow
+import com.example.ui.theme.StitchSurfaceContainerLowest
 
 enum class LegalSection(val title: String) {
     PRIVACY_POLICY("Privacy Policy (DPDP Act 2023)"),
@@ -51,11 +57,11 @@ fun LegalComplianceDialog(
     onDismiss: () -> Unit
 ) {
     var selectedSection by remember { mutableStateOf(initialSection) }
-    val primaryGreen = Color(0xFF006D43)
-    val surfaceBg = Color(0xFFFFFFFF)
-    val surfaceLow = Color(0xFFF3F4F6)
-    val textDark = Color(0xFF191C1D)
-    val textMuted = Color(0xFF475569) // WCAG 2.1 AA 4.5:1+ compliant slate
+    val primaryGreen = StitchPrimaryContainer
+    val surfaceBg = StitchSurfaceContainerLowest
+    val surfaceLow = StitchSurfaceContainerLow
+    val textDark = StitchOnSurface
+    val textMuted = StitchOnSurfaceVariant
 
     Dialog(
         onDismissRequest = onDismiss,
@@ -166,7 +172,7 @@ fun LegalComplianceDialog(
                         .fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     color = surfaceLow,
-                    border = BorderStroke(1.dp, Color(0xFFE2E8F0))
+                    border = BorderStroke(1.dp, StitchOutline.copy(alpha = 0.65f))
                 ) {
                     Column(
                         modifier = Modifier
@@ -181,7 +187,7 @@ fun LegalComplianceDialog(
                             fontWeight = FontWeight.Bold,
                             color = primaryGreen
                         )
-                        HorizontalDivider(thickness = 0.5.dp, color = Color(0xFFCBD5E1))
+                        HorizontalDivider(thickness = 0.5.dp, color = StitchOutline.copy(alpha = 0.65f))
 
                         when (selectedSection) {
                             LegalSection.PRIVACY_POLICY -> PrivacyPolicyBody(textDark, textMuted)
@@ -223,7 +229,7 @@ private fun LegalTabChip(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val primaryGreen = Color(0xFF006D43)
+    val primaryGreen = StitchPrimaryContainer
     Surface(
         modifier = modifier
             .heightIn(min = 48.dp)
@@ -232,8 +238,8 @@ private fun LegalTabChip(
                 onClick = onClick
             ),
         shape = RoundedCornerShape(8.dp),
-        color = if (selected) primaryGreen else Color(0xFFF1F5F9),
-        border = BorderStroke(1.dp, if (selected) primaryGreen else Color(0xFFCBD5E1))
+        color = if (selected) primaryGreen else StitchSurfaceContainerLow,
+        border = BorderStroke(1.dp, if (selected) primaryGreen else StitchOutline.copy(alpha = 0.65f))
     ) {
         Box(
             modifier = Modifier.padding(vertical = 6.dp, horizontal = 4.dp),
@@ -243,7 +249,7 @@ private fun LegalTabChip(
                 text = label,
                 fontSize = 11.sp,
                 fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
-                color = if (selected) Color.White else Color(0xFF334155),
+                color = if (selected) Color.White else StitchOnSurface,
                 maxLines = 1
             )
         }

@@ -46,8 +46,8 @@ fun StitchVendorTopBar(
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = StitchSurface,
-        border = BorderStroke(1.dp, StitchOutline)
+        color = StitchSurfaceContainerLow,
+        border = BorderStroke(1.dp, StitchOutline.copy(alpha = 0.65f))
     ) {
         Row(
             modifier = Modifier
@@ -229,15 +229,15 @@ fun StitchPrimaryButton(
         enabled = enabled,
         modifier = modifier
             .fillMaxWidth()
-            .heightIn(min = 52.dp),
-        shape = RoundedCornerShape(12.dp),
+            .heightIn(min = 56.dp),
+        shape = RoundedCornerShape(14.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = StitchPrimaryContainer,
             contentColor = Color.White,
             disabledContainerColor = StitchSurfaceContainerHighest,
             disabledContentColor = StitchOnSurfaceVariant
         ),
-        elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 1.dp, pressedElevation = 0.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -268,7 +268,7 @@ fun StitchInfoCard(
 ) {
     Surface(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(14.dp),
         color = StitchSurfaceContainerLow,
         border = BorderStroke(1.dp, StitchSecondaryContainer.copy(alpha = 0.7f))
     ) {
@@ -313,7 +313,7 @@ fun StitchInfoCard(
 fun StitchSecurityBadge(modifier: Modifier = Modifier) {
     Surface(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(14.dp),
         color = StitchSurfaceContainerLowest,
         border = BorderStroke(1.dp, StitchOutline.copy(alpha = 0.6f))
     ) {

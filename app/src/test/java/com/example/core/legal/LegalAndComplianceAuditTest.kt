@@ -69,8 +69,8 @@ class LegalAndComplianceAuditTest {
 
     @Test
     fun `LensColors SlateCaption and SlateMuted meet WCAG AA 4_5 to 1 contrast`() {
-        assertEquals(Color(0xFF475569), LensColors.SlateCaption)
-        assertEquals(Color(0xFF475569), LensColors.SlateMuted)
+        assertEquals(Color(0xFF4F5A52), LensColors.SlateCaption)
+        assertEquals(Color(0xFF4F5A52), LensColors.SlateMuted)
     }
 
     @Test

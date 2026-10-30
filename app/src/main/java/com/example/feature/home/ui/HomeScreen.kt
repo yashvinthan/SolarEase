@@ -92,18 +92,18 @@ import java.util.Locale
 
 // ─── SolarEase Minimalist Home Tokens ──────────────────────────────────────────
 private object HomeColors {
-    val Background = Color(0xFFFBFCF3)
-    val Primary = Color(0xFF386A20)
-    val PrimaryContainer = Color(0xFFE5F2D9)
-    val TextPrimary = Color(0xFF191C18)
-    val TextSecondary = Color(0xFF525651)
-    val Border = Color(0xFFE2E7DC)
+    val Background = Color(0xFFF8F8F2)
+    val Primary = Color(0xFF245B3A)
+    val PrimaryContainer = Color(0xFFDDEFD9)
+    val TextPrimary = Color(0xFF17201B)
+    val TextSecondary = Color(0xFF4F5A52)
+    val Border = Color(0xFFD2DBD1)
     val CardBg = Color(0xFFFFFFFF)
-    val SurfaceSecondary = Color(0xFFF4F7EE)
-    val AccentOrange = Color(0xFFC05621)
-    val Success = Color(0xFF217346)
-    val ChartHighlight = Color(0xFFF4B183)
-    val LightBlue = Color(0xFFEEF4FF)
+    val SurfaceSecondary = Color(0xFFEEF2E9)
+    val AccentOrange = Color(0xFFAA5418)
+    val Success = Color(0xFF1E6B45)
+    val ChartHighlight = Color(0xFFF2C27C)
+    val LightBlue = Color(0xFFE7F2F3)
 }
 
 // ─── Main Home Screen Entry Route ──────────────────────────────────────────────
@@ -787,9 +787,6 @@ private fun GreetingHeader(
     userName: String?,
     onboardingStep: Int
 ) {
-    // Keep the status marker steady; constant motion adds unnecessary visual noise.
-    val alphaAnim = 1f
-
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -797,35 +794,13 @@ private fun GreetingHeader(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(
-                        modifier = Modifier
-                            .size(7.dp)
-                            .clip(CircleShape)
-                            .background(HomeColors.Success)
-                            .alpha(alphaAnim)
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text(
-                        text = when (onboardingStep) {
-                            1 -> "GET STARTED"
-                            2 -> "BILL CONNECTED"
-                            else -> "HOME ENERGY OVERVIEW"
-                        },
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = HomeColors.Success,
-                        letterSpacing = 0.8.sp
-                    )
-                }
-                Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = when (onboardingStep) {
                         1 -> if (!userName.isNullOrBlank()) "Welcome, $userName!" else "Welcome to SolarEase!"
                         2 -> "Your electricity connection is ready!"
                         else -> if (!userName.isNullOrBlank()) "$greeting, $userName!" else "$greeting!"
                     },
-                    fontSize = 22.sp,
+                    fontSize = 26.sp,
                     fontWeight = FontWeight.Bold,
                     color = HomeColors.TextPrimary,
                     letterSpacing = (-0.5).sp
@@ -849,7 +824,7 @@ private fun GreetingHeader(
             }
         }
 
-        Spacer(modifier = Modifier.height(2.dp))
+        Spacer(modifier = Modifier.height(6.dp))
         Text(
             text = when (onboardingStep) {
                 1 -> "Connect your electricity bill to get started."
@@ -882,8 +857,8 @@ private fun PrimaryEnergyCard(
 
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        color = HomeColors.CardBg,
+        shape = RoundedCornerShape(20.dp),
+        color = HomeColors.SurfaceSecondary,
         border = BorderStroke(1.dp, HomeColors.Border),
         shadowElevation = 0.dp
     ) {
@@ -891,8 +866,8 @@ private fun PrimaryEnergyCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .subtleTopRightGradient(
-                    shape = RoundedCornerShape(16.dp),
-                    radiusMultiplier = 0.70f
+                    shape = RoundedCornerShape(20.dp),
+                    radiusMultiplier = 0.85f
                 )
         ) {
             if (!uiState.hasConnectedBill) {

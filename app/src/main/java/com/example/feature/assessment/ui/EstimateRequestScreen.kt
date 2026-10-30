@@ -18,6 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -57,70 +60,92 @@ fun EstimateRequestScreen(
             )
         },
         bottomBar = {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 14.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
             ) {
-                StitchPrimaryButton(
-                    text = "Send Request",
-                    onClick = onNavigateNext
-                )
-
-                Text(
-                    text = "Cancel",
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = StitchSecondary,
+                Column(
                     modifier = Modifier
-                        .clickable { onNavigateBack() }
-                        .padding(vertical = 4.dp)
-                )
+                        .widthIn(max = 640.dp)
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp, vertical = 14.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    StitchPrimaryButton(
+                        text = "Send Request",
+                        onClick = onNavigateNext
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .heightIn(min = 48.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .clickable(role = Role.Button) { onNavigateBack() }
+                            .padding(horizontal = 16.dp, vertical = 8.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Cancel",
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = StitchSecondary
+                        )
+                    }
+                }
             }
         }
     ) { innerPadding ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 20.dp, vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .verticalScroll(rememberScrollState()),
+            contentAlignment = Alignment.TopCenter
         ) {
-            // Progress / Step Indicator
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+            Column(
+                modifier = Modifier
+                    .widthIn(max = 640.dp)
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+                // Progress / Step Indicator
                 Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .semantics(mergeDescendants = true) {
+                            contentDescription = "Step 3 of 3: Final Review, Verified Profile"
+                        },
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .size(8.dp)
-                            .clip(CircleShape)
-                            .background(StitchPrimaryContainer)
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(8.dp)
+                                .clip(CircleShape)
+                                .background(StitchPrimaryContainer)
+                        )
+                        Text(
+                            text = "STEP 3 OF 3 • FINAL REVIEW",
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = StitchPrimaryContainer,
+                            letterSpacing = 0.8.sp
+                        )
+                    }
+
                     Text(
-                        text = "STEP 3 OF 3 • FINAL REVIEW",
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = StitchPrimaryContainer,
-                        letterSpacing = 0.8.sp
+                        text = "Verified Profile",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = StitchSecondary
                     )
                 }
-
-                Text(
-                    text = "Verified Profile",
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = StitchSecondary
-                )
-            }
 
             // Header Context with Stitch Illustration
             Surface(
@@ -465,6 +490,7 @@ fun EstimateRequestScreen(
                 }
             }
             Spacer(modifier = Modifier.height(24.dp))
+            }
         }
     }
 }

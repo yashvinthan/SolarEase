@@ -23,6 +23,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -46,22 +52,22 @@ fun StitchVendorTopBar(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp)
-                .padding(horizontal = 20.dp),
+                .heightIn(min = 56.dp)
+                .padding(horizontal = 12.dp, vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(14.dp)
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 IconButton(
                     onClick = onNavigateBack,
-                    modifier = Modifier.size(36.dp)
+                    modifier = Modifier.size(48.dp)
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
+                        contentDescription = "Navigate back",
                         tint = StitchOnSurface,
                         modifier = Modifier.size(22.dp)
                     )
@@ -78,6 +84,7 @@ fun StitchVendorTopBar(
             // Profile Badge
             Box(
                 modifier = Modifier
+                    .padding(end = 8.dp)
                     .size(34.dp)
                     .clip(CircleShape)
                     .background(StitchPrimaryContainer),
@@ -85,7 +92,7 @@ fun StitchVendorTopBar(
             ) {
                 Icon(
                     imageVector = Icons.Default.Person,
-                    contentDescription = "Profile",
+                    contentDescription = null,
                     tint = Color.White,
                     modifier = Modifier.size(20.dp)
                 )
@@ -104,10 +111,15 @@ fun StitchStepProgressBar(
     percentageText: String? = null,
     modifier: Modifier = Modifier
 ) {
+    val progressFraction = (currentStep.toFloat() / totalSteps.toFloat()).coerceIn(0f, 1f)
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 8.dp),
+            .padding(horizontal = 20.dp, vertical = 8.dp)
+            .semantics(mergeDescendants = true) {
+                contentDescription = "Step $currentStep of $totalSteps: $stepTitle"
+                stateDescription = "${(progressFraction * 100).toInt()} percent complete"
+            },
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
         Row(
@@ -151,7 +163,6 @@ fun StitchStepProgressBar(
                 )
             }
         }
-        val progressFraction = (currentStep.toFloat() / totalSteps.toFloat()).coerceIn(0f, 1f)
         LinearProgressIndicator(
             progress = { progressFraction },
             modifier = Modifier
@@ -218,13 +229,13 @@ fun StitchPrimaryButton(
         enabled = enabled,
         modifier = modifier
             .fillMaxWidth()
-            .height(52.dp),
+            .heightIn(min = 52.dp),
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = StitchPrimaryContainer,
             contentColor = Color.White,
-            disabledContainerColor = StitchSurfaceContainerHigh,
-            disabledContentColor = StitchOnSurfaceVariant.copy(alpha = 0.5f)
+            disabledContainerColor = StitchSurfaceContainerHighest,
+            disabledContentColor = StitchOnSurfaceVariant
         ),
         elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
     ) {
@@ -348,12 +359,22 @@ fun StitchSelectableCard(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick),
+            .heightIn(min = 64.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .clickable(
+                role = Role.RadioButton,
+                onClick = onClick
+            )
+            .semantics(mergeDescendants = true) {
+                role = Role.RadioButton
+                this.selected = selected
+                stateDescription = if (selected) "Selected" else "Not selected"
+            },
         shape = RoundedCornerShape(16.dp),
         color = StitchSurfaceContainerLowest,
         border = BorderStroke(
             width = if (selected) 2.dp else 1.dp,
-            color = if (selected) StitchPrimaryContainer else StitchOutline.copy(alpha = 0.6f)
+            color = if (selected) StitchPrimaryContainer else StitchOutline.copy(alpha = 0.7f)
         ),
         shadowElevation = if (selected) 1.dp else 0.dp
     ) {
@@ -374,7 +395,7 @@ fun StitchSelectableCard(
                         modifier = Modifier
                             .size(46.dp)
                             .clip(RoundedCornerShape(12.dp))
-                            .background(if (selected) StitchPrimaryFixed.copy(alpha = 0.3f) else StitchSurfaceContainerLow),
+                            .background(if (selected) StitchPrimaryFixed.copy(alpha = 0.45f) else StitchSurfaceContainerLow),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
@@ -389,7 +410,7 @@ fun StitchSelectableCard(
                     if (badgeText != null) {
                         Surface(
                             shape = RoundedCornerShape(4.dp),
-                            color = StitchPrimaryFixed.copy(alpha = 0.3f),
+                            color = StitchPrimaryFixed.copy(alpha = 0.45f),
                             modifier = Modifier.padding(bottom = 2.dp)
                         ) {
                             Text(
@@ -435,7 +456,7 @@ fun StitchSelectableCard(
                 if (selected) {
                     Icon(
                         imageVector = Icons.Default.Check,
-                        contentDescription = "Selected",
+                        contentDescription = null,
                         tint = Color.White,
                         modifier = Modifier.size(16.dp)
                     )

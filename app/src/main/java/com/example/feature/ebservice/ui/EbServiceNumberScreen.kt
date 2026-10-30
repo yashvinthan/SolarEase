@@ -22,6 +22,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -90,219 +94,236 @@ fun EbServiceNumberScreen(
             }
         }
     ) { innerPadding ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 20.dp, vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .verticalScroll(rememberScrollState()),
+            contentAlignment = Alignment.TopCenter
         ) {
-            // Visual Hero Illustration from Stitch
-            StitchHeroIllustration(
-                drawableRes = R.drawable.ic_stitch_consumer_number,
-                contentDescription = "Consumer Number Verification"
-            )
-
-            // Header Text Group
-            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text(
-                    text = "Consumer Number",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = StitchOnSurface
-                )
-                Text(
-                    text = "Enter your electricity consumer number so we can use your electricity details for your solar recommendation.",
-                    fontSize = 15.sp,
-                    color = StitchSecondary,
-                    lineHeight = 22.sp
-                )
-            }
-
-            // Main Consumer Number Input Card (Stitch faithful layout)
-            Surface(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp),
-                color = StitchSurfaceContainerLowest,
-                border = BorderStroke(1.dp, StitchOutline.copy(alpha = 0.5f)),
-                shadowElevation = 0.5.dp
+            Column(
+                modifier = Modifier
+                    .widthIn(max = 640.dp)
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Column(
-                    modifier = Modifier.padding(18.dp),
-                    verticalArrangement = Arrangement.spacedBy(14.dp)
+                // Visual Hero Illustration from Stitch
+                StitchHeroIllustration(
+                    drawableRes = R.drawable.ic_stitch_consumer_number,
+                    contentDescription = "Consumer Number Verification"
+                )
+
+                // Header Text Group
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Text(
+                        text = "Consumer Number",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = StitchOnSurface
+                    )
+                    Text(
+                        text = "Enter your electricity consumer number so we can use your electricity details for your solar recommendation.",
+                        fontSize = 15.sp,
+                        color = StitchSecondary,
+                        lineHeight = 22.sp
+                    )
+                }
+
+                // Main Consumer Number Input Card (Stitch faithful layout)
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    color = StitchSurfaceContainerLowest,
+                    border = BorderStroke(1.dp, StitchOutline.copy(alpha = 0.5f)),
+                    shadowElevation = 0.5.dp
                 ) {
-                    // Header row: Bolt + Tamil Nadu (TNEB)
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 4.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                    Column(
+                        modifier = Modifier.padding(18.dp),
+                        verticalArrangement = Arrangement.spacedBy(14.dp)
                     ) {
+                        // Header row: Bolt + Tamil Nadu (TNEB)
                         Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 4.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Bolt,
+                                    contentDescription = null,
+                                    tint = StitchPrimaryContainer,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                                Text(
+                                    text = "ELECTRICITY SERVICE CONNECTION",
+                                    fontSize = 11.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = StitchPrimaryContainer,
+                                    letterSpacing = 0.8.sp
+                                )
+                            }
+                            Text(
+                                text = "Tamil Nadu (TNEB)",
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Medium,
+                                color = StitchSecondary
+                            )
+                        }
+
+                        // Input row
+                        Surface(
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(12.dp),
+                            color = StitchSurfaceContainerLow,
+                            border = BorderStroke(1.dp, StitchSecondaryContainer.copy(alpha = 0.6f))
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp, vertical = 14.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Row(
+                                    modifier = Modifier.weight(1f),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                                ) {
+                                    Text(
+                                        text = "#",
+                                        fontSize = 20.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = StitchSecondary
+                                    )
+
+                                    BasicTextField(
+                                        value = consumerNumber,
+                                        onValueChange = onNumberChange,
+                                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                        textStyle = TextStyle(
+                                            fontSize = 18.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = StitchOnSurface,
+                                            letterSpacing = 0.5.sp
+                                        ),
+                                        cursorBrush = SolidColor(StitchPrimaryContainer),
+                                        decorationBox = { innerTextField ->
+                                            if (consumerNumber.isEmpty()) {
+                                                Text(
+                                                    text = "e.g. 042345678901",
+                                                    fontSize = 18.sp,
+                                                    color = StitchSecondary.copy(alpha = 0.5f)
+                                                )
+                                            }
+                                            innerTextField()
+                                        }
+                                    )
+                                }
+
+                                if (isValid) {
+                                    Icon(
+                                        imageVector = Icons.Default.CheckCircle,
+                                        contentDescription = "Valid",
+                                        tint = StitchPrimaryContainer,
+                                        modifier = Modifier.size(22.dp)
+                                    )
+                                }
+                            }
+                        }
+
+                        // Helper & Clear row
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(6.dp)
+                                        .clip(CircleShape)
+                                        .background(if (isValid) StitchPrimaryContainer else StitchSecondary)
+                                )
+                                Text(
+                                    text = if (isValid) "Valid ${consumerNumber.length}-digit consumer number" else "Enter 11 or 12 digit consumer number",
+                                    fontSize = 12.sp,
+                                    color = if (isValid) StitchPrimaryContainer else StitchSecondary
+                                )
+                            }
+
+                            Box(
+                                modifier = Modifier
+                                    .sizeIn(minWidth = 48.dp, minHeight = 48.dp)
+                                    .semantics(mergeDescendants = true) {
+                                        role = Role.Button
+                                        contentDescription = "Clear consumer number"
+                                    }
+                                    .clickable(role = Role.Button) { onClearNumber() },
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = "Clear",
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = StitchPrimaryContainer
+                                )
+                            }
+                        }
+                    }
+                }
+
+                // Why we ask this?
+                StitchInfoCard(
+                    icon = Icons.Default.HelpOutline,
+                    title = "Why we ask this?",
+                    description = "Your consumer number helps connect your solar journey with your electricity connection and verify baseline demand."
+                )
+
+                // Trust & Verification Badge
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    color = StitchSurfaceContainerLowest.copy(alpha = 0.8f),
+                    border = BorderStroke(1.dp, StitchOutline.copy(alpha = 0.3f))
+                ) {
+                    Row(
+                        modifier = Modifier.padding(14.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(28.dp)
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(StitchPrimaryContainer.copy(alpha = 0.15f)),
+                            contentAlignment = Alignment.Center
                         ) {
                             Icon(
-                                imageVector = Icons.Default.Bolt,
+                                imageVector = Icons.Default.VerifiedUser,
                                 contentDescription = null,
                                 tint = StitchPrimaryContainer,
                                 modifier = Modifier.size(18.dp)
                             )
-                            Text(
-                                text = "ELECTRICITY SERVICE CONNECTION",
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = StitchPrimaryContainer,
-                                letterSpacing = 0.8.sp
-                            )
                         }
                         Text(
-                            text = "Tamil Nadu (TNEB)",
+                            text = "Your data is only shared with verified DISCOM vendors you choose.",
                             fontSize = 12.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = StitchSecondary
-                        )
-                    }
-
-                    // Input row
-                    Surface(
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(12.dp),
-                        color = StitchSurfaceContainerLow,
-                        border = BorderStroke(1.dp, StitchSecondaryContainer.copy(alpha = 0.6f))
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 14.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Row(
-                                modifier = Modifier.weight(1f),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(10.dp)
-                            ) {
-                                Text(
-                                    text = "#",
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = StitchSecondary
-                                )
-
-                                BasicTextField(
-                                    value = consumerNumber,
-                                    onValueChange = onNumberChange,
-                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                                    textStyle = TextStyle(
-                                        fontSize = 18.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = StitchOnSurface,
-                                        letterSpacing = 0.5.sp
-                                    ),
-                                    cursorBrush = SolidColor(StitchPrimaryContainer),
-                                    decorationBox = { innerTextField ->
-                                        if (consumerNumber.isEmpty()) {
-                                            Text(
-                                                text = "e.g. 042345678901",
-                                                fontSize = 18.sp,
-                                                color = StitchSecondary.copy(alpha = 0.5f)
-                                            )
-                                        }
-                                        innerTextField()
-                                    }
-                                )
-                            }
-
-                            if (isValid) {
-                                Icon(
-                                    imageVector = Icons.Default.CheckCircle,
-                                    contentDescription = "Valid",
-                                    tint = StitchPrimaryContainer,
-                                    modifier = Modifier.size(22.dp)
-                                )
-                            }
-                        }
-                    }
-
-                    // Helper & Clear row
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .size(6.dp)
-                                    .clip(CircleShape)
-                                    .background(if (isValid) StitchPrimaryContainer else StitchSecondary)
-                            )
-                            Text(
-                                text = if (isValid) "Valid ${consumerNumber.length}-digit consumer number" else "Enter 11 or 12 digit consumer number",
-                                fontSize = 12.sp,
-                                color = if (isValid) StitchPrimaryContainer else StitchSecondary
-                            )
-                        }
-
-                        Text(
-                            text = "Clear",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = StitchPrimaryContainer,
-                            modifier = Modifier.clickable { onClearNumber() }
+                            color = StitchSecondary,
+                            lineHeight = 16.sp
                         )
                     }
                 }
+                Spacer(modifier = Modifier.height(24.dp))
             }
-
-            // Why we ask this?
-            StitchInfoCard(
-                icon = Icons.Default.HelpOutline,
-                title = "Why we ask this?",
-                description = "Your consumer number helps connect your solar journey with your electricity connection and verify baseline demand."
-            )
-
-            // Trust & Verification Badge
-            Surface(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                color = StitchSurfaceContainerLowest.copy(alpha = 0.8f),
-                border = BorderStroke(1.dp, StitchOutline.copy(alpha = 0.3f))
-            ) {
-                Row(
-                    modifier = Modifier.padding(14.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(28.dp)
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(StitchPrimaryContainer.copy(alpha = 0.15f)),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.VerifiedUser,
-                            contentDescription = null,
-                            tint = StitchPrimaryContainer,
-                            modifier = Modifier.size(18.dp)
-                        )
-                    }
-                    Text(
-                        text = "Your data is only shared with verified DISCOM vendors you choose.",
-                        fontSize = 12.sp,
-                        color = StitchSecondary,
-                        lineHeight = 16.sp
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }

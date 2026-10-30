@@ -41,8 +41,8 @@ android {
     create("release") {
       val keystorePath = keystoreProperties.getProperty("KEYSTORE_PATH")
         ?: System.getenv("KEYSTORE_PATH")
-        ?: "${rootDir}/my-upload-key.jks"
-      storeFile = file(keystorePath)
+        ?: "my-upload-key.jks"
+      storeFile = rootProject.file(keystorePath)
       storePassword = keystoreProperties.getProperty("STORE_PASSWORD")
         ?: System.getenv("STORE_PASSWORD")
         ?: ""
@@ -74,8 +74,8 @@ android {
     }
   }
   compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
   }
   buildFeatures {
     compose = true
@@ -111,6 +111,12 @@ secrets {
 }
 
 googleServices { missingGoogleServicesStrategy = MissingGoogleServicesStrategy.WARN }
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+  compilerOptions {
+    freeCompilerArgs.add("-Xannotation-default-target=param-property")
+  }
+}
 
 dependencies {
   implementation(platform(libs.androidx.compose.bom))

@@ -68,62 +68,69 @@ fun MountTypeScreen(
             }
         }
     ) { innerPadding ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 20.dp, vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .verticalScroll(rememberScrollState()),
+            contentAlignment = androidx.compose.ui.Alignment.TopCenter
         ) {
-            // Visual Hero: Faithful Stitch Vector Illustration
-            StitchHeroIllustration(
-                drawableRes = R.drawable.ic_stitch_mount_type,
-                contentDescription = "Rooftop and ground solar mounting illustration"
-            )
+            Column(
+                modifier = Modifier
+                    .widthIn(max = 640.dp)
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                // Visual Hero: Faithful Stitch Vector Illustration
+                StitchHeroIllustration(
+                    drawableRes = R.drawable.ic_stitch_mount_type,
+                    contentDescription = "Rooftop and ground solar mounting illustration"
+                )
 
-            // Header Group
-            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text(
-                    text = "Where would you like to install the panels?",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = StitchOnSurface,
-                    letterSpacing = (-0.3).sp
+                // Header Group
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Text(
+                        text = "Where would you like to install the panels?",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = StitchOnSurface,
+                        letterSpacing = (-0.3).sp
+                    )
+                    Text(
+                        text = "Choose the location where you plan to install the solar panels.",
+                        fontSize = 15.sp,
+                        color = StitchSecondary,
+                        lineHeight = 22.sp
+                    )
+                }
+
+                // 1. Rooftop
+                StitchSelectableCard(
+                    selected = selectedMountType == "Rooftop",
+                    title = "Rooftop",
+                    subtitle = "On terrace, flat concrete roof, or sloped roof",
+                    icon = Icons.Default.Home,
+                    onClick = { onSelectMountType("Rooftop") }
                 )
-                Text(
-                    text = "Choose the location where you plan to install the solar panels.",
-                    fontSize = 15.sp,
-                    color = StitchSecondary,
-                    lineHeight = 22.sp
+
+                // 2. Ground
+                StitchSelectableCard(
+                    selected = selectedMountType == "Ground",
+                    title = "Ground",
+                    subtitle = "In an open garden, yard, or dedicated vacant plot",
+                    icon = Icons.Default.Nature,
+                    onClick = { onSelectMountType("Ground") }
                 )
+
+                // Good to know
+                StitchInfoCard(
+                    icon = Icons.Default.Lightbulb,
+                    title = "Good to know",
+                    description = "Rooftop setups are the most popular in urban homes as they don't consume ground space and capture unshaded sunlight."
+                )
+                Spacer(modifier = Modifier.height(24.dp))
             }
-
-            // 1. Rooftop
-            StitchSelectableCard(
-                selected = selectedMountType == "Rooftop",
-                title = "Rooftop",
-                subtitle = "On terrace, flat concrete roof, or sloped roof",
-                icon = Icons.Default.Home,
-                onClick = { onSelectMountType("Rooftop") }
-            )
-
-            // 2. Ground
-            StitchSelectableCard(
-                selected = selectedMountType == "Ground",
-                title = "Ground",
-                subtitle = "In an open garden, yard, or dedicated vacant plot",
-                icon = Icons.Default.Nature,
-                onClick = { onSelectMountType("Ground") }
-            )
-
-            // Good to know
-            StitchInfoCard(
-                icon = Icons.Default.Lightbulb,
-                title = "Good to know",
-                description = "Rooftop setups are the most popular in urban homes as they don't consume ground space and capture unshaded sunlight."
-            )
-            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }

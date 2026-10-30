@@ -38,11 +38,17 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.core.legal.LegalComplianceDialog
+import com.example.core.legal.LegalSection
 import com.example.feature.lens.ui.theme.LensColors
 import com.example.feature.lens.ui.theme.LensTypography
 
@@ -171,9 +177,11 @@ fun LensLandingScreen(
         ) {
             Column(
                 modifier = Modifier
+                    .widthIn(max = 480.dp)
                     .padding(24.dp)
                     .background(LensColors.SurfaceContainerLowest, RoundedCornerShape(12.dp))
-                    .padding(24.dp),
+                    .padding(24.dp)
+                    .semantics { liveRegion = LiveRegionMode.Polite },
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Icon(
@@ -199,7 +207,8 @@ fun LensLandingScreen(
                 Button(
                     onClick = { viewModel.dismissError() },
                     colors = ButtonDefaults.buttonColors(containerColor = LensColors.Primary),
-                    shape = RoundedCornerShape(8.dp)
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier.heightIn(min = 48.dp)
                 ) {
                     Text("Try Again", color = LensColors.OnPrimary)
                 }
@@ -240,9 +249,15 @@ fun LensLandingScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .background(LensColors.Background)
+                .background(LensColors.Background),
+            contentAlignment = Alignment.TopCenter
         ) {
-            when (uiState) {
+            Box(
+                modifier = Modifier
+                    .widthIn(max = 680.dp)
+                    .fillMaxSize()
+            ) {
+                when (uiState) {
                 is LensUiState.Introduction -> {
                     IntroductionContent(
                         onGoRoomByRoom = { viewModel.startRoomSetup() }
@@ -341,6 +356,7 @@ fun LensLandingScreen(
                     )
                 }
                 else -> {}
+                }
             }
         }
     }
@@ -430,7 +446,7 @@ private fun LensTopAppBar(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = onBackClicked, modifier = Modifier.size(36.dp)) {
+                IconButton(onClick = onBackClicked, modifier = Modifier.size(48.dp)) {
                     Icon(
                         Icons.Default.ArrowBack,
                         contentDescription = "Back",
@@ -663,6 +679,15 @@ fun SolarLensWelcomeIllustration(modifier: Modifier = Modifier) {
 fun IntroductionContent(
     onGoRoomByRoom: () -> Unit
 ) {
+    var activeLegalSection by remember { mutableStateOf<LegalSection?>(null) }
+
+    activeLegalSection?.let { section ->
+        LegalComplianceDialog(
+            initialSection = section,
+            onDismiss = { activeLegalSection = null }
+        )
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -811,6 +836,49 @@ fun IntroductionContent(
                         style = LensTypography.bodyMd,
                         color = LensColors.SlateText,
                         lineHeight = 18.sp
+                    )
+                }
+            }
+        }
+
+        // Cloud AI & On-Device Processing Disclosure (DPDP Act 2023 § 5)
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp),
+            color = LensColors.SurfaceContainerLowest,
+            border = BorderStroke(1.dp, LensColors.Outline.copy(alpha = 0.35f))
+        ) {
+            Row(
+                modifier = Modifier.padding(12.dp),
+                verticalAlignment = Alignment.Top,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Icon(
+                    Icons.Default.VerifiedUser,
+                    contentDescription = null,
+                    tint = LensColors.Primary,
+                    modifier = Modifier
+                        .size(18.dp)
+                        .padding(top = 2.dp)
+                )
+                Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(
+                        text = "AI Processing & Privacy Notice",
+                        style = LensTypography.labelSm.copy(fontWeight = FontWeight.Bold),
+                        color = LensColors.SlateText
+                    )
+                    Text(
+                        text = "Live camera scanning runs on-device via Google ML Kit. Uploaded room photos/videos are transiently analyzed by Google Gemini AI (GCP Mumbai asia-south1) to detect appliances and immediately purged after inference.",
+                        style = LensTypography.labelSm,
+                        color = LensColors.SlateCaption,
+                        lineHeight = 16.sp
+                    )
+                    Text(
+                        text = "View AI & Subprocessor Disclosures",
+                        style = LensTypography.labelSm.copy(fontWeight = FontWeight.SemiBold),
+                        color = LensColors.Primary,
+                        textDecoration = TextDecoration.Underline,
+                        modifier = Modifier.clickable { activeLegalSection = LegalSection.SUBPROCESSORS_AI }
                     )
                 }
             }
@@ -1116,7 +1184,7 @@ fun RoomSetupContent(
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             IconButton(
                                 onClick = { onRenameRoom(room) },
-                                modifier = Modifier.size(34.dp)
+                                modifier = Modifier.size(48.dp)
                             ) {
                                 Icon(
                                     Icons.Default.Edit,
@@ -1129,7 +1197,7 @@ fun RoomSetupContent(
                             IconButton(
                                 onClick = { onMoveRoomUp(index) },
                                 enabled = index > 0,
-                                modifier = Modifier.size(32.dp)
+                                modifier = Modifier.size(48.dp)
                             ) {
                                 Icon(
                                     Icons.Default.KeyboardArrowUp,
@@ -1142,7 +1210,7 @@ fun RoomSetupContent(
                             IconButton(
                                 onClick = { onMoveRoomDown(index) },
                                 enabled = index < sortedRooms.size - 1,
-                                modifier = Modifier.size(32.dp)
+                                modifier = Modifier.size(48.dp)
                             ) {
                                 Icon(
                                     Icons.Default.KeyboardArrowDown,
@@ -1154,7 +1222,7 @@ fun RoomSetupContent(
 
                             IconButton(
                                 onClick = { onRemoveRoom(room.id) },
-                                modifier = Modifier.size(34.dp)
+                                modifier = Modifier.size(48.dp)
                             ) {
                                 Icon(
                                     Icons.Default.Delete,
@@ -1408,7 +1476,7 @@ fun RoomOverviewContent(
                     Spacer(modifier = Modifier.width(6.dp))
                     IconButton(
                         onClick = { onRenameRoom(room) },
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(48.dp)
                     ) {
                         Icon(
                             Icons.Default.Edit,

@@ -69,6 +69,15 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material.icons.filled.Bolt
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -76,6 +85,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.ui.theme.rememberIsReducedMotionEnabled
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -143,7 +153,9 @@ fun MeterScannerScreen(
             Surface(
                 shape = RoundedCornerShape(20.dp),
                 color = Color.White,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .widthIn(max = 480.dp)
+                    .fillMaxWidth()
             ) {
                 Column(
                     modifier = Modifier.padding(24.dp),
@@ -174,7 +186,7 @@ fun MeterScannerScreen(
                     Text(
                         text = "SolarEase needs camera access to photograph and extract your electricity meter reading on-device.",
                         fontSize = 13.sp,
-                        color = Color(0xFF64748B),
+                        color = Color(0xFF475569),
                         textAlign = TextAlign.Center
                     )
 
@@ -182,7 +194,7 @@ fun MeterScannerScreen(
                         onClick = { cameraPermissionState.launchPermissionRequest() },
                         colors = ButtonDefaults.buttonColors(containerColor = BrandGreen),
                         shape = RoundedCornerShape(12.dp),
-                        modifier = Modifier.fillMaxWidth().height(48.dp)
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
                     ) {
                         Text("Grant Permission", fontWeight = FontWeight.Bold)
                     }
@@ -190,9 +202,9 @@ fun MeterScannerScreen(
                     Button(
                         onClick = onNavigateBack,
                         colors = ButtonDefaults.textButtonColors(),
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
                     ) {
-                        Text("Enter Reading Manually", color = Color(0xFF64748B))
+                        Text("Enter Reading Manually", color = Color(0xFF475569))
                     }
                 }
             }
@@ -213,7 +225,10 @@ fun MeterScannerScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    IconButton(onClick = onNavigateBack) {
+                    IconButton(
+                        onClick = onNavigateBack,
+                        modifier = Modifier.size(48.dp)
+                    ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
@@ -228,7 +243,14 @@ fun MeterScannerScreen(
                         color = Color.White
                     )
 
-                    IconButton(onClick = { viewModel.toggleTorch() }) {
+                    IconButton(
+                        onClick = { viewModel.toggleTorch() },
+                        modifier = Modifier
+                            .size(48.dp)
+                            .semantics {
+                                stateDescription = if (isTorchOn) "On" else "Off"
+                            }
+                    ) {
                         Icon(
                             imageVector = if (isTorchOn) Icons.Default.FlashOn else Icons.Default.FlashOff,
                             contentDescription = "Toggle Torch",
@@ -408,7 +430,10 @@ fun MeterScannerScreen(
                             .border(3.dp, Color.White, CircleShape)
                             .padding(6.dp)
                             .background(BrandGreen, CircleShape)
-                            .clickable(enabled = uiState is MeterScannerUiState.Ready) {
+                            .clickable(
+                                enabled = uiState is MeterScannerUiState.Ready,
+                                role = Role.Button
+                            ) {
                                 imageCapture?.let { capture ->
                                     val actualW = previewViewRef?.width?.toFloat()?.takeIf { it > 0f } ?: viewWidthPx
                                     val actualH = previewViewRef?.height?.toFloat()?.takeIf { it > 0f } ?: viewHeightPx
@@ -420,7 +445,8 @@ fun MeterScannerScreen(
                                         viewHeightPx = actualH
                                     )
                                 }
-                            },
+                            }
+                            .semantics { role = Role.Button },
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
@@ -517,33 +543,52 @@ fun MeterScannerScreen(
  */
 @Composable
 private fun MeterTipsBanner(modifier: Modifier = Modifier) {
-    val tips = listOf(
-        "💡 Avoid reflections: tilt phone slightly if glare obscures numbers.",
-        "⚡ For digital meters: capture when cumulative 'kWh' is displayed.",
-        "🔄 Push meter button if screen currently displays Voltage (V) or Time.",
-        "⚙️ For mechanical meters: ensure all rotating number wheels are in frame."
-    )
+    val tips = remember {
+        listOf(
+            Icons.Default.Lightbulb to "Avoid reflections: tilt phone slightly if glare obscures numbers.",
+            Icons.Default.Bolt to "For digital meters: capture when cumulative 'kWh' is displayed.",
+            Icons.Default.Refresh to "Push meter button if screen currently displays Voltage (V) or Time.",
+            Icons.Default.Settings to "For mechanical meters: ensure all rotating number wheels are in frame."
+        )
+    }
     var currentTipIdx by remember { mutableIntStateOf(0) }
+    val isReducedMotion = rememberIsReducedMotionEnabled()
 
-    LaunchedEffect(Unit) {
-        while (true) {
-            delay(4000)
-            currentTipIdx = (currentTipIdx + 1) % tips.size
+    LaunchedEffect(isReducedMotion) {
+        if (!isReducedMotion) {
+            while (true) {
+                delay(4000)
+                currentTipIdx = (currentTipIdx + 1) % tips.size
+            }
         }
     }
 
+    val (tipIcon, tipText) = tips[currentTipIdx]
+
     Surface(
         shape = RoundedCornerShape(10.dp),
-        color = Color(0xFF1E293B).copy(alpha = 0.75f),
+        color = Color(0xFF1E293B).copy(alpha = 0.85f),
         border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF334155).copy(alpha = 0.5f)),
-        modifier = modifier
+        modifier = modifier.widthIn(max = 520.dp)
     ) {
-        Text(
-            text = tips[currentTipIdx],
-            fontSize = 11.sp,
-            color = Color(0xFFCBD5E1),
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
-        )
+        Row(
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Icon(
+                imageVector = tipIcon,
+                contentDescription = null,
+                tint = Color(0xFF34D399),
+                modifier = Modifier.size(16.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = tipText,
+                fontSize = 11.sp,
+                color = Color(0xFFE2E8F0),
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }

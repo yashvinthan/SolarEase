@@ -71,13 +71,22 @@ import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.roundToInt
 
-// Blue accent theme for Consumption Analytics as required
-private val BluePrimary = Color(0xFF2563EB) // Energy Blue
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
+
+// Blue accent theme for Consumption Analytics as required (WCAG 2.2 AA >= 4.5:1 verified)
+private val BluePrimary = Color(0xFF1D4ED8) // Energy Blue
 private val BluePrimaryLight = Color(0xFF3B82F6)
 private val BlueContainer = Color(0xFFEFF6FF)
 private val BlueBorder = Color(0xFFDBEAFE)
 private val TextDark = Color(0xFF1E222D)
-private val TextMuted = Color(0xFF64748B)
+private val TextMuted = Color(0xFF475569)
 private val GridLineColor = Color(0xFFE2E8F0)
 
 enum class ConsumptionRange(val label: String, val days: Int) {
@@ -190,19 +199,26 @@ fun DailyConsumptionGraph(
                         .clip(RoundedCornerShape(12.dp))
                         .background(Color(0xFFE2E8F0).copy(alpha = 0.6f))
                         .padding(2.dp),
-                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                    horizontalArrangement = Arrangement.spacedBy(2.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     availableRanges.forEach { range ->
                         val isSelected = range == selectedRange
                         Box(
                             modifier = Modifier
+                                .defaultMinSize(minWidth = 40.dp, minHeight = 48.dp)
                                 .clip(RoundedCornerShape(10.dp))
                                 .background(if (isSelected) BluePrimary else Color.Transparent)
-                                .clickable {
+                                .clickable(role = Role.Tab) {
                                     selectedRange = range
                                     selectedPointIndex = null
                                 }
-                                .padding(horizontal = 8.dp, vertical = 3.dp),
+                                .semantics(mergeDescendants = true) {
+                                    role = Role.Tab
+                                    selected = isSelected
+                                    stateDescription = if (isSelected) "Selected" else "Not selected"
+                                }
+                                .padding(horizontal = 8.dp, vertical = 4.dp),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
@@ -345,6 +361,9 @@ fun DailyConsumptionGraph(
                     Canvas(
                         modifier = Modifier
                             .fillMaxSize()
+                            .semantics {
+                                contentDescription = "Daily consumption line chart for ${selectedRange.label}: average ${String.format(Locale.getDefault(), "%.1f", avgDaily)} kWh per day, peak ${String.format(Locale.getDefault(), "%.1f", peakDaily)} kWh, total ${String.format(Locale.getDefault(), "%.0f", totalPeriodUnits)} kWh."
+                            }
                             .pointerInput(filteredPoints) {
                                 detectTapGestures { tapOffset ->
                                     if (pointCoordinates.isNotEmpty()) {
@@ -545,12 +564,12 @@ private fun parseIsoDate(iso: String): Date? {
         null
     }
 }
-// SolarEase Energy Blue Palette for Weekly Meter Consumption Graph
-private val GraphBluePrimary = Color(0xFF2563EB)
-private val GraphBluePrimaryDark = Color(0xFF1D4ED8)
+// SolarEase Energy Blue Palette for Weekly Meter Consumption Graph (WCAG 2.2 AA verified)
+private val GraphBluePrimary = Color(0xFF1D4ED8)
+private val GraphBluePrimaryDark = Color(0xFF1E40AF)
 private val GraphBlueContainer = Color(0xFFEFF6FF)
 private val GraphBlueBorder = Color(0xFFDBEAFE)
-private val AmberWarning = Color(0xFFD97706)
+private val AmberWarning = Color(0xFF9A3412)
 private val AmberContainer = Color(0xFFFFFBEB)
 private val BorderColor = Color(0xFFE2E8F0)
 
@@ -692,14 +711,14 @@ fun MeterReadingProgressionGraph(
                         },
                         enabled = weeklyData.hasOlder,
                         modifier = Modifier
-                            .size(24.dp)
+                            .size(48.dp)
                             .testTag("prev_week_button")
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Previous Week",
                             tint = if (weeklyData.hasOlder) GraphBluePrimary else TextMuted.copy(alpha = 0.3f),
-                            modifier = Modifier.size(14.dp)
+                            modifier = Modifier.size(16.dp)
                         )
                     }
 
@@ -721,14 +740,14 @@ fun MeterReadingProgressionGraph(
                         },
                         enabled = weeklyData.hasNewer,
                         modifier = Modifier
-                            .size(24.dp)
+                            .size(48.dp)
                             .testTag("next_week_button")
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                             contentDescription = "Next Week",
                             tint = if (weeklyData.hasNewer) GraphBluePrimary else TextMuted.copy(alpha = 0.3f),
-                            modifier = Modifier.size(14.dp)
+                            modifier = Modifier.size(16.dp)
                         )
                     }
                 }
@@ -739,9 +758,9 @@ fun MeterReadingProgressionGraph(
                         if (onViewReadingDetails != null) onViewReadingDetails()
                         else showInternalBottomSheet = true
                     },
-                    contentPadding = PaddingValues(horizontal = 4.dp, vertical = 0.dp),
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp),
                     modifier = Modifier
-                        .height(24.dp)
+                        .heightIn(min = 48.dp)
                         .testTag("view_reading_details_header_button")
                 ) {
                     Text(
@@ -810,6 +829,9 @@ fun MeterReadingProgressionGraph(
                     Canvas(
                         modifier = Modifier
                             .fillMaxSize()
+                            .semantics {
+                                contentDescription = "Weekly meter consumption bar chart for ${weeklyData.periodTitle}"
+                            }
                             .pointerInput(days) {
                                 detectTapGestures { tapOffset ->
                                     val leftPad = 44.dp.toPx()
@@ -931,7 +953,7 @@ fun MeterReadingProgressionGraph(
                         )
                     }
 
-                    // Floating Labels Above Bars (Interval consumption +X kWh, Base, or ⚠)
+                    // Floating Labels Above Bars (Interval consumption +X kWh, Base, or Warning Icon)
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -948,11 +970,11 @@ fun MeterReadingProgressionGraph(
                                 contentAlignment = Alignment.Center
                             ) {
                                 if (day.isDecreasedReading) {
-                                    Text(
-                                        text = "⚠",
-                                        fontSize = 10.sp,
-                                        color = AmberWarning,
-                                        fontWeight = FontWeight.Bold
+                                    Icon(
+                                        imageVector = Icons.Default.Warning,
+                                        contentDescription = "Decreased reading warning",
+                                        tint = AmberWarning,
+                                        modifier = Modifier.size(12.dp)
                                     )
                                 } else if (day.isBaselinePoint) {
                                     Text(
@@ -992,7 +1014,11 @@ fun MeterReadingProgressionGraph(
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 modifier = Modifier
                                     .weight(1f)
-                                    .clickable { selectedDayIndex = if (isSel) null else i }
+                                    .clickable(role = Role.Tab) { selectedDayIndex = if (isSel) null else i }
+                                    .semantics(mergeDescendants = true) {
+                                        role = Role.Tab
+                                        selected = isSel
+                                    }
                             ) {
                                 Text(
                                     text = day.dayLabel,
@@ -1043,17 +1069,17 @@ fun MeterReadingProgressionGraph(
 
                                 TextButton(
                                     onClick = { onEditReading(selectedDay.dateIso) },
-                                    contentPadding = PaddingValues(horizontal = 4.dp, vertical = 0.dp),
-                                    modifier = Modifier.height(22.dp)
+                                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp),
+                                    modifier = Modifier.heightIn(min = 48.dp)
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.Edit,
                                         contentDescription = "Edit reading",
                                         tint = GraphBluePrimary,
-                                        modifier = Modifier.size(11.dp)
+                                        modifier = Modifier.size(12.dp)
                                     )
-                                    Spacer(modifier = Modifier.width(2.dp))
-                                    Text("Edit", fontSize = 10.sp, color = GraphBluePrimary, fontWeight = FontWeight.Bold)
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Text("Edit", fontSize = 11.sp, color = GraphBluePrimary, fontWeight = FontWeight.Bold)
                                 }
                             }
 
@@ -1151,9 +1177,9 @@ fun MeterReadingProgressionGraph(
                                         if (onViewReadingDetails != null) onViewReadingDetails()
                                         else showInternalBottomSheet = true
                                     },
-                                    contentPadding = PaddingValues(horizontal = 6.dp, vertical = 0.dp),
+                                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp),
                                     modifier = Modifier
-                                        .height(24.dp)
+                                        .heightIn(min = 48.dp)
                                         .testTag("view_reading_details_tooltip_button")
                                 ) {
                                     Text(
@@ -1189,8 +1215,8 @@ fun MeterReadingProgressionGraph(
                             )
                             TextButton(
                                 onClick = { onEditReading(selectedDay.dateIso) },
-                                contentPadding = PaddingValues(horizontal = 6.dp, vertical = 0.dp),
-                                modifier = Modifier.height(24.dp)
+                                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp),
+                                modifier = Modifier.heightIn(min = 48.dp)
                             ) {
                                 Text(
                                     text = "Log Reading",

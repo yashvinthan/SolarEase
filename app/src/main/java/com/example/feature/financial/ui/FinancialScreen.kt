@@ -119,57 +119,59 @@ fun EmptyFinancialState() {
 fun FinancialContent(data: FinancialDashboard) {
     val currencyFormat = remember { NumberFormat.getCurrencyInstance(Locale("en", "IN")).apply { maximumFractionDigits = 0 } }
     
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        item {
-            FinancialOverviewCard(data.investmentSummary, currencyFormat)
-        }
-        
-        item {
-            SavingsMilestoneCard(data.milestones, currencyFormat)
-        }
-        
-        item {
-            TodaySavingsSection(data.savingsSummary, currencyFormat)
-        }
-        
-        item {
-            BillComparisonSection(data.billComparison, currencyFormat)
-        }
-        
-        item {
-            RoiSection(data.roiSummary, currencyFormat)
-        }
-        
-        item {
-            SavingsHistorySection(data.savingsHistory)
-        }
-        
-        item {
-            FinancialInsightsSection(data.insights)
-        }
-        
-        item {
-            TwentyFiveYearSavingsSection(data.projectedSavings25Years, currencyFormat)
-        }
-        
-        item {
-            IncentivesSection(data.subsidyInformation, currencyFormat)
-        }
-        
-        item {
-            SmartRecommendationsSection(data.recommendations)
-        }
-        
-        item {
-            ReportsSection()
-        }
-        
-        item {
-            Spacer(modifier = Modifier.height(32.dp))
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+        LazyColumn(
+            modifier = Modifier.widthIn(max = 720.dp).fillMaxSize(),
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            item {
+                FinancialOverviewCard(data.investmentSummary, currencyFormat)
+            }
+            
+            item {
+                SavingsMilestoneCard(data.milestones, currencyFormat)
+            }
+            
+            item {
+                TodaySavingsSection(data.savingsSummary, currencyFormat)
+            }
+            
+            item {
+                BillComparisonSection(data.billComparison, currencyFormat)
+            }
+            
+            item {
+                RoiSection(data.roiSummary, currencyFormat)
+            }
+            
+            item {
+                SavingsHistorySection(data.savingsHistory)
+            }
+            
+            item {
+                FinancialInsightsSection(data.insights)
+            }
+            
+            item {
+                TwentyFiveYearSavingsSection(data.projectedSavings25Years, currencyFormat)
+            }
+            
+            item {
+                IncentivesSection(data.subsidyInformation, currencyFormat)
+            }
+            
+            item {
+                SmartRecommendationsSection(data.recommendations)
+            }
+            
+            item {
+                ReportsSection()
+            }
+            
+            item {
+                Spacer(modifier = Modifier.height(32.dp))
+            }
         }
     }
 }
@@ -229,7 +231,7 @@ fun SavingsMilestoneCard(milestones: MilestonesData, format: NumberFormat) {
         ) {
             Column(modifier = Modifier.padding(20.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("🎉", style = MaterialTheme.typography.headlineMedium)
+                    Icon(Icons.Default.EmojiEvents, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(32.dp))
                     Spacer(modifier = Modifier.width(12.dp))
                     Column {
                         Text("Congratulations!", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSecondaryContainer)
@@ -678,10 +680,10 @@ fun ReportsSection() {
     Column {
         Text("Reports", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 4.dp, bottom = 12.dp))
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            OutlinedButton(onClick = { }, modifier = Modifier.weight(1f).height(44.dp), shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)) {
+            OutlinedButton(onClick = { }, modifier = Modifier.weight(1f).heightIn(min = 48.dp), shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)) {
                 Text("Monthly Report")
             }
-            OutlinedButton(onClick = { }, modifier = Modifier.weight(1f).height(44.dp), shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)) {
+            OutlinedButton(onClick = { }, modifier = Modifier.weight(1f).heightIn(min = 48.dp), shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)) {
                 Text("Annual Report")
             }
         }

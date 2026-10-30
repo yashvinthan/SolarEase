@@ -27,9 +27,14 @@ import com.example.feature.home.ui.modules.BillingComparisonState
 import com.example.feature.home.ui.modules.BillingCycleComparison
 import com.example.feature.home.ui.modules.BillingCycleItem
 import com.example.feature.home.ui.modules.BillingCycleStatus
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import com.example.feature.recommends.model.*
 import com.example.ui.components.SolarEaseBottomNavigation
 import com.example.ui.components.SolarEaseNavTab
+import com.example.ui.components.SolarEaseNavigationRail
 import com.example.ui.theme.*
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -75,6 +80,8 @@ fun RecommendsScreen(
     onNextCycle: () -> Unit = {},
     onNavigateToSolarEstimate: () -> Unit = {}
 ) {
+    val layoutInfo = rememberSolarEaseWindowLayoutInfo()
+
     Scaffold(
         containerColor = StitchSurface,
         topBar = {
@@ -84,12 +91,14 @@ fun RecommendsScreen(
             )
         },
         bottomBar = {
-            SolarEaseBottomNavigation(
-                currentTab = SolarEaseNavTab.RECOMMENDS,
-                onNavigateToHome = onNavigateToHome,
-                onNavigateToRecommends = { /* Already on Recommends */ },
-                onNavigateToProfile = onNavigateToProfile
-            )
+            if (!layoutInfo.useNavigationRail) {
+                SolarEaseBottomNavigation(
+                    currentTab = SolarEaseNavTab.RECOMMENDS,
+                    onNavigateToHome = onNavigateToHome,
+                    onNavigateToRecommends = { /* Already on Recommends */ },
+                    onNavigateToProfile = onNavigateToProfile
+                )
+            }
         }
     ) { innerPadding ->
         var showRulesAndHistorySheet by remember { mutableStateOf(false) }
@@ -103,51 +112,72 @@ fun RecommendsScreen(
             )
         }
 
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 20.dp, vertical = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // 1. Hero Header Section with Eco Illustration
-            RecommendsHeroHeader()
+            if (layoutInfo.useNavigationRail) {
+                SolarEaseNavigationRail(
+                    currentTab = SolarEaseNavTab.RECOMMENDS,
+                    onNavigateToHome = onNavigateToHome,
+                    onNavigateToRecommends = { /* Already on Recommends */ },
+                    onNavigateToProfile = onNavigateToProfile
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+                    .verticalScroll(rememberScrollState()),
+                contentAlignment = Alignment.TopCenter
+            ) {
+                Column(
+                    modifier = Modifier
+                        .widthIn(max = layoutInfo.maxContentWidth)
+                        .fillMaxWidth()
+                        .padding(horizontal = layoutInfo.horizontalPadding, vertical = 12.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    // 1. Hero Header Section with Eco Illustration
+                    RecommendsHeroHeader()
 
-            // 2. Compact SolarEase Coins Card
-            SolarEaseCoinsCard(
-                coinBalance = uiState.coinBalance,
-                streakState = uiState.streakState,
-                recentTransactions = uiState.coinTransactions.take(3),
-                verificationResult = uiState.billVerificationResult,
-                onViewHistoryClick = { showRulesAndHistorySheet = true }
-            )
+                    // 2. Compact SolarEase Coins Card
+                    SolarEaseCoinsCard(
+                        coinBalance = uiState.coinBalance,
+                        streakState = uiState.streakState,
+                        recentTransactions = uiState.coinTransactions.take(3),
+                        verificationResult = uiState.billVerificationResult,
+                        onViewHistoryClick = { showRulesAndHistorySheet = true }
+                    )
 
-            // 3. Last Billing Cycle (Verified Savings Card with Navigation)
-            BillingSavingsCard(
-                savings = uiState.billingCycleSavings,
-                availableCycles = uiState.availableCycles,
-                selectedCycleIndex = uiState.selectedCycleIndex,
-                cycleComparison = uiState.cycleComparison,
-                onPreviousCycle = onPreviousCycle,
-                onNextCycle = onNextCycle
-            )
+                    // 3. Last Billing Cycle (Verified Savings Card with Navigation)
+                    BillingSavingsCard(
+                        savings = uiState.billingCycleSavings,
+                        availableCycles = uiState.availableCycles,
+                        selectedCycleIndex = uiState.selectedCycleIndex,
+                        cycleComparison = uiState.cycleComparison,
+                        onPreviousCycle = onPreviousCycle,
+                        onNextCycle = onNextCycle
+                    )
 
-            // 4. Today's Mantra Progress (Full-width compact card)
-            TodayProgressCard(
-                modifier = Modifier.fillMaxWidth(),
-                checkedCount = uiState.todayProgressChecked,
-                totalCount = uiState.todayProgressTotal
-            )
+                    // 4. Today's Mantra Progress (Full-width compact card)
+                    TodayProgressCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        checkedCount = uiState.todayProgressChecked,
+                        totalCount = uiState.todayProgressTotal
+                    )
 
-            // 5. 9 Energy-Saving Mantras Section
-            MantrasSection(
-                mantras = uiState.mantras,
-                isExpanded = uiState.isMantrasExpanded,
-                onToggleExpand = onToggleMantrasExpanded,
-                onMantraClick = onMantraClick
-            )
-            Spacer(modifier = Modifier.height(24.dp))
+                    // 5. 9 Energy-Saving Mantras Section
+                    MantrasSection(
+                        mantras = uiState.mantras,
+                        isExpanded = uiState.isMantrasExpanded,
+                        onToggleExpand = onToggleMantrasExpanded,
+                        onMantraClick = onMantraClick
+                    )
+                    Spacer(modifier = Modifier.height(24.dp))
+                }
+            }
         }
     }
 }
@@ -169,12 +199,13 @@ private fun RecommendsTopBar(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp)
-                .padding(horizontal = 20.dp),
+                .heightIn(min = 56.dp)
+                .padding(horizontal = 20.dp, vertical = 6.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Row(
+                modifier = Modifier.weight(1f),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
@@ -192,13 +223,15 @@ private fun RecommendsTopBar(
                         modifier = Modifier.size(20.dp)
                     )
                 }
-                Column {
+                Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = "SolarEase",
                         fontSize = 17.sp,
                         fontWeight = FontWeight.Bold,
                         color = StitchOnSurface,
-                        letterSpacing = (-0.3).sp
+                        letterSpacing = (-0.3).sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
@@ -221,18 +254,27 @@ private fun RecommendsTopBar(
 
             Box(
                 modifier = Modifier
-                    .size(36.dp)
-                    .clip(CircleShape)
-                    .background(StitchPrimary)
-                    .clickable { onProfileClick() },
+                    .size(48.dp)
+                    .semantics(mergeDescendants = true) {
+                        role = Role.Button
+                    }
+                    .clickable(role = Role.Button) { onProfileClick() },
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = Icons.Default.Person,
-                    contentDescription = "Profile",
-                    tint = Color.White,
-                    modifier = Modifier.size(20.dp)
-                )
+                Box(
+                    modifier = Modifier
+                        .size(36.dp)
+                        .clip(CircleShape)
+                        .background(StitchPrimary),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = "Profile",
+                        tint = Color.White,
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
             }
         }
     }
@@ -260,7 +302,7 @@ private fun RecommendsHeroHeader() {
         Text(
             text = "Follow the 9 Energy-Saving Mantras and build your energy-saving journey.",
             fontSize = 12.sp,
-            color = Color(0xFF64748B),
+            color = Color(0xFF525651),
             lineHeight = 16.sp
         )
     }
@@ -303,8 +345,13 @@ private fun SolarEaseCoinsCard(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .heightIn(min = 48.dp)
                     .clip(RoundedCornerShape(8.dp))
-                    .clickable { isExpanded = !isExpanded },
+                    .semantics {
+                        role = Role.Button
+                        stateDescription = if (isExpanded) "Expanded" else "Collapsed"
+                    }
+                    .clickable(role = Role.Button) { isExpanded = !isExpanded },
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -325,9 +372,11 @@ private fun SolarEaseCoinsCard(
                             .border(2.dp, Color(0xFFFDE68A), CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(
-                            text = "🪙",
-                            fontSize = if (isExpanded) 20.sp else 18.sp
+                        Icon(
+                            imageVector = Icons.Default.MonetizationOn,
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier.size(if (isExpanded) 24.dp else 20.dp)
                         )
                     }
 
@@ -380,7 +429,7 @@ private fun SolarEaseCoinsCard(
 
                     IconButton(
                         onClick = { isExpanded = !isExpanded },
-                        modifier = Modifier.size(28.dp)
+                        modifier = Modifier.size(48.dp)
                     ) {
                         Icon(
                             imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
@@ -426,7 +475,7 @@ private fun SolarEaseCoinsCard(
                             Text(
                                 text = if (recentTransactions.isNotEmpty()) "Latest ${recentTransactions.size}" else "",
                                 fontSize = 11.sp,
-                                color = Color(0xFF73796E)
+                                color = Color(0xFF525651)
                             )
                         }
 
@@ -444,13 +493,13 @@ private fun SolarEaseCoinsCard(
                                 Icon(
                                     imageVector = Icons.Outlined.Info,
                                     contentDescription = null,
-                                    tint = Color(0xFF94A3B8),
+                                    tint = Color(0xFF525651),
                                     modifier = Modifier.size(16.dp)
                                 )
                                 Text(
                                     text = "No coin transactions yet. Check in a mantra to earn your first coin!",
                                     fontSize = 11.sp,
-                                    color = Color(0xFF64748B),
+                                    color = Color(0xFF525651),
                                     lineHeight = 15.sp
                                 )
                             }
@@ -468,7 +517,7 @@ private fun SolarEaseCoinsCard(
                         onClick = onViewHistoryClick,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(42.dp),
+                            .heightIn(min = 48.dp),
                         shape = RoundedCornerShape(10.dp),
                         border = BorderStroke(1.dp, Color(0xFF386A20)),
                         colors = ButtonDefaults.outlinedButtonColors(
@@ -649,7 +698,7 @@ private fun SevenDayStreakTracker(streakState: StreakState) {
                 Box(
                     modifier = Modifier
                         .weight(1f)
-                        .height(38.dp)
+                        .heightIn(min = 38.dp)
                         .clip(RoundedCornerShape(8.dp))
                         .background(
                             when {
@@ -701,7 +750,7 @@ private fun SevenDayStreakTracker(streakState: StreakState) {
                             text = "D$day",
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color(0xFF94A3B8)
+                            color = Color(0xFF525651)
                         )
                     }
                 }
@@ -711,12 +760,12 @@ private fun SevenDayStreakTracker(streakState: StreakState) {
         // Milestone Subtext
         Text(
             text = if (streakState.daysInCurrentCycle == 7) {
-                "🎉 Cycle ${streakState.currentMilestoneCycle} complete! +5 bonus coins awarded. Check in tomorrow to advance into Cycle ${streakState.currentMilestoneCycle + 1}!"
+                "Cycle ${streakState.currentMilestoneCycle} complete! +5 bonus coins awarded. Check in tomorrow to advance into Cycle ${streakState.currentMilestoneCycle + 1}!"
             } else {
                 "${7 - streakState.daysInCurrentCycle} day(s) until your next 5-coin milestone bonus."
             },
             fontSize = 11.sp,
-            color = Color(0xFF64748B),
+            color = Color(0xFF525651),
             lineHeight = 15.sp
         )
     }
@@ -786,7 +835,7 @@ private fun MiniTransactionRow(tx: CoinTransaction) {
                     Text(
                         text = formatTransactionTimestamp(tx.timestamp),
                         fontSize = 10.sp,
-                        color = Color(0xFF94A3B8)
+                        color = Color(0xFF525651)
                     )
                 }
             }
@@ -921,11 +970,11 @@ private fun CoinsRulesAndHistoryBottomSheet(
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF0F172A)
                 )
-                IconButton(onClick = onDismiss, modifier = Modifier.size(32.dp)) {
+                IconButton(onClick = onDismiss, modifier = Modifier.size(48.dp)) {
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = "Close",
-                        tint = Color(0xFF64748B),
+                        tint = Color(0xFF525651),
                         modifier = Modifier.size(20.dp)
                     )
                 }
@@ -1041,7 +1090,7 @@ private fun CoinsRulesAndHistoryBottomSheet(
                             Text(
                                 text = "Complete daily mantras or verify electric bills to earn SolarEase Coins.",
                                 fontSize = 12.sp,
-                                color = Color(0xFF64748B),
+                                color = Color(0xFF475569),
                                 lineHeight = 16.sp
                             )
                         }
@@ -1096,7 +1145,7 @@ private fun CoinsRulesAndHistoryBottomSheet(
 
                         EarningRuleItem(
                             icon = Icons.Outlined.Info,
-                            iconTint = Color(0xFF64748B),
+                            iconTint = Color(0xFF475569),
                             title = "Historical Baseline Policy",
                             description = "Pre-existing cached bills on first activation establish your historical baseline and do not earn retroactive rewards. If prior bill history is insufficient, shows 'Not enough bill history to verify yet.'"
                         )
@@ -1175,7 +1224,7 @@ private fun EarningRuleItem(
                 Text(
                     text = description,
                     fontSize = 11.sp,
-                    color = Color(0xFF64748B),
+                    color = Color(0xFF475569),
                     lineHeight = 15.sp
                 )
             }
@@ -1274,8 +1323,13 @@ private fun BillingSavingsCard(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .heightIn(min = 48.dp)
                     .clip(RoundedCornerShape(8.dp))
-                    .clickable { isExpanded = !isExpanded },
+                    .semantics {
+                        role = Role.Button
+                        stateDescription = if (isExpanded) "Expanded" else "Collapsed"
+                    }
+                    .clickable(role = Role.Button) { isExpanded = !isExpanded },
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -1299,7 +1353,7 @@ private fun BillingSavingsCard(
 
                 IconButton(
                     onClick = { isExpanded = !isExpanded },
-                    modifier = Modifier.size(28.dp)
+                    modifier = Modifier.size(48.dp)
                 ) {
                     Icon(
                         imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
@@ -1326,7 +1380,7 @@ private fun BillingSavingsCard(
                         text = "Previous Cycle",
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Medium,
-                        color = Color(0xFF64748B)
+                        color = Color(0xFF525651)
                     )
                     Text(
                         text = "${prevUnits.toInt()} kWh",
@@ -1337,7 +1391,7 @@ private fun BillingSavingsCard(
                     Text(
                         text = prevPeriod,
                         fontSize = 11.sp,
-                        color = Color(0xFF94A3B8),
+                        color = Color(0xFF525651),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -1375,7 +1429,7 @@ private fun BillingSavingsCard(
                             tint = when {
                                 isIncreaseDiff -> Color(0xFFD97706)
                                 isDecrease -> Color(0xFF059669)
-                                else -> Color(0xFF64748B)
+                                else -> Color(0xFF525651)
                             },
                             modifier = Modifier.size(13.dp)
                         )
@@ -1407,7 +1461,7 @@ private fun BillingSavingsCard(
                         text = if (isCurrent) "Current Cycle" else "Selected Cycle",
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Medium,
-                        color = Color(0xFF64748B)
+                        color = Color(0xFF525651)
                     )
                     Text(
                         text = "${currUnits.toInt()} kWh",
@@ -1422,7 +1476,7 @@ private fun BillingSavingsCard(
                         Text(
                             text = currPeriod,
                             fontSize = 11.sp,
-                            color = Color(0xFF94A3B8),
+                            color = Color(0xFF525651),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -1479,7 +1533,7 @@ private fun BillingSavingsCard(
                                 text = "Select Cycle",
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.SemiBold,
-                                color = Color(0xFF64748B)
+                                color = Color(0xFF525651)
                             )
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
@@ -1488,7 +1542,7 @@ private fun BillingSavingsCard(
                                 IconButton(
                                     onClick = onPreviousCycle,
                                     enabled = canGoBack,
-                                    modifier = Modifier.size(28.dp)
+                                    modifier = Modifier.size(48.dp)
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.ChevronLeft,
@@ -1528,7 +1582,7 @@ private fun BillingSavingsCard(
                                 IconButton(
                                     onClick = onNextCycle,
                                     enabled = canGoForward,
-                                    modifier = Modifier.size(28.dp)
+                                    modifier = Modifier.size(48.dp)
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.ChevronRight,
@@ -1626,13 +1680,13 @@ private fun BillingSavingsCard(
                                                 text = "↑ +$diff kWh",
                                                 fontSize = 12.sp,
                                                 fontWeight = FontWeight.ExtraBold,
-                                                color = Color(0xFFD97706)
+                                                color = Color(0xFF9A3412)
                                             )
                                             Text(
                                                 text = "• Consumption Increased",
                                                 fontSize = 12.sp,
                                                 fontWeight = FontWeight.Bold,
-                                                color = Color(0xFFB45309)
+                                                color = Color(0xFF9A3412)
                                             )
                                         }
                                         Text(
@@ -1644,7 +1698,7 @@ private fun BillingSavingsCard(
                                         Text(
                                             text = comparison?.comparisonNote ?: "Already +$diff kWh higher than previous cycle",
                                             fontSize = 10.sp,
-                                            color = Color(0xFF94A3B8)
+                                            color = Color(0xFF525651)
                                         )
                                     }
                                     BillingComparisonState.CURRENT_LOWER -> {
@@ -1657,7 +1711,7 @@ private fun BillingSavingsCard(
                                                 text = "↓ $diff kWh",
                                                 fontSize = 12.sp,
                                                 fontWeight = FontWeight.ExtraBold,
-                                                color = Color(0xFF0284C7)
+                                                color = Color(0xFF0369A1)
                                             )
                                             Text(
                                                 text = "• Below Previous Cycle",
@@ -1675,7 +1729,7 @@ private fun BillingSavingsCard(
                                         Text(
                                             text = comparison?.comparisonNote ?: "Current cycle still in progress",
                                             fontSize = 10.sp,
-                                            color = Color(0xFF64748B)
+                                            color = Color(0xFF525651)
                                         )
                                     }
                                     BillingComparisonState.COMPLETED_SAVED -> {
@@ -1689,7 +1743,7 @@ private fun BillingSavingsCard(
                                                 text = "↓ $saved kWh",
                                                 fontSize = 12.sp,
                                                 fontWeight = FontWeight.ExtraBold,
-                                                color = Color(0xFF059669)
+                                                color = Color(0xFF15803D)
                                             )
                                             Text(
                                                 text = "• Saved",
@@ -1702,12 +1756,12 @@ private fun BillingSavingsCard(
                                             text = if (credits > 0) "+$credits Energy Credits" else comparison?.secondaryMessage ?: "Historical Baseline",
                                             fontSize = 11.sp,
                                             fontWeight = FontWeight.SemiBold,
-                                            color = if (credits > 0) Color(0xFF059669) else Color(0xFF64748B)
+                                            color = if (credits > 0) Color(0xFF15803D) else Color(0xFF525651)
                                         )
                                         Text(
                                             text = comparison?.comparisonNote ?: "$saved kWh lower than $prevPeriod",
                                             fontSize = 10.sp,
-                                            color = Color(0xFF94A3B8)
+                                            color = Color(0xFF525651)
                                         )
                                     }
                                     BillingComparisonState.COMPLETED_INCREASED -> {
@@ -1720,13 +1774,13 @@ private fun BillingSavingsCard(
                                                 text = "↑ +$diff kWh",
                                                 fontSize = 12.sp,
                                                 fontWeight = FontWeight.ExtraBold,
-                                                color = Color(0xFFD97706)
+                                                color = Color(0xFF9A3412)
                                             )
                                             Text(
                                                 text = "• Consumption Increased",
                                                 fontSize = 12.sp,
                                                 fontWeight = FontWeight.Bold,
-                                                color = Color(0xFFB45309)
+                                                color = Color(0xFF9A3412)
                                             )
                                         }
                                         Text(
@@ -1738,7 +1792,7 @@ private fun BillingSavingsCard(
                                         Text(
                                             text = comparison?.comparisonNote ?: "Consumption increased by $diff kWh compared with the previous cycle",
                                             fontSize = 10.sp,
-                                            color = Color(0xFF94A3B8)
+                                            color = Color(0xFF525651)
                                         )
                                     }
                                     BillingComparisonState.COMPLETED_NO_CHANGE -> {
@@ -1768,7 +1822,7 @@ private fun BillingSavingsCard(
                                         Text(
                                             text = comparison?.comparisonNote ?: "0 kWh difference compared with the previous cycle",
                                             fontSize = 10.sp,
-                                            color = Color(0xFF94A3B8)
+                                            color = Color(0xFF525651)
                                         )
                                     }
                                     BillingComparisonState.CURRENT_NO_READINGS -> {
@@ -1787,7 +1841,7 @@ private fun BillingSavingsCard(
                                         Text(
                                             text = comparison?.comparisonNote ?: "Log daily readings on Home to track consumption in real-time",
                                             fontSize = 10.sp,
-                                            color = Color(0xFF94A3B8)
+                                            color = Color(0xFF525651)
                                         )
                                     }
                                 }
@@ -1819,8 +1873,13 @@ private fun MantrasSection(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .heightIn(min = 48.dp)
                 .clip(RoundedCornerShape(8.dp))
-                .clickable { onToggleExpand() }
+                .semantics {
+                    role = Role.Button
+                    stateDescription = if (isExpanded) "Expanded" else "Collapsed"
+                }
+                .clickable(role = Role.Button) { onToggleExpand() }
                 .padding(vertical = 4.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
@@ -1840,7 +1899,7 @@ private fun MantrasSection(
                 Text(
                     text = "Check in regularly, build the habit and reduce your electricity consumption.",
                     fontSize = 12.sp,
-                    color = Color(0xFF64748B)
+                    color = Color(0xFF525651)
                 )
             }
 
@@ -1862,7 +1921,7 @@ private fun MantrasSection(
                             text = "$checkedCount of $totalCount completed",
                             fontSize = 11.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = if (checkedCount == totalCount) Color(0xFF16A34A) else Color(0xFF64748B),
+                            color = if (checkedCount == totalCount) Color(0xFF16A34A) else Color(0xFF525651),
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                         )
                     }
@@ -1870,7 +1929,7 @@ private fun MantrasSection(
 
                 IconButton(
                     onClick = onToggleExpand,
-                    modifier = Modifier.size(28.dp)
+                    modifier = Modifier.size(48.dp)
                 ) {
                     Icon(
                         imageVector = if (isExpanded) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowUp,
@@ -1907,6 +1966,18 @@ private fun MantraCard(
     item: MantraItem,
     onClick: () -> Unit
 ) {
+    val mantraVectorIcon = when (item.id) {
+        1 -> Icons.Outlined.PowerSettingsNew
+        2 -> Icons.Outlined.Tv
+        3 -> Icons.Outlined.AcUnit
+        4 -> Icons.Outlined.Lightbulb
+        5 -> Icons.Outlined.Kitchen
+        6 -> Icons.Outlined.LocalLaundryService
+        7 -> Icons.Outlined.OfflineBolt
+        8 -> Icons.Outlined.WbSunny
+        else -> Icons.Outlined.Restaurant
+    }
+
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
@@ -1926,7 +1997,7 @@ private fun MantraCard(
                     text = item.number,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF94A3B8),
+                    color = Color(0xFF525651),
                     modifier = Modifier.padding(top = 2.dp)
                 )
 
@@ -1938,9 +2009,11 @@ private fun MantraCard(
                         .background(Color(item.iconBgColorHex)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = item.iconEmoji,
-                        fontSize = 19.sp
+                    Icon(
+                        imageVector = mantraVectorIcon,
+                        contentDescription = null,
+                        tint = Color(0xFF19380A),
+                        modifier = Modifier.size(20.dp)
                     )
                 }
 
@@ -1959,7 +2032,7 @@ private fun MantraCard(
                     Text(
                         text = item.description,
                         fontSize = 11.sp,
-                        color = Color(0xFF64748B),
+                        color = Color(0xFF525651),
                         lineHeight = 15.sp,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
@@ -1975,7 +2048,7 @@ private fun MantraCard(
                         Surface(
                             shape = RoundedCornerShape(14.dp),
                             color = Color(0xFF16A34A),
-                            modifier = Modifier.clickable { onClick() }
+                            modifier = Modifier.clickable(role = Role.Button) { onClick() }
                         ) {
                             Row(
                                 modifier = Modifier.padding(horizontal = 9.dp, vertical = 5.dp),
@@ -2003,17 +2076,17 @@ private fun MantraCard(
                                 text = item.checkInTimeDisplay,
                                 fontSize = 9.sp,
                                 fontWeight = FontWeight.Medium,
-                                color = Color(0xFF94A3B8),
+                                color = Color(0xFF525651),
                                 maxLines = 1
                             )
                         }
                     } else {
                         OutlinedButton(
                             onClick = onClick,
-                            modifier = Modifier.height(30.dp),
+                            modifier = Modifier.heightIn(min = 48.dp),
                             shape = RoundedCornerShape(14.dp),
                             border = BorderStroke(1.dp, Color(0xFF16A34A)),
-                            contentPadding = PaddingValues(horizontal = 10.dp, vertical = 0.dp),
+                            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
                             colors = ButtonDefaults.outlinedButtonColors(
                                 containerColor = Color.White,
                                 contentColor = Color(0xFF15803D)

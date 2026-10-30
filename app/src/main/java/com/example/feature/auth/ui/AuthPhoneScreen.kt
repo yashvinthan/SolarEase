@@ -13,6 +13,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -41,112 +44,129 @@ fun AuthPhoneRoute(
         }
     }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .verticalScroll(rememberScrollState())
-            .padding(24.dp)
+            .verticalScroll(rememberScrollState()),
+        contentAlignment = Alignment.TopCenter
     ) {
-        StepProgress(currentStep = 1, totalSteps = 11)
-        
-        Spacer(modifier = Modifier.height(24.dp))
-        
-        Box(
+        Column(
             modifier = Modifier
-                .size(64.dp)
-                .clip(MaterialTheme.shapes.medium)
-                .background(MaterialTheme.colorScheme.primaryContainer),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = Icons.Default.WbSunny,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(32.dp)
-            )
-        }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Text(
-            text = "Welcome to SolarEase",
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-        
-        Text(
-            text = "Enter your details to start your solar journey.",
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(bottom = 32.dp)
-        )
-        
-        OutlinedTextField(
-            value = fullName,
-            onValueChange = { fullName = it },
-            label = { Text("Full Name *") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            shape = MaterialTheme.shapes.medium,
-            modifier = Modifier.fillMaxWidth(),
-            isError = fullName.isNotEmpty() && !isFullNameValid,
-            supportingText = {
-                if (fullName.isNotEmpty() && !isFullNameValid) {
-                    Text("Enter a valid name (3-60 characters, letters/spaces/periods only)")
-                }
-            }
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-        
-        OutlinedTextField(
-            value = phoneNumber,
-            onValueChange = { newValue -> 
-                val filtered = newValue.filter { it.isDigit() }.take(10)
-                phoneNumber = filtered 
-            },
-            label = { Text("Mobile Number *") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            shape = MaterialTheme.shapes.medium,
-            modifier = Modifier.fillMaxWidth(),
-            isError = uiState is AuthUiState.Error || (phoneNumber.isNotEmpty() && !isPhoneNumberValid),
-            supportingText = {
-                if (uiState is AuthUiState.Error) {
-                    Text((uiState as AuthUiState.Error).message)
-                } else if (phoneNumber.isNotEmpty() && !isPhoneNumberValid) {
-                    Text("Enter a valid 10-digit mobile number.", color = MaterialTheme.colorScheme.error)
-                }
-            }
-        )
-        
-        Spacer(modifier = Modifier.height(24.dp))
-        
-        val context = androidx.compose.ui.platform.LocalContext.current
-        Button(
-            onClick = {
-                val activity = context as? android.app.Activity
-                if (activity != null) {
-                    viewModel.sendOtp(phoneNumber, activity)
-                }
-            },
-            modifier = Modifier
+                .widthIn(max = 640.dp)
                 .fillMaxWidth()
-                .height(56.dp)
-                .padding(bottom = 8.dp),
-            shape = MaterialTheme.shapes.extraLarge,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
-            ),
-            elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
-            enabled = uiState !is AuthUiState.Loading && isFullNameValid && isPhoneNumberValid
+                .padding(24.dp)
         ) {
-            if (uiState is AuthUiState.Loading) {
-                CircularProgressIndicator(modifier = Modifier.size(24.dp), color = MaterialTheme.colorScheme.onPrimary)
-            } else {
-                Text("Get OTP", style = MaterialTheme.typography.titleMedium)
+            StepProgress(currentStep = 1, totalSteps = 11)
+            
+            Spacer(modifier = Modifier.height(24.dp))
+            
+            Box(
+                modifier = Modifier
+                    .size(64.dp)
+                    .clip(MaterialTheme.shapes.medium)
+                    .background(MaterialTheme.colorScheme.primaryContainer),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.WbSunny,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(32.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
+                text = "Welcome to SolarEase",
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            
+            Text(
+                text = "Enter your details to start your solar journey.",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(bottom = 32.dp)
+            )
+            
+            OutlinedTextField(
+                value = fullName,
+                onValueChange = { fullName = it },
+                label = { Text("Full Name *") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                shape = MaterialTheme.shapes.medium,
+                modifier = Modifier.fillMaxWidth(),
+                isError = fullName.isNotEmpty() && !isFullNameValid,
+                supportingText = {
+                    if (fullName.isNotEmpty() && !isFullNameValid) {
+                        Text(
+                            text = "Enter a valid name (3-60 characters, letters/spaces/periods only)",
+                            modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite }
+                        )
+                    }
+                }
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            OutlinedTextField(
+                value = phoneNumber,
+                onValueChange = { newValue -> 
+                    val filtered = newValue.filter { it.isDigit() }.take(10)
+                    phoneNumber = filtered 
+                },
+                label = { Text("Mobile Number *") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                shape = MaterialTheme.shapes.medium,
+                modifier = Modifier.fillMaxWidth(),
+                isError = uiState is AuthUiState.Error || (phoneNumber.isNotEmpty() && !isPhoneNumberValid),
+                supportingText = {
+                    if (uiState is AuthUiState.Error) {
+                        Text(
+                            text = (uiState as AuthUiState.Error).message,
+                            modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite }
+                        )
+                    } else if (phoneNumber.isNotEmpty() && !isPhoneNumberValid) {
+                        Text(
+                            text = "Enter a valid 10-digit mobile number.",
+                            color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite }
+                        )
+                    }
+                }
+            )
+            
+            Spacer(modifier = Modifier.height(24.dp))
+            
+            val context = androidx.compose.ui.platform.LocalContext.current
+            Button(
+                onClick = {
+                    val activity = context as? android.app.Activity
+                    if (activity != null) {
+                        viewModel.sendOtp(phoneNumber, activity)
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 56.dp)
+                    .padding(bottom = 8.dp),
+                shape = MaterialTheme.shapes.extraLarge,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                ),
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp),
+                enabled = uiState !is AuthUiState.Loading && isFullNameValid && isPhoneNumberValid
+            ) {
+                if (uiState is AuthUiState.Loading) {
+                    CircularProgressIndicator(modifier = Modifier.size(24.dp), color = MaterialTheme.colorScheme.onPrimary)
+                } else {
+                    Text("Get OTP", style = MaterialTheme.typography.titleMedium)
+                }
             }
         }
     }

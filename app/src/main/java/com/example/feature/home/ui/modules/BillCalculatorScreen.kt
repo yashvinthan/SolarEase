@@ -63,7 +63,7 @@ private val StitchSurfaceLow = Color(0xFFF7F9F0)
 private val StitchSurfaceContainer = Color(0xFFF1F5E9)
 private val StitchSurfaceHigh = Color(0xFFEAF0E1)
 private val StitchOnSurface = Color(0xFF191C18)
-private val StitchOnSurfaceVariant = Color(0xFF747873)
+private val StitchOnSurfaceVariant = Color(0xFF525651)
 private val StitchOutline = Color(0xFFDDE4D5)
 private val StitchError = Color(0xFFBA1A1A)
 
@@ -176,7 +176,7 @@ fun BillCalculatorRoute(
                         CalculatorScreenState.ENTRY -> {
                             IconButton(
                                 onClick = { viewModel.navigateToHistory() },
-                                modifier = Modifier.size(40.dp)
+                                modifier = Modifier.size(48.dp)
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.History,
@@ -188,7 +188,7 @@ fun BillCalculatorRoute(
                         CalculatorScreenState.RESULT -> {
                             IconButton(
                                 onClick = { viewModel.navigateToHistory() },
-                                modifier = Modifier.size(40.dp)
+                                modifier = Modifier.size(48.dp)
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.History,
@@ -198,7 +198,7 @@ fun BillCalculatorRoute(
                             }
                             IconButton(
                                 onClick = { viewModel.recalculate() },
-                                modifier = Modifier.size(40.dp)
+                                modifier = Modifier.size(48.dp)
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Refresh,
@@ -367,7 +367,7 @@ private fun BillCalculatorEntryView(
                                 text = "0",
                                 fontSize = 28.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = StitchOnSurfaceVariant.copy(alpha = 0.4f)
+                                color = StitchOnSurfaceVariant.copy(alpha = 0.65f)
                             )
                         }
                         BasicTextField(
@@ -397,7 +397,7 @@ private fun BillCalculatorEntryView(
                     if (inputText.isNotEmpty()) {
                         IconButton(
                             onClick = onClearInput,
-                            modifier = Modifier.size(24.dp)
+                            modifier = Modifier.size(48.dp)
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Cancel,
@@ -948,7 +948,7 @@ private fun BillCalculatorCalculatingView(
             shape = RoundedCornerShape(10.dp),
             border = BorderStroke(1.dp, StitchOutline),
             colors = ButtonDefaults.outlinedButtonColors(contentColor = StitchOnSurfaceVariant),
-            modifier = Modifier.height(40.dp)
+            modifier = Modifier.heightIn(min = 48.dp)
         ) {
             Icon(
                 imageVector = Icons.Default.Close,
@@ -1915,7 +1915,7 @@ private fun BillCalculatorHistoryView(
                                 }
                                 IconButton(
                                     onClick = { onDeleteItem(item.id) },
-                                    modifier = Modifier.size(32.dp)
+                                    modifier = Modifier.size(48.dp)
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.DeleteOutline,

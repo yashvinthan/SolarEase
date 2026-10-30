@@ -87,6 +87,7 @@ class FakeLensApi : LensApi {
         Response.success(analyzeResult)
 }
 
+@OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [34])
 class LensViewModelTest {

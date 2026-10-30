@@ -47,7 +47,17 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.window.Dialog
+import com.example.core.legal.LegalComplianceDialog
+import com.example.core.legal.LegalSection
+import com.example.ui.theme.rememberIsReducedMotionEnabled
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialCancellationException
@@ -92,6 +102,7 @@ fun AuthMainRoute(
     var linkingPassword by rememberSaveable { mutableStateOf("") }
     var linkingPasswordVisible by rememberSaveable { mutableStateOf(false) }
     var forgotPasswordEmail by rememberSaveable { mutableStateOf("") }
+    var activeLegalSection by remember { mutableStateOf<LegalSection?>(null) }
 
     val focusManager = LocalFocusManager.current
 
@@ -159,7 +170,7 @@ fun AuthMainRoute(
     val primaryGreen = Color(0xFF386A20)
     val backgroundCream = Color(0xFFFBFCF3)
     val textPrimary = Color(0xFF191C18)
-    val textSecondary = Color(0xFF747873)
+    val textSecondary = Color(0xFF525651)
     val outlineBorder = Color(0xFFDDE4D5)
     val inputBackground = Color(0xFFFFFFFF)
 
@@ -277,7 +288,8 @@ fun AuthMainRoute(
                         Surface(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(bottom = 16.dp),
+                                .padding(bottom = 16.dp)
+                                .semantics { liveRegion = LiveRegionMode.Polite },
                             shape = RoundedCornerShape(10.dp),
                             color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.75f),
                             border = BorderStroke(1.dp, MaterialTheme.colorScheme.error.copy(alpha = 0.4f))
@@ -297,7 +309,8 @@ fun AuthMainRoute(
                         Surface(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(bottom = 16.dp),
+                                .padding(bottom = 16.dp)
+                                .semantics { liveRegion = LiveRegionMode.Polite },
                             shape = RoundedCornerShape(10.dp),
                             color = Color(0xFFE8F5E9),
                             border = BorderStroke(1.dp, primaryGreen.copy(alpha = 0.3f))
@@ -781,11 +794,65 @@ fun AuthMainRoute(
                             }
                         }
                     }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+                    HorizontalDivider(thickness = 0.5.dp, color = outlineBorder.copy(alpha = 0.6f))
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    // Statutory Consent & Legal Links (DPDP Act 2023 § 5 & § 6)
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "By continuing, you consent to personal data processing under India's DPDP Act, 2023.",
+                            style = MaterialTheme.typography.bodySmall,
+                            fontSize = 11.sp,
+                            color = textSecondary,
+                            textAlign = TextAlign.Center
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "Terms of Service",
+                                fontSize = 11.5.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = primaryGreen,
+                                modifier = Modifier.clickable {
+                                    activeLegalSection = LegalSection.TERMS_OF_SERVICE
+                                }
+                            )
+                            Text(
+                                text = "  •  ",
+                                fontSize = 11.5.sp,
+                                color = textSecondary
+                            )
+                            Text(
+                                text = "Privacy Policy",
+                                fontSize = 11.5.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = primaryGreen,
+                                modifier = Modifier.clickable {
+                                    activeLegalSection = LegalSection.PRIVACY_POLICY
+                                }
+                            )
+                        }
+                    }
                 }
             }
 
             Spacer(modifier = Modifier.height(36.dp))
         }
+    }
+
+    if (activeLegalSection != null) {
+        LegalComplianceDialog(
+            initialSection = activeLegalSection!!,
+            onDismiss = { activeLegalSection = null }
+        )
     }
 
     // -----------------------------------------------------------------
@@ -836,12 +903,20 @@ fun AuthMainRoute(
                             IconButton(onClick = { linkingPasswordVisible = !linkingPasswordVisible }) {
                                 Icon(
                                     imageVector = if (linkingPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-                                    contentDescription = null,
+                                    contentDescription = if (linkingPasswordVisible) "Hide password" else "Show password",
                                     tint = textSecondary,
                                     modifier = Modifier.size(20.dp)
                                 )
                             }
                         },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Password,
+                            imeAction = ImeAction.Done
+                        ),
+                        keyboardActions = KeyboardActions(onDone = {
+                            focusManager.clearFocus()
+                            viewModel.confirmAccountLinking(linkingPassword)
+                        }),
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = primaryGreen,
                             unfocusedBorderColor = outlineBorder,
@@ -1146,15 +1221,19 @@ private fun AnimatedSegmentedSwitcher(
     modifier: Modifier = Modifier
 ) {
     val primaryGreen = Color(0xFF386A20)
-    val textMuted = Color(0xFF747873)
+    val textMuted = Color(0xFF525651)
     val trackBackground = Color(0xFFEEF3EA)
     val trackBorder = Color(0xFFDDE4D5)
+    val reducedMotion = rememberIsReducedMotionEnabled()
 
     // 0f = SIGN_IN (left), 1f = SIGN_UP (right)
     val targetPosition = if (selectedMode == AuthMode.SIGN_IN) 0f else 1f
     val animatedOffset by animateFloatAsState(
         targetValue = targetPosition,
-        animationSpec = tween(durationMillis = 260, easing = FastOutSlowInEasing),
+        animationSpec = tween(
+            durationMillis = if (reducedMotion) 0 else 260,
+            easing = FastOutSlowInEasing
+        ),
         label = "indicatorOffset"
     )
 
@@ -1197,9 +1276,15 @@ private fun AnimatedSegmentedSwitcher(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
+                    .semantics(mergeDescendants = true) {
+                        role = Role.Tab
+                        selected = selectedMode == AuthMode.SIGN_IN
+                        stateDescription = if (selectedMode == AuthMode.SIGN_IN) "Selected" else "Not selected"
+                    }
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
-                        indication = null
+                        indication = null,
+                        role = Role.Tab
                     ) {
                         onModeSelected(AuthMode.SIGN_IN)
                     },
@@ -1207,7 +1292,7 @@ private fun AnimatedSegmentedSwitcher(
             ) {
                 val signInColor by animateColorAsState(
                     targetValue = if (selectedMode == AuthMode.SIGN_IN) primaryGreen else textMuted,
-                    animationSpec = tween(durationMillis = 200),
+                    animationSpec = tween(durationMillis = if (reducedMotion) 0 else 200),
                     label = "signInTextColor"
                 )
                 Text(
@@ -1224,9 +1309,15 @@ private fun AnimatedSegmentedSwitcher(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
+                    .semantics(mergeDescendants = true) {
+                        role = Role.Tab
+                        selected = selectedMode == AuthMode.SIGN_UP
+                        stateDescription = if (selectedMode == AuthMode.SIGN_UP) "Selected" else "Not selected"
+                    }
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
-                        indication = null
+                        indication = null,
+                        role = Role.Tab
                     ) {
                         onModeSelected(AuthMode.SIGN_UP)
                     },
@@ -1234,7 +1325,7 @@ private fun AnimatedSegmentedSwitcher(
             ) {
                 val signUpColor by animateColorAsState(
                     targetValue = if (selectedMode == AuthMode.SIGN_UP) primaryGreen else textMuted,
-                    animationSpec = tween(durationMillis = 200),
+                    animationSpec = tween(durationMillis = if (reducedMotion) 0 else 200),
                     label = "signUpTextColor"
                 )
                 Text(

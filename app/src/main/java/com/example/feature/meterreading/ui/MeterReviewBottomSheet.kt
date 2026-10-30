@@ -52,19 +52,25 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import com.example.feature.meterreading.model.MeterOcrStatus
 import com.example.feature.meterreading.model.MeterReadingCandidate
 import com.example.feature.meterreading.parser.ReadingPlausibilityStatus
+import com.example.ui.theme.SolarEaseSemanticColors
 import java.util.Locale
 
 private val BrandGreen = Color(0xFF386A20)
-private val BrandGreenLight = Color(0xFFE8F5E9)
-private val WarningAmber = Color(0xFFD97706)
-private val WarningAmberBg = Color(0xFFFEF3C7)
-private val ErrorRed = Color(0xFFDC2626)
-private val ErrorRedBg = Color(0xFFFEE2E2)
+private val BrandGreenLight = Color(0xFFE5F2D9)
+private val WarningAmber = SolarEaseSemanticColors.WarningText
+private val WarningAmberBg = SolarEaseSemanticColors.WarningContainer
+private val ErrorRed = SolarEaseSemanticColors.ErrorText
+private val ErrorRedBg = SolarEaseSemanticColors.ErrorContainer
 private val SlateText = Color(0xFF1E293B)
-private val SlateMuted = Color(0xFF64748B)
+private val SlateMuted = Color(0xFF475569)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -91,83 +97,91 @@ fun MeterReviewBottomSheet(
         shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         modifier = modifier
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 8.dp)
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(14.dp)
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.TopCenter
         ) {
-            // Drag handle / Title
-            Text(
-                text = "Review Meter Reading",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                color = SlateText
-            )
-
-            // A. Captured Image Crop Preview with "Adjust Crop" button overlay
-            Surface(
+            Column(
                 modifier = Modifier
+                    .widthIn(max = 560.dp)
                     .fillMaxWidth()
-                    .height(130.dp),
-                shape = RoundedCornerShape(12.dp),
-                color = Color(0xFFF1F5F9),
-                border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFCBD5E1))
+                    .padding(horizontal = 24.dp, vertical = 8.dp)
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
-                Box(contentAlignment = Alignment.Center) {
-                    Image(
-                        bitmap = croppedBitmap.asImageBitmap(),
-                        contentDescription = "Photographed meter display",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(12.dp)),
-                        contentScale = ContentScale.Fit
-                    )
-                }
-            }
-
-            // Adjust crop box action chip
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+                // Drag handle / Title
                 Text(
-                    text = "Viewfinder reticle crop",
-                    fontSize = 12.sp,
-                    color = SlateMuted,
-                    fontWeight = FontWeight.Medium
+                    text = "Review Meter Reading",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = SlateText
                 )
 
+                // A. Captured Image Crop Preview with "Adjust Crop" button overlay
                 Surface(
-                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(130.dp),
+                    shape = RoundedCornerShape(12.dp),
                     color = Color(0xFFF1F5F9),
-                    border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFCBD5E1)),
-                    modifier = Modifier.clickable { onAdjustCrop() }
+                    border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFCBD5E1))
                 ) {
-                    Row(
-                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Edit,
-                            contentDescription = "Adjust Display Box",
-                            tint = BrandGreen,
-                            modifier = Modifier.size(14.dp)
-                        )
-                        Text(
-                            text = "Adjust Display Box",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = BrandGreen
+                    Box(contentAlignment = Alignment.Center) {
+                        Image(
+                            bitmap = croppedBitmap.asImageBitmap(),
+                            contentDescription = "Photographed meter display",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(12.dp)),
+                            contentScale = ContentScale.Fit
                         )
                     }
                 }
-            }
+
+                // Adjust crop box action chip
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Viewfinder reticle crop",
+                        fontSize = 12.sp,
+                        color = SlateMuted,
+                        fontWeight = FontWeight.Medium
+                    )
+
+                    Surface(
+                        shape = RoundedCornerShape(8.dp),
+                        color = Color(0xFFF1F5F9),
+                        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFCBD5E1)),
+                        modifier = Modifier
+                            .heightIn(min = 48.dp)
+                            .clickable(role = Role.Button) { onAdjustCrop() }
+                            .semantics { role = Role.Button }
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = null,
+                                tint = BrandGreen,
+                                modifier = Modifier.size(16.dp)
+                            )
+                            Text(
+                                text = "Adjust Display Box",
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = BrandGreen
+                            )
+                        }
+                    }
+                }
 
             // B. Recognition Status Chip
             val (chipBg, chipTextColor, chipBorder, chipIcon) = when (candidate.status) {
@@ -368,7 +382,7 @@ fun MeterReviewBottomSheet(
                     enabled = editableText.isNotBlank() && !isSaving,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(48.dp),
+                        .heightIn(min = 48.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = BrandGreen),
                     shape = RoundedCornerShape(12.dp)
                 ) {
@@ -388,7 +402,7 @@ fun MeterReviewBottomSheet(
                     enabled = !isSaving,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(44.dp),
+                        .heightIn(min = 48.dp),
                     shape = RoundedCornerShape(12.dp)
                 ) {
                     Icon(Icons.Default.Refresh, contentDescription = null, modifier = Modifier.size(16.dp))
@@ -399,12 +413,15 @@ fun MeterReviewBottomSheet(
                 TextButton(
                     onClick = onManualEntry,
                     enabled = !isSaving,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 48.dp)
                 ) {
                     Icon(Icons.Default.Edit, contentDescription = null, modifier = Modifier.size(15.dp), tint = SlateMuted)
                     Spacer(modifier = Modifier.width(6.dp))
                     Text("Enter Manually Instead", color = SlateMuted, fontSize = 13.sp)
                 }
+            }
             }
         }
     }

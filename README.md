@@ -1864,11 +1864,11 @@ SolarEase/
 - Refresh token rotation on every access token refresh
 - Refresh tokens are revocable server-side (stored in Redis or DB)
 
-### 14.2 Session Storage
+### 14.2 Session & Local Data Storage
 
-- Current implementation: `SharedPreferences` (plain)
-- Production target: **EncryptedSharedPreferences** (`androidx.security.crypto`) for sensitive user data
-- Session token (JWT) must be stored in `EncryptedSharedPreferences`, never in plain `SharedPreferences` or hardcoded
+- **Encrypted Storage**: `SecureSessionPreferences` (`EncryptedSharedPreferences` backed by Android Keystore `AES256_SIV` / `AES256_GCM`) is used for `UserSession`, `TnebBillCache`, and `RewardStorage`.
+- **Automatic PII Minimization**: `TnebBillCache` automatically strips `"aadhaar"` and `"pan"` keys from parsed TANGEDCO utility HTML before encrypting and persisting bill records locally.
+- **Right to Erasure**: Users can permanently delete their account and wipe all local encrypted caches (`UserSession`, `TnebBillCache`, `MeterReadingCache`, `BillCalculatorHistoryStorage`, `LensRoomStorage`, `ChatHistoryStorage`) directly from **Profile → Privacy & Security → Delete Account & Erase Personal Data**.
 
 ### 14.3 API Security
 
@@ -2077,8 +2077,9 @@ Environment variables are exposed as `BuildConfig` fields in the app.
 ### 17.1 SDK & Build Environment Matrix
 - **Min SDK:** 24 (Android 7.0 Nougat)
 - **Target SDK:** 35 (Android 15)
-- **Compile SDK:** 36 (Android 16 preview)
-- **JDK Requirement:** OpenJDK 17 or 21 (Temurin / Microsoft HotSpot)
+- **Compile SDK:** 36 (Android 16)
+- **JDK Requirement:** OpenJDK 21 (Temurin 21 / Android Studio JBR 21 — required by Gradle 9.6.1 & AGP 9.3.2)
+- **Java / Kotlin Bytecode Target:** JVM 17
 - **Gradle Version:** 9.6.1 (managed by Gradle Wrapper)
 - **AGP (Android Gradle Plugin):** 9.3.2
 
@@ -2102,14 +2103,16 @@ Environment variables are exposed as `BuildConfig` fields in the app.
 ### 17.3 Essential Gradle Commands
 | Task | Command | Description |
 |---|---|---|
-| **Run Unit Tests** | ./gradlew testDebugUnitTest | Executes all 260+ JVM & Robolectric unit tests |
-| **Run Android Lint** | ./gradlew lintDebug | Analyzes code quality, security, and resource hygiene |
-| **Build Debug APK** | ./gradlew assembleDebug | Builds installable debug APK signed with debug keystore |
-| **Build Release APK** | ./gradlew assembleRelease | Builds minified, R8-shrunk release APK with upload signing |
-| **Check Dependencies** | ./gradlew app:dependencies | Inspects full dependency tree resolved via Version Catalog |
+| **Run Unit Tests** | `./gradlew testDebugUnitTest` | Executes all 320+ JVM & Robolectric unit tests |
+| **Run Android Lint** | `./gradlew lintDebug` | Analyzes code quality, security, and resource hygiene |
+| **Build Debug APK** | `./gradlew assembleDebug` | Builds installable debug APK signed with debug keystore |
+| **Build Release APK** | `./gradlew assembleRelease` | Builds minified, R8-shrunk release APK with upload signing |
+| **Build Release AAB** | `./gradlew bundleRelease` | Builds Play Store release App Bundle (`.aab`) and R8 `mapping.txt` |
+| **Check Dependencies** | `./gradlew app:dependencies` | Inspects full dependency tree resolved via Version Catalog |
 
 ### 17.4 CI/CD Pipeline
-Continuous Integration runs on every pull request to main via .github/workflows/android-ci.yml, enforcing:
-- Clean build with JDK 17
-- 100% test pass on 	estDebugUnitTest
-- Android Lint validation without critical/fatal errors
+Continuous Integration runs on every push and pull request to `main` via `.github/workflows/android-ci.yml`, enforcing:
+- Clean build with OpenJDK 21 (Temurin)
+- 100% test pass on `testDebugUnitTest`
+- Android Lint validation (`lintDebug`) without critical/fatal errors
+- Production R8 minification & Play Store bundle verification (`assembleRelease` and `bundleRelease`)

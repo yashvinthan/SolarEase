@@ -17,6 +17,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -26,7 +32,15 @@ fun StepProgress(
     totalSteps: Int,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier.fillMaxWidth().padding(vertical = 16.dp)) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 16.dp)
+            .semantics(mergeDescendants = true) {
+                contentDescription = "Step $currentStep of $totalSteps"
+                stateDescription = "${((currentStep.toFloat() / totalSteps.toFloat()) * 100).toInt()} percent complete"
+            }
+    ) {
         Text(
             text = "Step $currentStep of $totalSteps",
             style = MaterialTheme.typography.labelMedium,
@@ -73,14 +87,20 @@ fun SelectableCard(
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .heightIn(min = 56.dp)
+            .padding(vertical = 8.dp)
+            .semantics(mergeDescendants = true) {
+                role = Role.RadioButton
+                this.selected = selected
+                stateDescription = if (selected) "Selected" else "Not selected"
+            },
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(
             containerColor = containerColor,
             contentColor = contentColor
         ),
-        border = BorderStroke(if (selected) 2.dp else 0.dp, borderColor),
-        elevation = CardDefaults.cardElevation(defaultElevation = if (selected) 4.dp else 0.dp)
+        border = BorderStroke(if (selected) 2.dp else 1.dp, if (selected) borderColor else MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)),
+        elevation = CardDefaults.cardElevation(defaultElevation = if (selected) 2.dp else 0.dp)
     ) {
         Row(
             modifier = Modifier.padding(16.dp),

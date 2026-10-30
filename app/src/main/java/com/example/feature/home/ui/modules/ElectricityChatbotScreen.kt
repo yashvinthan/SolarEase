@@ -122,7 +122,7 @@ fun ElectricityChatbotRoute(
                     if (!uiState.showHistory) {
                         IconButton(
                             onClick = { viewModel.toggleHistory(true) },
-                            modifier = Modifier.size(40.dp)
+                            modifier = Modifier.size(48.dp)
                         ) {
                             Icon(
                                 imageVector = Icons.Default.History,
@@ -135,7 +135,7 @@ fun ElectricityChatbotRoute(
                                 viewModel.startNewChat()
                                 Toast.makeText(context, "New chat started", Toast.LENGTH_SHORT).show()
                             },
-                            modifier = Modifier.size(40.dp)
+                            modifier = Modifier.size(48.dp)
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Add,
@@ -149,7 +149,7 @@ fun ElectricityChatbotRoute(
                                 viewModel.startNewChat()
                                 Toast.makeText(context, "New chat started", Toast.LENGTH_SHORT).show()
                             },
-                            modifier = Modifier.size(40.dp)
+                            modifier = Modifier.size(48.dp)
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Add,
@@ -885,7 +885,7 @@ private fun AssistantMessageCardStitch(
                 Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                     IconButton(
                         onClick = { onCopy(message.text) },
-                        modifier = Modifier.size(28.dp)
+                        modifier = Modifier.size(48.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Default.ContentCopy,
@@ -896,7 +896,7 @@ private fun AssistantMessageCardStitch(
                     }
                     IconButton(
                         onClick = { feedbackSelected = true },
-                        modifier = Modifier.size(28.dp)
+                        modifier = Modifier.size(48.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Default.ThumbUp,
@@ -907,7 +907,7 @@ private fun AssistantMessageCardStitch(
                     }
                     IconButton(
                         onClick = { feedbackSelected = false },
-                        modifier = Modifier.size(28.dp)
+                        modifier = Modifier.size(48.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Default.ThumbDown,
@@ -1043,7 +1043,7 @@ private fun ErrorRetryCardStitch(
                     contentColor = LensColors.OnPrimary
                 ),
                 contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
-                modifier = Modifier.height(36.dp)
+                modifier = Modifier.heightIn(min = 48.dp)
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -1097,9 +1097,9 @@ private fun ChatInputBarStitch(
             Surface(
                 modifier = Modifier
                     .weight(1f)
-                    .height(46.dp)
-                    .border(1.5.dp, ChatbotBlue, RoundedCornerShape(23.dp)),
-                shape = RoundedCornerShape(23.dp),
+                    .heightIn(min = 48.dp)
+                    .border(1.5.dp, ChatbotBlue, RoundedCornerShape(24.dp)),
+                shape = RoundedCornerShape(24.dp),
                 color = LensColors.SurfaceContainerLow
             ) {
                 Box(
@@ -1167,7 +1167,7 @@ private fun ChatInputBarStitch(
                 onClick = onSend,
                 enabled = canSend,
                 modifier = Modifier
-                    .size(46.dp)
+                    .size(48.dp)
                     .clip(CircleShape)
                     .background(if (canSend) ChatbotBlue else LensColors.SurfaceContainerHigh)
             ) {
@@ -1264,7 +1264,7 @@ private fun ChatHistoryView(
                             contentColor = LensColors.OnPrimary
                         ),
                         contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp),
-                        modifier = Modifier.height(32.dp)
+                        modifier = Modifier.heightIn(min = 48.dp)
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
@@ -1280,7 +1280,7 @@ private fun ChatHistoryView(
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(40.dp),
+                        .heightIn(min = 48.dp),
                     shape = RoundedCornerShape(8.dp),
                     color = LensColors.SurfaceContainerLowest,
                     shadowElevation = 0.5.dp
@@ -1325,7 +1325,7 @@ private fun ChatHistoryView(
                         if (uiState.historySearchQuery.isNotBlank()) {
                             IconButton(
                                 onClick = { onQueryChange("") },
-                                modifier = Modifier.size(24.dp)
+                                modifier = Modifier.size(48.dp)
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Close,

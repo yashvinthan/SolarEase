@@ -3,7 +3,7 @@ package com.example.feature.recommends.data
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import com.example.core.session.SecurePreferencesHelper
+import com.example.core.session.SecureSessionPreferences
 import com.example.feature.recommends.model.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -75,7 +75,7 @@ object RewardStorage : IRewardStorage {
 
     private fun getPrefs(context: Context? = null): SharedPreferences? {
         val ctx = context?.applicationContext ?: appContext ?: return null
-        return SecurePreferencesHelper.getEncryptedPrefs(ctx, PREFS_NAME)
+        return SecureSessionPreferences.getEncryptedPrefs(ctx, PREFS_NAME)
     }
 
     fun todayDate(referenceDate: Date = Date()): String {

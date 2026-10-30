@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -77,41 +78,47 @@ fun ApplianceReviewScreen(
                 color = LensColors.Background,
                 border = BorderStroke(1.dp, LensColors.Outline)
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp, vertical = 10.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.TopCenter
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        IconButton(onClick = {
-                            viewModel.popUiState()
-                            onNavigateBack()
-                        }, modifier = Modifier.size(36.dp)) {
-                            Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = LensColors.SlateText)
-                        }
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Column {
-                            Text(
-                                "Review Appliances",
-                                style = LensTypography.headlineSm.copy(fontSize = 15.sp),
-                                color = LensColors.SlateText
-                            )
-                            Text(
-                                "Room $activeIdx of $totalRooms · ${room.name}",
-                                style = LensTypography.labelCaps,
-                                color = LensColors.Primary
-                            )
-                        }
-                    }
-                    Box(
+                    Row(
                         modifier = Modifier
-                            .size(32.dp)
-                            .background(LensColors.Primary, CircleShape),
-                        contentAlignment = Alignment.Center
+                            .widthIn(max = 640.dp)
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp, vertical = 10.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(Icons.Default.Person, contentDescription = null, tint = LensColors.OnPrimary, modifier = Modifier.size(18.dp))
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            IconButton(onClick = {
+                                viewModel.popUiState()
+                                onNavigateBack()
+                            }, modifier = Modifier.size(48.dp)) {
+                                Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = LensColors.SlateText)
+                            }
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Column {
+                                Text(
+                                    "Review Appliances",
+                                    style = LensTypography.headlineSm.copy(fontSize = 15.sp),
+                                    color = LensColors.SlateText
+                                )
+                                Text(
+                                    "Room $activeIdx of $totalRooms · ${room.name}",
+                                    style = LensTypography.labelCaps,
+                                    color = LensColors.Primary
+                                )
+                            }
+                        }
+                        Box(
+                            modifier = Modifier
+                                .size(32.dp)
+                                .background(LensColors.Primary, CircleShape),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(Icons.Default.Person, contentDescription = null, tint = LensColors.OnPrimary, modifier = Modifier.size(18.dp))
+                        }
                     }
                 }
             }
@@ -122,112 +129,118 @@ fun ApplianceReviewScreen(
                 color = LensColors.SurfaceContainerLowest,
                 border = BorderStroke(1.dp, LensColors.Outline)
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp, vertical = 12.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.TopCenter
                 ) {
-                    OutlinedButton(
-                        onClick = { viewModel.addReviewAppliance() },
+                    Column(
                         modifier = Modifier
+                            .widthIn(max = 640.dp)
                             .fillMaxWidth()
-                            .height(44.dp),
-                        shape = RoundedCornerShape(8.dp),
-                        border = BorderStroke(1.dp, LensColors.OutlineVariant)
+                            .padding(horizontal = 20.dp, vertical = 12.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Icon(Icons.Default.Add, contentDescription = null, tint = LensColors.Primary, modifier = Modifier.size(16.dp))
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text("+ Add Appliance", style = LensTypography.labelSm, color = LensColors.SlateText)
-                    }
-
-                    if (hasZeroWattage) {
-                        Surface(
-                            shape = RoundedCornerShape(6.dp),
-                            color = LensColors.Error.copy(alpha = 0.08f),
-                            border = BorderStroke(1.dp, LensColors.Error.copy(alpha = 0.3f)),
-                            modifier = Modifier.fillMaxWidth()
+                        OutlinedButton(
+                            onClick = { viewModel.addReviewAppliance() },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 48.dp),
+                            shape = RoundedCornerShape(8.dp),
+                            border = BorderStroke(1.dp, LensColors.OutlineVariant)
                         ) {
-                            Row(
-                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-                                verticalAlignment = Alignment.CenterVertically
+                            Icon(Icons.Default.Add, contentDescription = null, tint = LensColors.Primary, modifier = Modifier.size(16.dp))
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text("+ Add Appliance", style = LensTypography.labelSm, color = LensColors.SlateText)
+                        }
+
+                        if (hasZeroWattage) {
+                            Surface(
+                                shape = RoundedCornerShape(6.dp),
+                                color = LensColors.Error.copy(alpha = 0.08f),
+                                border = BorderStroke(1.dp, LensColors.Error.copy(alpha = 0.3f)),
+                                modifier = Modifier.fillMaxWidth()
                             ) {
-                                Icon(
-                                    Icons.Default.Warning,
-                                    contentDescription = null,
-                                    tint = LensColors.Error,
-                                    modifier = Modifier.size(16.dp)
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(
-                                    "Please specify a valid wattage (> 0 W) for all appliances before confirming.",
-                                    style = LensTypography.labelSm.copy(fontSize = 12.sp),
-                                    color = LensColors.Error
-                                )
+                                Row(
+                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(
+                                        Icons.Default.Warning,
+                                        contentDescription = null,
+                                        tint = LensColors.Error,
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(
+                                        "Please specify a valid wattage (> 0 W) for all appliances before confirming.",
+                                        style = LensTypography.labelSm.copy(fontSize = 12.sp),
+                                        color = LensColors.Error
+                                    )
+                                }
                             }
                         }
-                    }
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 2.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            "ROOM $activeIdx OF $totalRooms FINALIZATION",
-                            style = LensTypography.labelCaps,
-                            color = LensColors.SlateCaption
-                        )
-                        Text(
-                            "${room.name} Subtotal: ${String.format(java.util.Locale.US, "%.2f", roomPeakKw)} kW",
-                            style = LensTypography.labelSm.copy(fontWeight = FontWeight.SemiBold),
-                            color = LensColors.Primary
-                        )
-                    }
-
-                    Button(
-                        onClick = { viewModel.confirmReview() },
-                        enabled = !hasZeroWattage,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(52.dp),
-                        shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = LensColors.Primary,
-                            disabledContainerColor = LensColors.Primary.copy(alpha = 0.35f),
-                            disabledContentColor = LensColors.OnPrimary.copy(alpha = 0.6f)
-                        )
-                    ) {
                         Row(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = 2.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Column {
-                                Text(
-                                    "Confirm ${room.name}",
-                                    style = LensTypography.headlineSm.copy(fontSize = 15.sp),
-                                    color = if (hasZeroWattage) LensColors.OnPrimary.copy(alpha = 0.6f) else LensColors.OnPrimary
-                                )
-                                Text(
-                                    if (activeIdx < sortedRooms.size) "Next: ${sortedRooms[activeIdx].name} (Room ${activeIdx + 1} of ${sortedRooms.size})" else "Next: Whole-House Analysis",
-                                    style = LensTypography.labelCaps.copy(fontSize = 10.sp),
-                                    color = if (hasZeroWattage) LensColors.OnPrimary.copy(alpha = 0.5f) else LensColors.OnPrimary.copy(alpha = 0.85f)
-                                )
-                            }
-                            Box(
-                                modifier = Modifier
-                                    .size(32.dp)
-                                    .clip(CircleShape)
-                                    .background(Color.White.copy(alpha = if (hasZeroWattage) 0.1f else 0.2f)),
-                                contentAlignment = Alignment.Center
+                            Text(
+                                "ROOM $activeIdx OF $totalRooms FINALIZATION",
+                                style = LensTypography.labelCaps,
+                                color = LensColors.SlateCaption
+                            )
+                            Text(
+                                "${room.name} Subtotal: ${String.format(java.util.Locale.US, "%.2f", roomPeakKw)} kW",
+                                style = LensTypography.labelSm.copy(fontWeight = FontWeight.SemiBold),
+                                color = LensColors.Primary
+                            )
+                        }
+
+                        Button(
+                            onClick = { viewModel.confirmReview() },
+                            enabled = !hasZeroWattage,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 52.dp),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = LensColors.Primary,
+                                disabledContainerColor = LensColors.Primary.copy(alpha = 0.35f),
+                                disabledContentColor = LensColors.OnPrimary.copy(alpha = 0.6f)
+                            )
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Icon(
-                                    Icons.AutoMirrored.Filled.ArrowForward,
-                                    contentDescription = null,
-                                    tint = if (hasZeroWattage) LensColors.OnPrimary.copy(alpha = 0.6f) else LensColors.OnPrimary,
-                                    modifier = Modifier.size(18.dp)
-                                )
+                                Column {
+                                    Text(
+                                        "Confirm ${room.name}",
+                                        style = LensTypography.headlineSm.copy(fontSize = 15.sp),
+                                        color = if (hasZeroWattage) LensColors.OnPrimary.copy(alpha = 0.6f) else LensColors.OnPrimary
+                                    )
+                                    Text(
+                                        if (activeIdx < sortedRooms.size) "Next: ${sortedRooms[activeIdx].name} (Room ${activeIdx + 1} of ${sortedRooms.size})" else "Next: Whole-House Analysis",
+                                        style = LensTypography.labelCaps.copy(fontSize = 10.sp),
+                                        color = if (hasZeroWattage) LensColors.OnPrimary.copy(alpha = 0.5f) else LensColors.OnPrimary.copy(alpha = 0.85f)
+                                    )
+                                }
+                                Box(
+                                    modifier = Modifier
+                                        .size(32.dp)
+                                        .clip(CircleShape)
+                                        .background(Color.White.copy(alpha = if (hasZeroWattage) 0.1f else 0.2f)),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        Icons.AutoMirrored.Filled.ArrowForward,
+                                        contentDescription = null,
+                                        tint = if (hasZeroWattage) LensColors.OnPrimary.copy(alpha = 0.6f) else LensColors.OnPrimary,
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                }
                             }
                         }
                     }
@@ -236,13 +249,20 @@ fun ApplianceReviewScreen(
         },
         containerColor = LensColors.Background
     ) { padding ->
-        LazyColumn(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding),
-            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            contentAlignment = Alignment.TopCenter
         ) {
+            LazyColumn(
+                modifier = Modifier
+                    .widthIn(max = 640.dp)
+                    .fillMaxWidth()
+                    .fillMaxHeight(),
+                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
             // Step Progress Header
             item {
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -490,7 +510,8 @@ fun ApplianceReviewScreen(
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { viewModel.addReviewAppliance() },
+                        .heightIn(min = 48.dp)
+                        .clickable(role = Role.Button) { viewModel.addReviewAppliance() },
                     shape = RoundedCornerShape(12.dp),
                     color = LensColors.SurfaceContainerLowest,
                     border = BorderStroke(1.dp, LensColors.Primary.copy(alpha = 0.3f))
@@ -520,6 +541,7 @@ fun ApplianceReviewScreen(
 
             item {
                 Spacer(modifier = Modifier.height(30.dp))
+            }
             }
         }
     }
@@ -634,7 +656,8 @@ private fun ApplianceCardStitch(
                     border = BorderStroke(1.dp, LensColors.Error.copy(alpha = 0.4f)),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { showWattageDialog = true }
+                        .heightIn(min = 48.dp)
+                        .clickable(role = Role.Button) { showWattageDialog = true }
                         .padding(bottom = 10.dp)
                 ) {
                     Row(
@@ -729,8 +752,8 @@ private fun ApplianceCardStitch(
                         )
                     }
                 }
-                IconButton(onClick = { onRemove(appliance.id) }, modifier = Modifier.size(28.dp)) {
-                    Icon(Icons.Default.Delete, contentDescription = "Delete", tint = LensColors.SlateCaption, modifier = Modifier.size(18.dp))
+                IconButton(onClick = { onRemove(appliance.id) }, modifier = Modifier.size(48.dp)) {
+                    Icon(Icons.Default.Delete, contentDescription = "Delete ${appliance.label}", tint = LensColors.SlateCaption, modifier = Modifier.size(18.dp))
                 }
             }
 
@@ -840,9 +863,9 @@ private fun ApplianceCardStitch(
                         ) {
                             Box(
                                 modifier = Modifier
-                                    .size(26.dp)
+                                    .size(48.dp)
                                     .background(LensColors.SurfaceContainerLowest, RoundedCornerShape(4.dp))
-                                    .clickable {
+                                    .clickable(role = Role.Button) {
                                         if (appliance.quantity > 1) {
                                             onUpdate(
                                                 appliance.id, appliance.label, appliance.powerWatts,
@@ -853,14 +876,14 @@ private fun ApplianceCardStitch(
                                     },
                                 contentAlignment = Alignment.Center
                             ) {
-                                Icon(Icons.Default.Remove, contentDescription = "Decrease", tint = LensColors.SlateText, modifier = Modifier.size(14.dp))
+                                Icon(Icons.Default.Remove, contentDescription = "Decrease quantity", tint = LensColors.SlateText, modifier = Modifier.size(16.dp))
                             }
                             Text("${appliance.quantity}", style = LensTypography.metricValMd, color = LensColors.SlateText)
                             Box(
                                 modifier = Modifier
-                                    .size(26.dp)
+                                    .size(48.dp)
                                     .background(LensColors.SurfaceContainerLowest, RoundedCornerShape(4.dp))
-                                    .clickable {
+                                    .clickable(role = Role.Button) {
                                         onUpdate(
                                             appliance.id, appliance.label, appliance.powerWatts,
                                             appliance.usageHoursPerDay, appliance.monthlyUsageDays,
@@ -869,7 +892,7 @@ private fun ApplianceCardStitch(
                                     },
                                 contentAlignment = Alignment.Center
                             ) {
-                                Icon(Icons.Default.Add, contentDescription = "Increase", tint = LensColors.SlateText, modifier = Modifier.size(14.dp))
+                                Icon(Icons.Default.Add, contentDescription = "Increase quantity", tint = LensColors.SlateText, modifier = Modifier.size(16.dp))
                             }
                         }
                     }
@@ -879,7 +902,8 @@ private fun ApplianceCardStitch(
                 Surface(
                     modifier = Modifier
                         .weight(1f)
-                        .clickable { showWattageDialog = true },
+                        .heightIn(min = 48.dp)
+                        .clickable(role = Role.Button) { showWattageDialog = true },
                     shape = RoundedCornerShape(6.dp),
                     color = LensColors.SurfaceContainerLow
                 ) {

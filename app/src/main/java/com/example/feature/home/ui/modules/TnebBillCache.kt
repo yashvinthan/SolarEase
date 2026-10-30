@@ -3,7 +3,7 @@ package com.example.feature.home.ui.modules
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import com.example.core.session.SecurePreferencesHelper
+import com.example.core.session.SecureSessionPreferences
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -37,7 +37,7 @@ object TnebBillCache {
 
     private fun getPrefs(context: Context? = null): SharedPreferences? {
         val ctx = context?.applicationContext ?: appContext ?: return null
-        return SecurePreferencesHelper.getEncryptedPrefs(ctx, SECURE_PREFS_NAME)
+        return SecureSessionPreferences.getEncryptedPrefs(ctx, SECURE_PREFS_NAME)
     }
 
     fun init(context: Context) {

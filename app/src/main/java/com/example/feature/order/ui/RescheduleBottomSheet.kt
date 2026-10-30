@@ -1,14 +1,8 @@
 package com.example.feature.order.ui
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+/**
+ * The interactive site-survey reschedule sheet ([RescheduleBottomSheet]) is hosted directly
+ * in [SiteSurveyStatusScreen.kt] with adaptive `widthIn(max = 640.dp)` tablet centering,
+ * `Role.RadioButton` time-slot selection semantics, and `>= 48.dp` action buttons.
+ */
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TestDatePicker() {
-    val datePickerState = rememberDatePickerState()
-    DatePicker(state = datePickerState)
-}

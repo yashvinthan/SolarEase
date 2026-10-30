@@ -43,13 +43,20 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.core.legal.LegalComplianceConstants
+import com.example.core.legal.LegalComplianceDialog
+import com.example.core.legal.LegalSection
 import com.example.core.session.User
 import com.example.feature.ebservice.util.ConsumerNumberParser
 import com.example.feature.ebservice.util.formatConsumerNumber
 import com.example.feature.ebservice.util.formatIndianMobile
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import com.example.feature.home.ui.modules.TnebBillCache
 import com.example.ui.components.SolarEaseBottomNavigation
 import com.example.ui.components.SolarEaseNavTab
+import com.example.ui.components.SolarEaseNavigationRail
 import com.example.ui.theme.*
 import com.google.android.gms.location.LocationServices
 import java.util.Locale
@@ -71,7 +78,54 @@ fun ProfileRoute(
     val biometricLock by viewModel.biometricLock.collectAsStateWithLifecycle()
 
     var showSignOutDialog by remember { mutableStateOf(false) }
+    var showDeleteAccountDialog by remember { mutableStateOf(false) }
     val context = LocalContext.current
+
+    if (showDeleteAccountDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteAccountDialog = false },
+            title = {
+                Text(
+                    text = "Delete Account & Erase Data",
+                    fontWeight = FontWeight.Bold,
+                    color = StitchError,
+                    fontSize = 18.sp
+                )
+            },
+            text = {
+                Text(
+                    text = "Under Section 12 of the DPDP Act, 2023, this action permanently deletes your SolarEase account, revokes active sessions, and erases all local encrypted bill records, meter readings, and appliance data. This cannot be undone.",
+                    color = StitchOnSurfaceVariant,
+                    fontSize = 13.5.sp,
+                    lineHeight = 18.sp
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    showDeleteAccountDialog = false
+                    viewModel.deleteAccountAndEraseData(context, onSignOut)
+                }) {
+                    Text(
+                        text = "Delete Account",
+                        color = StitchError,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteAccountDialog = false }) {
+                    Text(
+                        text = "Cancel",
+                        color = StitchOnSurfaceVariant,
+                        fontSize = 14.sp
+                    )
+                }
+            },
+            containerColor = StitchSurfaceContainerLowest,
+            shape = RoundedCornerShape(16.dp)
+        )
+    }
 
     if (showSignOutDialog) {
         AlertDialog(
@@ -118,74 +172,100 @@ fun ProfileRoute(
         )
     }
 
+    val layoutInfo = rememberSolarEaseWindowLayoutInfo()
+
     Scaffold(
         containerColor = StitchSurface,
         bottomBar = {
-            SolarEaseBottomNavigation(
-                currentTab = SolarEaseNavTab.PROFILE,
-                onNavigateToHome = onNavigateToHome,
-                onNavigateToRecommends = onNavigateToRecommends,
-                onNavigateToProfile = { /* Already on Profile */ }
-            )
+            if (!layoutInfo.useNavigationRail) {
+                SolarEaseBottomNavigation(
+                    currentTab = SolarEaseNavTab.PROFILE,
+                    onNavigateToHome = onNavigateToHome,
+                    onNavigateToRecommends = onNavigateToRecommends,
+                    onNavigateToProfile = { /* Already on Profile */ }
+                )
+            }
         }
     ) { padding ->
-        Box(
+        Row(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
         ) {
-            when (val state = uiState) {
-                is ProfileUiState.Loading -> {
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.Center),
-                        color = StitchPrimaryContainer
-                    )
-                }
-                is ProfileUiState.Error -> {
-                    Column(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .padding(32.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.ErrorOutline,
-                            contentDescription = null,
-                            tint = StitchError,
-                            modifier = Modifier.size(40.dp)
-                        )
-                        Text(
-                            text = state.message,
-                            color = StitchError,
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Medium
+            if (layoutInfo.useNavigationRail) {
+                SolarEaseNavigationRail(
+                    currentTab = SolarEaseNavTab.PROFILE,
+                    onNavigateToHome = onNavigateToHome,
+                    onNavigateToRecommends = onNavigateToRecommends,
+                    onNavigateToProfile = { /* Already on Profile */ }
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight(),
+                contentAlignment = Alignment.TopCenter
+            ) {
+                when (val state = uiState) {
+                    is ProfileUiState.Loading -> {
+                        CircularProgressIndicator(
+                            modifier = Modifier.align(Alignment.Center),
+                            color = StitchPrimaryContainer
                         )
                     }
-                }
-                is ProfileUiState.Success -> {
-                    ProfileContent(
-                        user = state.user,
-                        notifPrefs = notifPrefs,
-                        selectedLanguage = selectedLanguage,
-                        biometricLock = biometricLock,
-                        onSaveProfile = { name, username, mobile, address, lat, lng, email ->
-                            viewModel.updateProfile(name, username, mobile, address, lat, lng, email)
-                        },
-                        onSaveElectricity = { consumerNumber, tnebMobile, onResult ->
-                            viewModel.updateElectricityDetails(consumerNumber, tnebMobile, onResult)
-                        },
-                        onSetNotification = { key, value ->
-                            viewModel.setNotificationPreference(key, value)
-                        },
-                        onSetLanguage = { lang ->
-                            viewModel.setAppLanguage(lang)
-                        },
-                        onSetBiometricLock = { enabled ->
-                            viewModel.setBiometricLock(enabled)
-                        },
-                        onSignOutClick = { showSignOutDialog = true }
-                    )
+                    is ProfileUiState.Error -> {
+                        Column(
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .padding(32.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.ErrorOutline,
+                                contentDescription = null,
+                                tint = StitchError,
+                                modifier = Modifier.size(40.dp)
+                            )
+                            Text(
+                                text = state.message,
+                                color = StitchError,
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+                    }
+                    is ProfileUiState.Success -> {
+                        Box(
+                            modifier = Modifier
+                                .widthIn(max = layoutInfo.maxContentWidth)
+                                .fillMaxSize()
+                        ) {
+                            ProfileContent(
+                                user = state.user,
+                                notifPrefs = notifPrefs,
+                                selectedLanguage = selectedLanguage,
+                                biometricLock = biometricLock,
+                                onSaveProfile = { name, username, mobile, address, lat, lng, email ->
+                                    viewModel.updateProfile(name, username, mobile, address, lat, lng, email)
+                                },
+                                onSaveElectricity = { consumerNumber, tnebMobile, onResult ->
+                                    viewModel.updateElectricityDetails(consumerNumber, tnebMobile, onResult)
+                                },
+                                onSetNotification = { key, value ->
+                                    viewModel.setNotificationPreference(key, value)
+                                },
+                                onSetLanguage = { lang ->
+                                    viewModel.setAppLanguage(lang)
+                                },
+                                onSetBiometricLock = { enabled ->
+                                    viewModel.setBiometricLock(enabled)
+                                },
+                                onSignOutClick = { showSignOutDialog = true },
+                                onDeleteAccountClick = { showDeleteAccountDialog = true }
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -205,7 +285,8 @@ fun ProfileContent(
     onSetNotification: (String, Boolean) -> Unit,
     onSetLanguage: (String) -> Unit,
     onSetBiometricLock: (Boolean) -> Unit,
-    onSignOutClick: () -> Unit
+    onSignOutClick: () -> Unit,
+    onDeleteAccountClick: () -> Unit = {}
 ) {
     // ── Sheets / Dialogs State ──
     var showPersonalInfoSheet by remember { mutableStateOf(false) }
@@ -216,6 +297,7 @@ fun ProfileContent(
     var showHelpSheet by remember { mutableStateOf(false) }
     var showLanguageSheet by remember { mutableStateOf(false) }
     var showAboutSheet by remember { mutableStateOf(false) }
+    var activeLegalSection by remember { mutableStateOf<LegalSection?>(null) }
 
     Column(
         modifier = Modifier
@@ -324,6 +406,14 @@ fun ProfileContent(
                 showPrivacySheet = false
                 onSignOutClick()
             },
+            onDeleteAccountClick = {
+                showPrivacySheet = false
+                onDeleteAccountClick()
+            },
+            onOpenLegalSection = { section ->
+                showPrivacySheet = false
+                activeLegalSection = section
+            },
             onDismiss = { showPrivacySheet = false }
         )
     }
@@ -344,7 +434,20 @@ fun ProfileContent(
     }
 
     if (showAboutSheet) {
-        AboutSolarEaseSheet(onDismiss = { showAboutSheet = false })
+        AboutSolarEaseSheet(
+            onOpenLegalSection = { section ->
+                showAboutSheet = false
+                activeLegalSection = section
+            },
+            onDismiss = { showAboutSheet = false }
+        )
+    }
+
+    if (activeLegalSection != null) {
+        LegalComplianceDialog(
+            initialSection = activeLegalSection!!,
+            onDismiss = { activeLegalSection = null }
+        )
     }
 }
 
@@ -877,7 +980,11 @@ private fun DetailRow(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable(onClick = onClick)
+                .heightIn(min = 56.dp)
+                .semantics(mergeDescendants = true) {
+                    role = Role.Button
+                }
+                .clickable(role = Role.Button, onClick = onClick)
                 .padding(horizontal = 14.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -963,6 +1070,15 @@ private fun AccountAppSection(
         ) {
             Column {
                 AccountRow(
+                    icon = Icons.Filled.Notifications,
+                    iconBgColor = StitchSurfaceContainerHigh,
+                    iconTint = StitchPrimaryContainer,
+                    title = "Notifications",
+                    subtitle = "Bill reminders, usage alerts & weekly insights",
+                    onClick = onNotificationsClick,
+                    showDivider = true
+                )
+                AccountRow(
                     icon = Icons.Filled.Security,
                     iconBgColor = StitchSurfaceContainerHigh,
                     iconTint = StitchPrimaryContainer,
@@ -1008,7 +1124,11 @@ private fun AccountRow(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable(onClick = onClick)
+                .heightIn(min = 56.dp)
+                .semantics(mergeDescendants = true) {
+                    role = Role.Button
+                }
+                .clickable(role = Role.Button, onClick = onClick)
                 .padding(horizontal = 14.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -1250,7 +1370,7 @@ private fun PersonalInformationSheet(
                     onClick = onDismiss,
                     modifier = Modifier
                         .weight(1f)
-                        .height(44.dp),
+                        .heightIn(min = 48.dp),
                     shape = RoundedCornerShape(12.dp),
                     border = BorderStroke(1.dp, StitchOutline)
                 ) {
@@ -1271,7 +1391,7 @@ private fun PersonalInformationSheet(
                     },
                     modifier = Modifier
                         .weight(1f)
-                        .height(44.dp),
+                        .heightIn(min = 48.dp),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = StitchPrimaryContainer,
@@ -1558,7 +1678,7 @@ private fun ElectricityDetailsSheet(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(44.dp),
+                        .heightIn(min = 48.dp),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = StitchPrimaryContainer,
@@ -1650,7 +1770,7 @@ private fun ElectricityDetailsSheet(
                         },
                         modifier = Modifier
                             .weight(1f)
-                            .height(44.dp),
+                            .heightIn(min = 48.dp),
                         shape = RoundedCornerShape(12.dp),
                         border = BorderStroke(1.dp, StitchOutline)
                     ) {
@@ -1699,7 +1819,7 @@ private fun ElectricityDetailsSheet(
                         },
                         modifier = Modifier
                             .weight(1f)
-                            .height(44.dp),
+                            .heightIn(min = 48.dp),
                         shape = RoundedCornerShape(12.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = StitchPrimaryContainer,
@@ -2042,7 +2162,7 @@ private fun HouseAddressSheet(
                     onClick = onDismiss,
                     modifier = Modifier
                         .weight(1f)
-                        .height(44.dp),
+                        .heightIn(min = 48.dp),
                     shape = RoundedCornerShape(12.dp),
                     border = BorderStroke(1.dp, StitchOutline)
                 ) {
@@ -2063,7 +2183,7 @@ private fun HouseAddressSheet(
                     },
                     modifier = Modifier
                         .weight(1f)
-                        .height(44.dp),
+                        .heightIn(min = 48.dp),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = StitchPrimaryContainer,
@@ -2170,7 +2290,7 @@ private fun NotificationPreferencesSheet(
                 onClick = onDismiss,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(44.dp),
+                    .heightIn(min = 48.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = StitchPrimaryContainer,
@@ -2239,6 +2359,8 @@ private fun PrivacySecuritySheet(
     biometricLock: Boolean,
     onToggleBiometric: (Boolean) -> Unit,
     onSignOutClick: () -> Unit,
+    onDeleteAccountClick: () -> Unit = {},
+    onOpenLegalSection: (LegalSection) -> Unit = {},
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
@@ -2335,11 +2457,40 @@ private fun PrivacySecuritySheet(
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = "All your electricity metrics, meter OCR logs, and solar estimates are protected with TLS 1.3 encryption. Your consumer connection data is never sold or shared.",
+                            text = "All your electricity metrics, meter OCR logs, and solar estimates are protected with TLS 1.3 and AndroidKeyStore AES256-GCM encryption. Aadhaar & PAN fields are automatically stripped before local caching.",
                             fontSize = 11.5.sp,
                             lineHeight = 16.sp,
                             color = StitchOnSurfaceVariant
                         )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "Privacy Policy",
+                                fontSize = 11.5.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = StitchPrimaryContainer,
+                                modifier = Modifier.clickable { onOpenLegalSection(LegalSection.PRIVACY_POLICY) }
+                            )
+                            Text("•", fontSize = 11.5.sp, color = StitchOnSurfaceVariant)
+                            Text(
+                                text = "Cookie & Storage Notice",
+                                fontSize = 11.5.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = StitchPrimaryContainer,
+                                modifier = Modifier.clickable { onOpenLegalSection(LegalSection.COOKIE_STORAGE) }
+                            )
+                            Text("•", fontSize = 11.5.sp, color = StitchOnSurfaceVariant)
+                            Text(
+                                text = "SDKs & Cloud AI",
+                                fontSize = 11.5.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = StitchPrimaryContainer,
+                                modifier = Modifier.clickable { onOpenLegalSection(LegalSection.SUBPROCESSORS_AI) }
+                            )
+                        }
                     }
                 }
             }
@@ -2347,7 +2498,7 @@ private fun PrivacySecuritySheet(
             // Sign out button
             OutlinedButton(
                 onClick = onSignOutClick,
-                modifier = Modifier.fillMaxWidth().height(42.dp),
+                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
                 shape = RoundedCornerShape(12.dp),
                 border = BorderStroke(1.dp, StitchError.copy(alpha = 0.4f)),
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = StitchError)
@@ -2355,6 +2506,17 @@ private fun PrivacySecuritySheet(
                 Icon(Icons.Filled.Logout, contentDescription = null, modifier = Modifier.size(16.dp))
                 Spacer(modifier = Modifier.width(6.dp))
                 Text("Sign Out of Session", fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+            }
+
+            // Statutory Right to Erasure / Account Deletion (DPDP Act 2023 § 12 & Play Data Safety)
+            TextButton(
+                onClick = onDeleteAccountClick,
+                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
+                colors = ButtonDefaults.textButtonColors(contentColor = StitchError)
+            ) {
+                Icon(Icons.Filled.DeleteForever, contentDescription = null, modifier = Modifier.size(16.dp))
+                Spacer(modifier = Modifier.width(6.dp))
+                Text("Delete Account & Erase Personal Data", fontSize = 12.5.sp, fontWeight = FontWeight.SemiBold)
             }
         }
     }
@@ -2532,7 +2694,7 @@ private fun HelpSupportSheet(onDismiss: () -> Unit) {
                                 context.startActivity(intent)
                             } catch (_: Exception) {}
                         },
-                        modifier = Modifier.fillMaxWidth().height(36.dp),
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
                         shape = RoundedCornerShape(8.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = StitchTertiary)
                     ) {
@@ -2668,7 +2830,7 @@ private fun AppLanguageSheet(
 
             Button(
                 onClick = onDismiss,
-                modifier = Modifier.fillMaxWidth().height(44.dp),
+                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = StitchPrimaryContainer)
             ) {
@@ -2680,7 +2842,10 @@ private fun AppLanguageSheet(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AboutSolarEaseSheet(onDismiss: () -> Unit) {
+private fun AboutSolarEaseSheet(
+    onOpenLegalSection: (LegalSection) -> Unit = {},
+    onDismiss: () -> Unit
+) {
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
@@ -2756,7 +2921,7 @@ private fun AboutSolarEaseSheet(onDismiss: () -> Unit) {
                     )
                     HorizontalDivider(thickness = 0.5.dp, color = StitchSurfaceContainer)
                     Text(
-                        text = "Statutory Disclaimer: SolarEase is an independent analytical software developed to assist consumers. It is not affiliated with, authorized, or endorsed by TANGEDCO, TNEB, or any governmental authority. Tariff estimates are based on public LT-1A tariff schedules.",
+                        text = "Statutory Disclaimer: SolarEase is an independent analytical software developed to assist consumers. It is not affiliated with, authorized, or endorsed by TANGEDCO, TNEB, MNRE, or any governmental authority. Tariff estimates are based on public LT-1A tariff schedules.",
                         fontSize = 11.sp,
                         lineHeight = 15.sp,
                         color = StitchOnSurfaceVariant
@@ -2764,18 +2929,84 @@ private fun AboutSolarEaseSheet(onDismiss: () -> Unit) {
                 }
             }
 
+            // Statutory Corporate & Grievance Redressal Card (Consumer Protection Rules 2020 & DPDP Act 2023)
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                color = StitchSurfaceContainerLow,
+                border = BorderStroke(1.dp, StitchSurfaceContainer)
+            ) {
+                Column(
+                    modifier = Modifier.padding(14.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Text(
+                        text = "Statutory Corporate & Grievance Details",
+                        fontSize = 12.5.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = StitchOnSurface
+                    )
+                    Text(
+                        text = "Entity: ${LegalComplianceConstants.ENTITY_NAME} (CIN: ${LegalComplianceConstants.CIN})",
+                        fontSize = 11.sp,
+                        color = StitchOnSurfaceVariant
+                    )
+                    Text(
+                        text = "Registered Office: ${LegalComplianceConstants.REGISTERED_ADDRESS}",
+                        fontSize = 11.sp,
+                        color = StitchOnSurfaceVariant
+                    )
+                    Text(
+                        text = "Grievance Officer & DPO: ${LegalComplianceConstants.GRIEVANCE_OFFICER_NAME} (${LegalComplianceConstants.GRIEVANCE_EMAIL})",
+                        fontSize = 11.sp,
+                        color = StitchOnSurfaceVariant
+                    )
+                    Text(
+                        text = "Helpline: ${LegalComplianceConstants.SUPPORT_PHONE} (${LegalComplianceConstants.BUSINESS_HOURS}) • SLA: 48h ack / 30d resolution",
+                        fontSize = 11.sp,
+                        color = StitchOnSurfaceVariant
+                    )
+                }
+            }
+
+            // Interactive Legal Documents List
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                Text("• Terms of Service: Governed by the Indian Contract Act, 1872.", fontSize = 11.5.sp, color = StitchOnSurfaceVariant)
-                Text("• Privacy Policy: DPDP Act 2023 compliant. Grievance Officer: privacy@solarease.app.", fontSize = 11.5.sp, color = StitchOnSurfaceVariant)
-                Text("• Refund & Cancellation: Transparent cancellation prior to site dispatch.", fontSize = 11.5.sp, color = StitchOnSurfaceVariant)
+                Text(
+                    text = "• View Terms of Service (Indian Contract Act, 1872) →",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = StitchPrimaryContainer,
+                    modifier = Modifier.clickable { onOpenLegalSection(LegalSection.TERMS_OF_SERVICE) }
+                )
+                Text(
+                    text = "• View Privacy Policy (DPDP Act 2023 Compliant) →",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = StitchPrimaryContainer,
+                    modifier = Modifier.clickable { onOpenLegalSection(LegalSection.PRIVACY_POLICY) }
+                )
+                Text(
+                    text = "• View Refund & Cancellation Policy (100% Pre-Dispatch) →",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = StitchPrimaryContainer,
+                    modifier = Modifier.clickable { onOpenLegalSection(LegalSection.REFUND_POLICY) }
+                )
+                Text(
+                    text = "• View Cookie, Storage & Third-Party SDK Disclosures →",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = StitchPrimaryContainer,
+                    modifier = Modifier.clickable { onOpenLegalSection(LegalSection.SUBPROCESSORS_AI) }
+                )
             }
 
             Button(
                 onClick = onDismiss,
-                modifier = Modifier.fillMaxWidth().height(44.dp),
+                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = StitchPrimaryContainer)
             ) {

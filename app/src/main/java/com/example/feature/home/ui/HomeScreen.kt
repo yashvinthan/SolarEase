@@ -78,8 +78,14 @@ import com.example.feature.home.ui.modules.MeterReadingGraph
 import com.example.feature.home.ui.modules.MeterReadingProgressionGraph
 import com.example.feature.home.ui.modules.PendingBillUiState
 import androidx.compose.material.icons.filled.History
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import com.example.ui.components.SolarEaseBottomNavigation
 import com.example.ui.components.SolarEaseNavTab
+import com.example.ui.components.SolarEaseNavigationRail
 import com.example.ui.components.subtleTopRightGradient
 import com.example.ui.theme.*
 import java.util.Locale
@@ -90,7 +96,7 @@ private object HomeColors {
     val Primary = Color(0xFF386A20)
     val PrimaryContainer = Color(0xFFE5F2D9)
     val TextPrimary = Color(0xFF191C18)
-    val TextSecondary = Color(0xFF747873)
+    val TextSecondary = Color(0xFF525651)
     val Border = Color(0xFFE2E7DC)
     val CardBg = Color(0xFFFFFFFF)
     val SurfaceSecondary = Color(0xFFF4F7EE)
@@ -201,6 +207,8 @@ fun HomeRoute(
         )
     }
 
+    val layoutInfo = rememberSolarEaseWindowLayoutInfo()
+
     Scaffold(
         containerColor = HomeColors.Background,
         topBar = {
@@ -211,27 +219,44 @@ fun HomeRoute(
             )
         },
         bottomBar = {
-            SolarEaseBottomNavigation(
-                currentTab = SolarEaseNavTab.HOME,
-                onNavigateToHome = {},
-                onNavigateToRecommends = onNavigateToRecommends,
-                onNavigateToProfile = onNavigateToProfile
-            )
+            if (!layoutInfo.useNavigationRail) {
+                SolarEaseBottomNavigation(
+                    currentTab = SolarEaseNavTab.HOME,
+                    onNavigateToHome = {},
+                    onNavigateToRecommends = onNavigateToRecommends,
+                    onNavigateToProfile = onNavigateToProfile
+                )
+            }
         }
     ) { padding ->
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .verticalScroll(rememberScrollState())
         ) {
-            Column(
+            if (layoutInfo.useNavigationRail) {
+                SolarEaseNavigationRail(
+                    currentTab = SolarEaseNavTab.HOME,
+                    onNavigateToHome = {},
+                    onNavigateToRecommends = onNavigateToRecommends,
+                    onNavigateToProfile = onNavigateToProfile
+                )
+            }
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 12.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                    .weight(1f)
+                    .fillMaxHeight()
+                    .verticalScroll(rememberScrollState()),
+                contentAlignment = Alignment.TopCenter
             ) {
-                val step = uiState.currentOnboardingStep
+                Column(
+                    modifier = Modifier
+                        .widthIn(max = layoutInfo.maxContentWidth)
+                        .fillMaxWidth()
+                        .padding(horizontal = layoutInfo.horizontalPadding, vertical = 12.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    val step = uiState.currentOnboardingStep
 
                 // ── Onboarding Progress Stepper Banner ───────────────────
                 OnboardingProgressBanner(
@@ -372,7 +397,11 @@ fun HomeRoute(
 
                     // Keep the dashboard focused; secondary tools remain available below.
                     Surface(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .semantics {
+                                stateDescription = if (showInsightsAndTools) "Expanded" else "Collapsed"
+                            },
                         shape = RoundedCornerShape(18.dp),
                         color = HomeColors.CardBg,
                         border = BorderStroke(1.dp, HomeColors.Border),
@@ -407,6 +436,7 @@ fun HomeRoute(
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))
+                }
             }
         }
 
@@ -645,6 +675,7 @@ private fun StitchTopBar(
         ) {
             // Brand: SolarEase icon, App name, and HOME badge
             Row(
+                modifier = Modifier.weight(1f),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
@@ -695,11 +726,11 @@ private fun StitchTopBar(
             // Notification & Profile Avatar
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 IconButton(
                     onClick = onNotificationsClick,
-                    modifier = Modifier.size(36.dp)
+                    modifier = Modifier.size(48.dp)
                 ) {
                     Box(contentAlignment = Alignment.TopEnd) {
                         Icon(
@@ -719,19 +750,29 @@ private fun StitchTopBar(
 
                 Box(
                     modifier = Modifier
-                        .size(34.dp)
-                        .clip(CircleShape)
-                        .background(HomeColors.Primary)
-                        .border(1.dp, HomeColors.Border, CircleShape)
-                        .clickable { onProfileClick() },
+                        .size(48.dp)
+                        .semantics(mergeDescendants = true) {
+                            contentDescription = "Account details"
+                            role = Role.Button
+                        }
+                        .clickable(role = Role.Button) { onProfileClick() },
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = userInitial.toString(),
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
+                    Box(
+                        modifier = Modifier
+                            .size(34.dp)
+                            .clip(CircleShape)
+                            .background(HomeColors.Primary)
+                            .border(1.dp, HomeColors.Border, CircleShape),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = userInitial.toString(),
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
+                        )
+                    }
                 }
             }
         }
@@ -782,7 +823,7 @@ private fun GreetingHeader(
                     text = when (onboardingStep) {
                         1 -> if (!userName.isNullOrBlank()) "Welcome, $userName!" else "Welcome to SolarEase!"
                         2 -> "Your electricity connection is ready!"
-                        else -> if (!userName.isNullOrBlank()) "$greeting, $userName! ☀️" else "$greeting! ☀️"
+                        else -> if (!userName.isNullOrBlank()) "$greeting, $userName!" else "$greeting!"
                     },
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
@@ -960,7 +1001,7 @@ private fun PrimaryEnergyCard(
                     onClick = onConnectBill,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(44.dp),
+                        .heightIn(min = 48.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = HomeColors.Primary,
                         contentColor = Color.White
@@ -1174,7 +1215,7 @@ private fun PrimaryEnergyCard(
 
                             IconButton(
                                 onClick = onScanMeterReading,
-                                modifier = Modifier.size(36.dp)
+                                modifier = Modifier.size(48.dp)
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.CameraAlt,
@@ -1230,7 +1271,7 @@ private fun PrimaryEnergyCard(
                             ) {
                                 OutlinedButton(
                                     onClick = onCancelEditingReading,
-                                    modifier = Modifier.weight(1f).height(44.dp),
+                                    modifier = Modifier.weight(1f).heightIn(min = 48.dp),
                                     shape = RoundedCornerShape(8.dp),
                                     border = BorderStroke(1.dp, HomeColors.Border)
                                 ) {
@@ -1238,7 +1279,7 @@ private fun PrimaryEnergyCard(
                                 }
                                 Button(
                                     onClick = onUpdateTodayReading,
-                                    modifier = Modifier.weight(1f).height(44.dp),
+                                    modifier = Modifier.weight(1f).heightIn(min = 48.dp),
                                     colors = ButtonDefaults.buttonColors(
                                         containerColor = HomeColors.Primary,
                                         contentColor = Color.White
@@ -1253,7 +1294,7 @@ private fun PrimaryEnergyCard(
                                 onClick = onSaveMeterReading,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(44.dp),
+                                    .heightIn(min = 48.dp),
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = HomeColors.Primary,
                                     contentColor = Color.White
@@ -1286,7 +1327,7 @@ private fun PrimaryEnergyCard(
                         onClick = onViewBillHistory,
                         modifier = Modifier
                             .weight(1f)
-                            .height(38.dp),
+                            .heightIn(min = 48.dp),
                         shape = RoundedCornerShape(8.dp),
                         border = BorderStroke(1.dp, HomeColors.Border)
                     ) {
@@ -1302,7 +1343,7 @@ private fun PrimaryEnergyCard(
                         onClick = onConnectBill,
                         modifier = Modifier
                             .weight(1f)
-                            .height(38.dp),
+                            .heightIn(min = 48.dp),
                         shape = RoundedCornerShape(8.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = HomeColors.AccentOrange,
@@ -1864,7 +1905,7 @@ private fun OnboardingProgressBanner(
                         text = when {
                             currentStep == 1 -> "33% Ready"
                             currentStep == 2 -> "66% Complete"
-                            isAuditCompleted -> "100% Ready ✨"
+                            isAuditCompleted -> "100% Ready"
                             else -> "Final Setup Step"
                         },
                         fontSize = 11.sp,
@@ -2368,7 +2409,7 @@ fun PendingElectricityBillHeroCard(
                 onClick = onViewBillDetails,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(46.dp),
+                    .heightIn(min = 48.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = HomeColors.Primary,
@@ -2515,7 +2556,7 @@ fun BillRetrievalFailedCard(
                     onClick = onRetry,
                     modifier = Modifier
                         .weight(1f)
-                        .height(38.dp),
+                        .heightIn(min = 48.dp),
                     shape = RoundedCornerShape(8.dp),
                     border = BorderStroke(1.dp, HomeColors.Border),
                     contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp)
@@ -2526,7 +2567,7 @@ fun BillRetrievalFailedCard(
                     onClick = onCheckBillStatus,
                     modifier = Modifier
                         .weight(1.4f)
-                        .height(38.dp),
+                        .heightIn(min = 48.dp),
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = HomeColors.Primary),
                     contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp)
@@ -2844,12 +2885,12 @@ private fun LockedStep3PreviewCard(
                             text = "Step 3: Audit with Solar Lens",
                             fontSize = 13.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = Color(0xFF64748B)
+                            color = Color(0xFF525651)
                         )
                         Text(
                             text = "Unlocks after 2nd meter reading is saved",
                             fontSize = 10.sp,
-                            color = Color(0xFF94A3B8)
+                            color = Color(0xFF525651)
                         )
                     }
                 }
@@ -2859,10 +2900,10 @@ private fun LockedStep3PreviewCard(
                     color = Color(0xFFE2E8F0)
                 ) {
                     Text(
-                        text = "Locked 🔒",
+                        text = "Locked",
                         fontSize = 10.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = Color(0xFF64748B),
+                        color = Color(0xFF525651),
                         modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                     )
                 }
@@ -2871,7 +2912,7 @@ private fun LockedStep3PreviewCard(
             Text(
                 text = "Once your second reading establishes your household burn rate, you'll be able to audit power-hungry appliances using camera-assisted Solar Lens.",
                 fontSize = 11.sp,
-                color = Color(0xFF94A3B8),
+                color = Color(0xFF525651),
                 lineHeight = 15.sp
             )
 
@@ -2888,7 +2929,7 @@ private fun LockedStep3PreviewCard(
                         Text(
                             text = tag,
                             fontSize = 10.sp,
-                            color = Color(0xFF94A3B8),
+                            color = Color(0xFF475569),
                             modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp)
                         )
                     }
@@ -2994,7 +3035,7 @@ private fun SolarLensPriorityHeroCard(
                 onClick = onOpenSolarLens,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(44.dp),
+                    .heightIn(min = 48.dp),
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF74D99F),
@@ -3356,7 +3397,7 @@ private fun KnowYourConsumptionCard(
                 onClick = onOpenSolarLens,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(42.dp),
+                    .heightIn(min = 48.dp),
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = HomeColors.Primary,
@@ -3437,7 +3478,7 @@ private fun BillActionsSection(
                     onClick = onViewBillHistory,
                     modifier = Modifier
                         .weight(1f)
-                        .height(40.dp),
+                        .heightIn(min = 48.dp),
                     shape = RoundedCornerShape(8.dp),
                     border = BorderStroke(1.dp, HomeColors.Border)
                 ) {
@@ -3453,7 +3494,7 @@ private fun BillActionsSection(
                     onClick = onCheckDues,
                     modifier = Modifier
                         .weight(1f)
-                        .height(40.dp),
+                        .heightIn(min = 48.dp),
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = HomeColors.AccentOrange,
@@ -3730,7 +3771,7 @@ private fun SolarLensHeroCard(
                 onClick = onLaunchLens,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(42.dp),
+                    .heightIn(min = 48.dp),
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = StitchPrimaryContainer,

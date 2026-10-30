@@ -97,15 +97,16 @@ fun SystemDetailsContent(details: SolarSystemDetails) {
     val dateFormat = remember { SimpleDateFormat("dd MMM yyyy", Locale.getDefault()) }
     val timeFormat = remember { SimpleDateFormat("HH:mm a", Locale.getDefault()) }
     
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        // Section 1: System Overview
-        item {
-            OverviewCard(details, dateFormat)
-        }
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+        LazyColumn(
+            modifier = Modifier.widthIn(max = 720.dp).fillMaxSize(),
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            // Section 1: System Overview
+            item {
+                OverviewCard(details, dateFormat)
+            }
         
         // Section 2: Live Status
         item {
@@ -184,6 +185,7 @@ fun SystemDetailsContent(details: SolarSystemDetails) {
         
         item {
             Spacer(modifier = Modifier.height(32.dp))
+        }
         }
     }
 }
@@ -266,7 +268,7 @@ fun LiveStatusCard(liveStatus: LiveStatus?, timeFormat: SimpleDateFormat) {
             if (liveStatus != null) {
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(1f)) {
-                        Text("⚡", style = MaterialTheme.typography.headlineMedium)
+                        Icon(Icons.Default.ElectricBolt, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(32.dp))
                         Text("${liveStatus.currentPowerOutput} kW", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSecondaryContainer)
                         Text("Current Output", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f))
                     }

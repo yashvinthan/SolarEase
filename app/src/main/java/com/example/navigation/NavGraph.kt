@@ -95,46 +95,47 @@ private fun NavHostController.navigateToTopLevel(destination: Screen) {
 @Composable
 fun SolarEaseNavGraph(navController: NavHostController, startDestination: Any = Screen.AuthGraph) {
     val solarVendorViewModel: SolarVendorViewModel = viewModel()
+    val isReducedMotion = com.example.ui.theme.rememberIsReducedMotionEnabled()
     NavHost(
         navController = navController,
         startDestination = startDestination,
         enterTransition = {
-            if (isTopLevelTransition(initialState.destination, targetState.destination)) {
+            if (isReducedMotion || isTopLevelTransition(initialState.destination, targetState.destination)) {
                 EnterTransition.None
             } else {
                 slideInHorizontally(
                     initialOffsetX = { fullWidth -> fullWidth },
-                    animationSpec = tween(durationMillis = 300, easing = FastOutSlowInEasing)
+                    animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing)
                 )
             }
         },
         exitTransition = {
-            if (isTopLevelTransition(initialState.destination, targetState.destination)) {
+            if (isReducedMotion || isTopLevelTransition(initialState.destination, targetState.destination)) {
                 ExitTransition.None
             } else {
                 slideOutHorizontally(
                     targetOffsetX = { fullWidth -> -fullWidth },
-                    animationSpec = tween(durationMillis = 300, easing = FastOutSlowInEasing)
+                    animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing)
                 )
             }
         },
         popEnterTransition = {
-            if (isTopLevelTransition(initialState.destination, targetState.destination)) {
+            if (isReducedMotion || isTopLevelTransition(initialState.destination, targetState.destination)) {
                 EnterTransition.None
             } else {
                 slideInHorizontally(
                     initialOffsetX = { fullWidth -> -fullWidth },
-                    animationSpec = tween(durationMillis = 300, easing = FastOutSlowInEasing)
+                    animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing)
                 )
             }
         },
         popExitTransition = {
-            if (isTopLevelTransition(initialState.destination, targetState.destination)) {
+            if (isReducedMotion || isTopLevelTransition(initialState.destination, targetState.destination)) {
                 ExitTransition.None
             } else {
                 slideOutHorizontally(
                     targetOffsetX = { fullWidth -> fullWidth },
-                    animationSpec = tween(durationMillis = 300, easing = FastOutSlowInEasing)
+                    animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing)
                 )
             }
         }
@@ -263,6 +264,7 @@ fun SolarEaseNavGraph(navController: NavHostController, startDestination: Any = 
                 val lensViewModel: LensViewModel = viewModel(
                     parentEntry,
                     factory = object : androidx.lifecycle.ViewModelProvider.Factory {
+                        @Suppress("UNCHECKED_CAST")
                         override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
                             return LensViewModel(LensRepository(RetrofitClient.lensApi)) as T
                         }
@@ -286,6 +288,7 @@ fun SolarEaseNavGraph(navController: NavHostController, startDestination: Any = 
                 val lensViewModel: LensViewModel = viewModel(
                     parentEntry,
                     factory = object : androidx.lifecycle.ViewModelProvider.Factory {
+                        @Suppress("UNCHECKED_CAST")
                         override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
                             return LensViewModel(LensRepository(RetrofitClient.lensApi)) as T
                         }

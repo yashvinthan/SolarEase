@@ -26,21 +26,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import com.example.feature.analytics.model.*
 import com.example.ui.components.SolarEaseBottomNavigation
 import com.example.ui.components.SolarEaseNavTab
+import com.example.ui.components.SolarEaseNavigationRail
 import com.example.ui.theme.*
 import java.util.Locale
 import kotlin.math.max
 
-// Stitch Color Palette Accents
-private val StitchBlueAccent = Color(0xFF2563EB)
+// Stitch Color Palette Accents (WCAG 2.2 AA contrast verified)
+private val StitchBlueAccent = Color(0xFF1D4ED8)
 private val StitchBlueContainer = Color(0xFFEFF4FF)
 private val StitchEmeraldGreen = Color(0xFF047857)
 private val StitchEmeraldContainer = Color(0xFFECFDF5)
-private val StitchAmberAccent = Color(0xFFD97706)
+private val StitchAmberAccent = Color(0xFF9A3412)
 private val StitchAmberContainer = Color(0xFFFFFBEB)
-private val StitchPurpleAccent = Color(0xFF7C3AED)
+private val StitchPurpleAccent = Color(0xFF6D28D9)
 private val StitchPurpleContainer = Color(0xFFF5F3FF)
 
 @Composable
@@ -77,16 +82,11 @@ fun AnalyticsScreen(
     onNavigateToTnebBillStatus: () -> Unit,
     onNavigateToLogMeterReading: () -> Unit
 ) {
-    Scaffold(
-        containerColor = StitchSurface,
-        topBar = {
-            AnalyticsTopBar(
-                userLocation = uiState.userLocation,
-                onProfileClick = onNavigateToProfile
-            )
-        },
-        bottomBar = {
-            SolarEaseBottomNavigation(
+    val windowLayoutInfo = rememberSolarEaseWindowLayoutInfo()
+
+    Row(modifier = Modifier.fillMaxSize()) {
+        if (windowLayoutInfo.useNavigationRail) {
+            SolarEaseNavigationRail(
                 currentTab = SolarEaseNavTab.ANALYTICS,
                 onNavigateToHome = onNavigateToHome,
                 onNavigateToAnalytics = { /* Already on Analytics */ },
@@ -94,27 +94,49 @@ fun AnalyticsScreen(
                 onNavigateToProfile = onNavigateToProfile
             )
         }
-    ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-        ) {
-            if (uiState.isLoading) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(color = StitchPrimaryContainer)
+
+        Scaffold(
+            modifier = Modifier.weight(1f),
+            containerColor = StitchSurface,
+            topBar = {
+                AnalyticsTopBar(
+                    userLocation = uiState.userLocation,
+                    onProfileClick = onNavigateToProfile
+                )
+            },
+            bottomBar = {
+                if (!windowLayoutInfo.useNavigationRail) {
+                    SolarEaseBottomNavigation(
+                        currentTab = SolarEaseNavTab.ANALYTICS,
+                        onNavigateToHome = onNavigateToHome,
+                        onNavigateToAnalytics = { /* Already on Analytics */ },
+                        onNavigateToRecommends = onNavigateToRecommends,
+                        onNavigateToProfile = onNavigateToProfile
+                    )
                 }
-            } else if (!uiState.hasData) {
-                EmptyAnalyticsView(
-                    onConnectBill = onNavigateToTnebBillStatus,
-                    onLogMeter = onNavigateToLogMeterReading
-                )
-            } else {
-                PopulatedAnalyticsView(
-                    uiState = uiState,
-                    onRangeSelected = onRangeSelected,
-                    onDailyPointSelected = onDailyPointSelected
-                )
+            }
+        ) { innerPadding ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+            ) {
+                if (uiState.isLoading) {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator(color = StitchPrimaryContainer)
+                    }
+                } else if (!uiState.hasData) {
+                    EmptyAnalyticsView(
+                        onConnectBill = onNavigateToTnebBillStatus,
+                        onLogMeter = onNavigateToLogMeterReading
+                    )
+                } else {
+                    PopulatedAnalyticsView(
+                        uiState = uiState,
+                        onRangeSelected = onRangeSelected,
+                        onDailyPointSelected = onDailyPointSelected
+                    )
+                }
             }
         }
     }
@@ -137,12 +159,13 @@ private fun AnalyticsTopBar(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp)
-                .padding(horizontal = 20.dp),
+                .heightIn(min = 56.dp)
+                .padding(horizontal = 20.dp, vertical = 6.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Row(
+                modifier = Modifier.weight(1f),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
@@ -160,13 +183,15 @@ private fun AnalyticsTopBar(
                         modifier = Modifier.size(20.dp)
                     )
                 }
-                Column {
+                Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = "SolarEase",
                         fontSize = 17.sp,
                         fontWeight = FontWeight.Bold,
                         color = StitchOnSurface,
-                        letterSpacing = (-0.3).sp
+                        letterSpacing = (-0.3).sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
@@ -189,18 +214,29 @@ private fun AnalyticsTopBar(
 
             Box(
                 modifier = Modifier
-                    .size(36.dp)
+                    .size(48.dp)
                     .clip(CircleShape)
-                    .background(StitchPrimary)
-                    .clickable { onProfileClick() },
+                    .clickable(onClick = onProfileClick)
+                    .semantics {
+                        role = Role.Button
+                        contentDescription = "Profile"
+                    },
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = Icons.Default.Person,
-                    contentDescription = "Profile",
-                    tint = Color.White,
-                    modifier = Modifier.size(20.dp)
-                )
+                Box(
+                    modifier = Modifier
+                        .size(36.dp)
+                        .clip(CircleShape)
+                        .background(StitchPrimary),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
             }
         }
     }
@@ -334,7 +370,7 @@ private fun EmptyAnalyticsView(
                     onClick = onConnectBill,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(44.dp),
+                        .heightIn(min = 48.dp),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = StitchPrimaryContainer)
                 ) {
@@ -347,7 +383,7 @@ private fun EmptyAnalyticsView(
                     onClick = onLogMeter,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(44.dp),
+                        .heightIn(min = 48.dp),
                     shape = RoundedCornerShape(12.dp),
                     border = BorderStroke(1.dp, StitchOutline),
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = StitchOnSurface)

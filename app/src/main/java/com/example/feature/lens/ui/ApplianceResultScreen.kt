@@ -91,16 +91,22 @@ fun ApplianceResultScreen(
         Color(0xFF8B5CF6)               // Purple
     )
 
-    val infiniteTransition = rememberInfiniteTransition(label = "pulse")
-    val pulseAlpha by infiniteTransition.animateFloat(
-        initialValue = 0.4f,
-        targetValue = 1.0f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(1000, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "pulseAlpha"
-    )
+    val isReducedMotion = com.example.ui.theme.rememberIsReducedMotionEnabled()
+    val pulseAlpha = if (isReducedMotion) {
+        1.0f
+    } else {
+        val infiniteTransition = rememberInfiniteTransition(label = "pulse")
+        val animated by infiniteTransition.animateFloat(
+            initialValue = 0.4f,
+            targetValue = 1.0f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(1000, easing = LinearEasing),
+                repeatMode = RepeatMode.Reverse
+            ),
+            label = "pulseAlpha"
+        )
+        animated
+    }
 
     Scaffold(
         containerColor = LensColors.Surface,
@@ -780,7 +786,7 @@ fun ApplianceResultScreen(
                                 },
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(44.dp),
+                                    .heightIn(min = 48.dp),
                                 shape = RoundedCornerShape(12.dp),
                                 border = BorderStroke(1.dp, LensColors.Primary.copy(alpha = 0.5f))
                             ) {
@@ -1052,7 +1058,7 @@ fun ApplianceResultScreen(
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(46.dp),
+                            .heightIn(min = 48.dp),
                         shape = RoundedCornerShape(12.dp),
                         border = BorderStroke(1.dp, LensColors.Outline.copy(alpha = 0.2f)),
                         colors = ButtonDefaults.outlinedButtonColors(
@@ -1107,7 +1113,7 @@ fun ApplianceResultScreen(
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(42.dp)
+                            .heightIn(min = 48.dp)
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,

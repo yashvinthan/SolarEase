@@ -85,6 +85,8 @@ tmp/
 temp/
 output/
 lib/
+lancedb/
+*.lance/
 *.zip
 
 # Large binary documentation & datasets (belong in Cloud Storage / Team Drive)

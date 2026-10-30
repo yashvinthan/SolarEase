@@ -24,12 +24,15 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.feature.environmental.domain.model.*
+import com.example.ui.theme.rememberIsReducedMotionEnabled
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,15 +53,15 @@ fun EnvironmentalRoute(
                     }
                 },
                 navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
+                    IconButton(onClick = onNavigateBack, modifier = Modifier.size(48.dp)) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /* Share */ }) {
+                    IconButton(onClick = { /* Share */ }, modifier = Modifier.size(48.dp)) {
                         Icon(Icons.Default.Share, contentDescription = "Share Impact")
                     }
-                    IconButton(onClick = { /* Download */ }) {
+                    IconButton(onClick = { /* Download */ }, modifier = Modifier.size(48.dp)) {
                         Icon(Icons.Default.Download, contentDescription = "Download Report")
                     }
                 }
@@ -90,15 +93,17 @@ fun EnvironmentalRoute(
 
 @Composable
 fun EnvironmentalLoadingSkeleton() {
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Box(modifier = Modifier.fillMaxWidth().height(220.dp).clip(MaterialTheme.shapes.large).background(MaterialTheme.colorScheme.surfaceVariant))
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            Box(modifier = Modifier.weight(1f).height(120.dp).clip(MaterialTheme.shapes.large).background(MaterialTheme.colorScheme.surfaceVariant))
-            Box(modifier = Modifier.weight(1f).height(120.dp).clip(MaterialTheme.shapes.large).background(MaterialTheme.colorScheme.surfaceVariant))
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+        Column(modifier = Modifier.widthIn(max = 720.dp).fillMaxSize().padding(16.dp)) {
+            Box(modifier = Modifier.fillMaxWidth().height(220.dp).clip(MaterialTheme.shapes.large).background(MaterialTheme.colorScheme.surfaceVariant))
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                Box(modifier = Modifier.weight(1f).height(120.dp).clip(MaterialTheme.shapes.large).background(MaterialTheme.colorScheme.surfaceVariant))
+                Box(modifier = Modifier.weight(1f).height(120.dp).clip(MaterialTheme.shapes.large).background(MaterialTheme.colorScheme.surfaceVariant))
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Box(modifier = Modifier.fillMaxWidth().height(300.dp).clip(MaterialTheme.shapes.large).background(MaterialTheme.colorScheme.surfaceVariant))
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        Box(modifier = Modifier.fillMaxWidth().height(300.dp).clip(MaterialTheme.shapes.large).background(MaterialTheme.colorScheme.surfaceVariant))
     }
 }
 
@@ -115,22 +120,24 @@ fun EmptyEnvironmentalState() {
 
 @Composable
 fun EnvironmentalContent(data: EnvironmentalDashboard) {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        item { EnvironmentalOverviewCard(data.overview) }
-        item { TodayImpactSection(data.today) }
-        item { LifetimeImpactSection(data.lifetime) }
-        item { EnvironmentalComparisonSection(data.comparison) }
-        item { MonthlyImpactSection(data.history) }
-        item { SustainabilityGoalsSection(data.sustainabilityGoals) }
-        item { AchievementsSection(data.achievements) }
-        item { SmartInsightsSection(data.insights) }
-        item { ImpactTimelineSection(data.timeline) }
-        item { ShareYourImpactSection() }
-        item { Spacer(modifier = Modifier.height(32.dp)) }
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+        LazyColumn(
+            modifier = Modifier.widthIn(max = 720.dp).fillMaxSize(),
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            item { EnvironmentalOverviewCard(data.overview) }
+            item { TodayImpactSection(data.today) }
+            item { LifetimeImpactSection(data.lifetime) }
+            item { EnvironmentalComparisonSection(data.comparison) }
+            item { MonthlyImpactSection(data.history) }
+            item { SustainabilityGoalsSection(data.sustainabilityGoals) }
+            item { AchievementsSection(data.achievements) }
+            item { SmartInsightsSection(data.insights) }
+            item { ImpactTimelineSection(data.timeline) }
+            item { ShareYourImpactSection() }
+            item { Spacer(modifier = Modifier.height(32.dp)) }
+        }
     }
 }
 
@@ -143,25 +150,25 @@ fun EnvironmentalOverviewCard(overview: EnvironmentalSummary) {
         colors = CardDefaults.cardColors(containerColor = Color(0xFFE8F5E9)) // Light green
     ) {
         Column(modifier = Modifier.padding(20.dp)) {
-            Text("CO₂ Emissions Prevented", style = MaterialTheme.typography.bodyMedium, color = Color(0xFF2E7D32).copy(alpha = 0.8f))
-            Text("${overview.co2SavedTons} Tons", style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.Bold, color = Color(0xFF2E7D32))
+            Text("CO₂ Emissions Prevented", style = MaterialTheme.typography.bodyMedium, color = Color(0xFF1B5E20))
+            Text("${overview.co2SavedTons} Tons", style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.Bold, color = Color(0xFF1B5E20))
             
             Spacer(modifier = Modifier.height(16.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Column {
-                    Text("Trees Equivalent", style = MaterialTheme.typography.bodySmall, color = Color(0xFF2E7D32).copy(alpha = 0.7f))
+                    Text("Trees Equivalent", style = MaterialTheme.typography.bodySmall, color = Color(0xFF1B5E20))
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Default.Park, contentDescription = null, tint = Color(0xFF2E7D32), modifier = Modifier.size(16.dp))
+                        Icon(Icons.Default.Park, contentDescription = null, tint = Color(0xFF1B5E20), modifier = Modifier.size(16.dp))
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("${overview.treesEquivalent} Trees", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color(0xFF2E7D32))
+                        Text("${overview.treesEquivalent} Trees", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color(0xFF1B5E20))
                     }
                 }
                 Column(horizontalAlignment = Alignment.End) {
-                    Text("Green Energy", style = MaterialTheme.typography.bodySmall, color = Color(0xFF2E7D32).copy(alpha = 0.7f))
+                    Text("Green Energy", style = MaterialTheme.typography.bodySmall, color = Color(0xFF1B5E20))
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Default.Bolt, contentDescription = null, tint = Color(0xFF2E7D32), modifier = Modifier.size(16.dp))
+                        Icon(Icons.Default.Bolt, contentDescription = null, tint = Color(0xFF1B5E20), modifier = Modifier.size(16.dp))
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("${overview.greenEnergyKwh} kWh", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color(0xFF2E7D32))
+                        Text("${overview.greenEnergyKwh} kWh", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color(0xFF1B5E20))
                     }
                 }
             }
@@ -339,8 +346,17 @@ fun MonthlyImpactSection(history: ImpactHistory) {
             
             if (chartData.isNotEmpty()) {
                 val maxValue = chartData.maxOf { it.value }
+                val barColor = MaterialTheme.colorScheme.primary
+                val chartSummary = chartData.joinToString(", ") { "${it.label}: ${it.value}" }
                 
-                Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .semantics {
+                            contentDescription = "Impact over time chart ($chartSummary)"
+                        }
+                ) {
                     Canvas(modifier = Modifier.fillMaxSize()) {
                         val width = size.width
                         val height = size.height
@@ -354,7 +370,7 @@ fun MonthlyImpactSection(history: ImpactHistory) {
                             val y = height - barHeight - 20.dp.toPx()
                             
                             drawRoundRect(
-                                color = Color(0xFF4CAF50),
+                                color = barColor,
                                 topLeft = Offset(x, y),
                                 size = Size(singleBarWidth, barHeight),
                                 cornerRadius = CornerRadius(4.dp.toPx(), 4.dp.toPx())
@@ -380,7 +396,7 @@ fun MonthlyImpactSection(history: ImpactHistory) {
                 
                 Spacer(modifier = Modifier.height(16.dp))
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
-                    Box(modifier = Modifier.size(12.dp).clip(CircleShape).background(Color(0xFF4CAF50)))
+                    Box(modifier = Modifier.size(12.dp).clip(CircleShape).background(barColor))
                     Spacer(modifier = Modifier.width(8.dp))
                     Text("Green Energy Generated", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }

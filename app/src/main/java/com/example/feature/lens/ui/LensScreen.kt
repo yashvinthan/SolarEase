@@ -116,7 +116,9 @@ fun LensScreen(
             contentAlignment = Alignment.Center
         ) {
             Column(
-                modifier = Modifier.padding(24.dp),
+                modifier = Modifier
+                    .widthIn(max = 480.dp)
+                    .padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Icon(Icons.Default.CameraAlt, contentDescription = null, tint = LensColors.Primary, modifier = Modifier.size(48.dp))
@@ -125,6 +127,7 @@ fun LensScreen(
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
                     onClick = { cameraPermissionState.launchPermissionRequest() },
+                    modifier = Modifier.heightIn(min = 48.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = LensColors.Primary)
                 ) {
                     Text("Grant Permission", color = LensColors.OnPrimary)
@@ -178,7 +181,7 @@ private fun LensCameraContent(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        IconButton(onClick = onNavigateBack, modifier = Modifier.size(36.dp)) {
+                        IconButton(onClick = onNavigateBack, modifier = Modifier.size(48.dp)) {
                             Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = LensColors.InverseOnSurface)
                         }
                         Spacer(modifier = Modifier.width(6.dp))
@@ -411,6 +414,7 @@ private fun LensCameraContent(
             // Top Status Diagnostic Banner
             Surface(
                 modifier = Modifier
+                    .widthIn(max = 600.dp)
                     .fillMaxWidth()
                     .align(Alignment.TopCenter)
                     .padding(horizontal = 14.dp, vertical = 8.dp),
@@ -468,8 +472,9 @@ private fun LensCameraContent(
                     colors = ButtonDefaults.buttonColors(containerColor = LensColors.Primary),
                     shape = RoundedCornerShape(8.dp),
                     modifier = Modifier
+                        .widthIn(max = 480.dp)
                         .fillMaxWidth(0.85f)
-                        .height(48.dp)
+                        .heightIn(min = 48.dp)
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,

@@ -113,65 +113,67 @@ fun EmptyPerformanceState() {
 fun PerformanceContent(data: PerformanceDashboard) {
     val currencyFormat = remember { NumberFormat.getCurrencyInstance(Locale("en", "IN")).apply { maximumFractionDigits = 0 } }
     
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        item {
-            LiveEnergyCard(data.liveGeneration)
-        }
-        
-        if (data.insights.isNotEmpty()) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+        LazyColumn(
+            modifier = Modifier.widthIn(max = 720.dp).fillMaxSize(),
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
             item {
-                PerformanceInsightsSection(data.insights)
+                LiveEnergyCard(data.liveGeneration)
             }
-        }
-        
-        item {
-            GenerationChartsSection(data.generationHistory)
-        }
-        
-        item {
-            EnergyFlowSection(data.energyFlow)
-        }
-        
-        item {
-            ExpandableDataSection("Today's Performance", Icons.Default.Today) {
-                TodayPerformanceContent(data.todayPerformance)
+            
+            if (data.insights.isNotEmpty()) {
+                item {
+                    PerformanceInsightsSection(data.insights)
+                }
             }
-        }
-        
-        item {
-            ExpandableDataSection("This Month", Icons.Default.CalendarMonth) {
-                MonthPerformanceContent(data.monthPerformance, currencyFormat)
+            
+            item {
+                GenerationChartsSection(data.generationHistory)
             }
-        }
-        
-        item {
-            ExpandableDataSection("Yearly Performance", Icons.Default.DateRange) {
-                YearPerformanceContent(data.yearPerformance, currencyFormat)
+            
+            item {
+                EnergyFlowSection(data.energyFlow)
             }
-        }
-        
-        item {
-            ExpandableDataSection("System Efficiency", Icons.Default.Speed) {
-                SystemEfficiencyContent(data.systemEfficiency)
+            
+            item {
+                ExpandableDataSection("Today's Performance", Icons.Default.Today) {
+                    TodayPerformanceContent(data.todayPerformance)
+                }
             }
-        }
-        
-        item {
-            ExpandableDataSection("Production Forecast", Icons.Default.Insights) {
-                ForecastContent(data.forecast, currencyFormat)
+            
+            item {
+                ExpandableDataSection("This Month", Icons.Default.CalendarMonth) {
+                    MonthPerformanceContent(data.monthPerformance, currencyFormat)
+                }
             }
-        }
-        
-        item {
-            ReportsSection()
-        }
-        
-        item {
-            Spacer(modifier = Modifier.height(32.dp))
+            
+            item {
+                ExpandableDataSection("Yearly Performance", Icons.Default.DateRange) {
+                    YearPerformanceContent(data.yearPerformance, currencyFormat)
+                }
+            }
+            
+            item {
+                ExpandableDataSection("System Efficiency", Icons.Default.Speed) {
+                    SystemEfficiencyContent(data.systemEfficiency)
+                }
+            }
+            
+            item {
+                ExpandableDataSection("Production Forecast", Icons.Default.Insights) {
+                    ForecastContent(data.forecast, currencyFormat)
+                }
+            }
+            
+            item {
+                ReportsSection()
+            }
+            
+            item {
+                Spacer(modifier = Modifier.height(32.dp))
+            }
         }
     }
 }
@@ -190,7 +192,7 @@ fun LiveEnergyCard(liveData: LiveGeneration) {
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Top) {
                     Column {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text("⚡", style = MaterialTheme.typography.titleMedium)
+                            Icon(Icons.Default.ElectricBolt, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(18.dp))
                             Spacer(modifier = Modifier.width(8.dp))
                             Text("Current Output", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f))
                         }
@@ -503,13 +505,13 @@ fun ReportsSection() {
     Column {
         Text("Reports", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 4.dp, bottom = 12.dp))
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            OutlinedButton(onClick = { }, modifier = Modifier.weight(1f).height(44.dp), shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)) {
+            OutlinedButton(onClick = { }, modifier = Modifier.weight(1f).heightIn(min = 48.dp), shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)) {
                 Text("Daily")
             }
-            OutlinedButton(onClick = { }, modifier = Modifier.weight(1f).height(44.dp), shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)) {
+            OutlinedButton(onClick = { }, modifier = Modifier.weight(1f).heightIn(min = 48.dp), shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)) {
                 Text("Monthly")
             }
-            OutlinedButton(onClick = { }, modifier = Modifier.weight(1f).height(44.dp), shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)) {
+            OutlinedButton(onClick = { }, modifier = Modifier.weight(1f).heightIn(min = 48.dp), shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)) {
                 Text("Annual")
             }
         }

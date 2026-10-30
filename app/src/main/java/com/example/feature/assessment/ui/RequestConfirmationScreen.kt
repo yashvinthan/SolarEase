@@ -64,72 +64,84 @@ fun RequestConfirmationScreen(
             )
         },
         bottomBar = {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 14.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
             ) {
-                // View My Requests
-                Button(
-                    onClick = onNavigateHome,
+                Column(
                     modifier = Modifier
+                        .widthIn(max = 640.dp)
                         .fillMaxWidth()
-                        .height(44.dp),
-                    shape = RoundedCornerShape(8.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = StitchPrimaryContainer,
-                        contentColor = StitchOnPrimary
-                    )
+                        .padding(horizontal = 20.dp, vertical = 14.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    // View My Requests
+                    Button(
+                        onClick = onNavigateHome,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 48.dp),
+                        shape = RoundedCornerShape(8.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = StitchPrimaryContainer,
+                            contentColor = StitchOnPrimary
+                        )
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            Text(
+                                text = "VIEW MY REQUESTS",
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold,
+                                letterSpacing = 0.8.sp
+                            )
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                                contentDescription = null,
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+                    }
+
+                    // Back to Recommendations
+                    OutlinedButton(
+                        onClick = onNavigateHome,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 48.dp),
+                        shape = RoundedCornerShape(8.dp),
+                        border = BorderStroke(1.dp, StitchOutline.copy(alpha = 0.4f)),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            contentColor = StitchOnSurface
+                        )
                     ) {
                         Text(
-                            text = "VIEW MY REQUESTS",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
-                            letterSpacing = 0.8.sp
-                        )
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                            contentDescription = null,
-                            modifier = Modifier.size(16.dp)
+                            text = "Back to Recommendations",
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.SemiBold
                         )
                     }
-                }
-
-                // Back to Recommendations
-                OutlinedButton(
-                    onClick = onNavigateHome,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(44.dp),
-                    shape = RoundedCornerShape(8.dp),
-                    border = BorderStroke(1.dp, StitchOutline.copy(alpha = 0.4f)),
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = StitchOnSurface
-                    )
-                ) {
-                    Text(
-                        text = "Back to Recommendations",
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.SemiBold
-                    )
                 }
             }
         }
     ) { innerPadding ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 20.dp, vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .verticalScroll(rememberScrollState()),
+            contentAlignment = Alignment.TopCenter
         ) {
+            Column(
+                modifier = Modifier
+                    .widthIn(max = 640.dp)
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
             // Success Visual & Badges
             Box(
                 modifier = Modifier
@@ -403,6 +415,7 @@ fun RequestConfirmationScreen(
                 }
             }
             Spacer(modifier = Modifier.height(24.dp))
+            }
         }
     }
 }

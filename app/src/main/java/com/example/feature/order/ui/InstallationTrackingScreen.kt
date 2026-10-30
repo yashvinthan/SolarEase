@@ -17,6 +17,10 @@ import kotlinx.coroutines.delay
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -75,11 +79,16 @@ fun InstallationTrackingRoute(
         return
     }
     
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
+        contentAlignment = Alignment.TopCenter
+    ) {
         Column(
             modifier = Modifier
+                .widthIn(max = 640.dp)
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
                 .padding(horizontal = 24.dp)
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -159,11 +168,20 @@ fun InstallationTrackingRoute(
                         val isCurrent = milestone.status == MilestoneStatus.IN_PROGRESS
                         val isPending = milestone.status == MilestoneStatus.PENDING
                         val isExpanded = expandedStep == index
+                        val statusLabel = when {
+                            isComplete -> "Completed"
+                            isCurrent -> "In Progress"
+                            else -> "Pending"
+                        }
                         
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clickable { expandedStep = if (isExpanded) null else index }
+                                .semantics {
+                                    role = Role.Button
+                                    stateDescription = "$statusLabel, ${if (isExpanded) "Expanded" else "Collapsed"}"
+                                }
+                                .clickable(role = Role.Button) { expandedStep = if (isExpanded) null else index }
                                 .padding(vertical = 4.dp)
                         ) {
                             Row(verticalAlignment = Alignment.Top) {
@@ -202,11 +220,28 @@ fun InstallationTrackingRoute(
                                 }
                                 Spacer(modifier = Modifier.width(16.dp))
                                 Column(modifier = Modifier.weight(1f).padding(top = 4.dp).animateContentSize()) {
-                                    Text(
-                                        text = milestone.title,
-                                        style = if (isComplete || isCurrent) MaterialTheme.typography.titleMedium else MaterialTheme.typography.bodyLarge,
-                                        color = if (isComplete || isCurrent) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Text(
+                                            text = milestone.title,
+                                            style = if (isComplete || isCurrent) MaterialTheme.typography.titleMedium else MaterialTheme.typography.bodyLarge,
+                                            color = if (isComplete || isCurrent) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.onSurfaceVariant,
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                        Text(
+                                            text = statusLabel,
+                                            style = MaterialTheme.typography.labelSmall,
+                                            fontWeight = FontWeight.SemiBold,
+                                            color = when {
+                                                isComplete -> MaterialTheme.colorScheme.primary
+                                                isCurrent -> MaterialTheme.colorScheme.secondary
+                                                else -> MaterialTheme.colorScheme.onSurfaceVariant
+                                            }
+                                        )
+                                    }
                                     
                                     if (isExpanded) {
                                         Spacer(modifier = Modifier.height(12.dp))

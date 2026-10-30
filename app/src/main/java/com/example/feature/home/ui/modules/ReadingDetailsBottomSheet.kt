@@ -53,12 +53,19 @@ import androidx.compose.ui.unit.sp
 import java.util.Date
 import java.util.Locale
 
-private val PrimaryBlue = Color(0xFF2563EB)
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
+
+private val PrimaryBlue = Color(0xFF1D4ED8)
 private val BlueLightContainer = Color(0xFFEFF6FF)
 private val BlueBorder = Color(0xFFDBEAFE)
 private val TextDark = Color(0xFF0F172A)
-private val TextMuted = Color(0xFF64748B)
-private val WarningAmber = Color(0xFFD97706)
+private val TextMuted = Color(0xFF475569)
+private val WarningAmber = Color(0xFF9A3412)
 private val WarningBg = Color(0xFFFFFBEB)
 private val BorderColor = Color(0xFFE2E8F0)
 
@@ -93,8 +100,13 @@ fun ReadingDetailsBottomSheet(
         shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         dragHandle = null
     ) {
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.TopCenter
+        ) {
         Column(
             modifier = Modifier
+                .widthIn(max = 640.dp)
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp, vertical = 16.dp)
                 .animateContentSize()
@@ -106,6 +118,7 @@ fun ReadingDetailsBottomSheet(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(
+                    modifier = Modifier.weight(1f),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
@@ -162,7 +175,7 @@ fun ReadingDetailsBottomSheet(
                     IconButton(
                         onClick = onDismiss,
                         modifier = Modifier
-                            .size(32.dp)
+                            .size(48.dp)
                             .testTag("close_reading_details_button")
                     ) {
                         Icon(
@@ -191,9 +204,15 @@ fun ReadingDetailsBottomSheet(
                     Box(
                         modifier = Modifier
                             .weight(1f)
+                            .heightIn(min = 48.dp)
                             .clip(RoundedCornerShape(9.dp))
                             .background(if (isSelected) PrimaryBlue else Color.Transparent)
-                            .clickable { selectedFilter = filter }
+                            .clickable(role = Role.Tab) { selectedFilter = filter }
+                            .semantics(mergeDescendants = true) {
+                                role = Role.Tab
+                                selected = isSelected
+                                stateDescription = if (isSelected) "Selected" else "Not selected"
+                            }
                             .padding(vertical = 8.dp)
                             .testTag("filter_tab_${filter.label}"),
                         contentAlignment = Alignment.Center
@@ -233,7 +252,7 @@ fun ReadingDetailsBottomSheet(
                         Icon(
                             imageVector = Icons.Default.Speed,
                             contentDescription = null,
-                            tint = TextMuted.copy(alpha = 0.5f),
+                            tint = TextMuted,
                             modifier = Modifier.size(32.dp)
                         )
                         Text(
@@ -268,6 +287,7 @@ fun ReadingDetailsBottomSheet(
 
             Spacer(modifier = Modifier.height(16.dp))
         }
+        }
     }
 }
 
@@ -282,7 +302,11 @@ private fun ReadingHistoryEntryCard(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .clickable { onToggleExpand() }
+            .clickable(role = Role.Button) { onToggleExpand() }
+            .semantics {
+                role = Role.Button
+                stateDescription = if (isExpanded) "Expanded" else "Collapsed"
+            }
             .animateContentSize(),
         shape = RoundedCornerShape(12.dp),
         color = if (isExpanded) Color(0xFFF8FAFC) else Color(0xFFF8FAFC),
@@ -357,7 +381,7 @@ private fun ReadingHistoryEntryCard(
 
                 IconButton(
                     onClick = onToggleExpand,
-                    modifier = Modifier.size(28.dp)
+                    modifier = Modifier.size(48.dp)
                 ) {
                     Icon(
                         imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
@@ -440,7 +464,7 @@ private fun ReadingHistoryEntryCard(
                     ) {
                         TextButton(
                             onClick = { onEditReading(item.reading.readingDate) },
-                            modifier = Modifier.height(30.dp)
+                            modifier = Modifier.heightIn(min = 48.dp)
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Edit,

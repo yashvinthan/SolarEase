@@ -232,4 +232,53 @@ class AuthMainScreenLayoutTest {
             viewModel.showForgotPasswordDialog.value
         )
     }
+
+    @Test
+    fun switchingModes_underReducedMotion_switchesCleanlyAndUpdatesTabRoleSemantics() {
+        android.provider.Settings.Global.putFloat(
+            application.contentResolver,
+            android.provider.Settings.Global.ANIMATOR_DURATION_SCALE,
+            0.0f
+        )
+        try {
+            composeTestRule.setContent {
+                AuthMainRoute(
+                    onNavigateToPhoneAuth = {},
+                    onNavigateToHome = {},
+                    viewModel = viewModel
+                )
+            }
+
+            val signInTab = composeTestRule.onAllNodesWithText("Sign In").onFirst()
+            val createAccountTab = composeTestRule.onAllNodesWithText("Create Account").onFirst()
+
+            signInTab.assertIsSelected()
+            createAccountTab.assertIsNotSelected()
+            org.junit.Assert.assertEquals(
+                androidx.compose.ui.semantics.Role.Tab,
+                signInTab.fetchSemanticsNode().config[androidx.compose.ui.semantics.SemanticsProperties.Role]
+            )
+
+            val initialGoogleTop = composeTestRule.onNodeWithText("Continue with Google").getBoundsInRoot().top
+
+            createAccountTab.performClick()
+            composeTestRule.waitForIdle()
+
+            createAccountTab.assertIsSelected()
+            signInTab.assertIsNotSelected()
+            composeTestRule.onNodeWithText("Email address").assertExists()
+
+            val reducedMotionGoogleTop = composeTestRule.onNodeWithText("Continue with Google").getBoundsInRoot().top
+            assertTrue(
+                "Expected Google button top ($reducedMotionGoogleTop) to remain anchored under reduced motion ($initialGoogleTop)",
+                Math.abs(reducedMotionGoogleTop.value - initialGoogleTop.value) < 1.0f
+            )
+        } finally {
+            android.provider.Settings.Global.putFloat(
+                application.contentResolver,
+                android.provider.Settings.Global.ANIMATOR_DURATION_SCALE,
+                1.0f
+            )
+        }
+    }
 }

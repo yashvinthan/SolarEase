@@ -25,12 +25,12 @@ object LensColors {
     val PrimaryContainer = Color(0xFF047857)
     val OnPrimaryContainer = Color(0xFF9FFDD3)
 
-    // Secondary & Industrial Slate Tier
+    // Secondary & Industrial Slate Tier (WCAG 2.1 AA 4.5:1+ compliant on #F8F9FF)
     val SlateDark = Color(0xFF0F172A)
     val SlateText = Color(0xFF0B1C30)
-    val SlateMuted = Color(0xFF565E74)
+    val SlateMuted = Color(0xFF475569)
     val SlateVariant = Color(0xFF3E4943)
-    val SlateCaption = Color(0xFF64748B)
+    val SlateCaption = Color(0xFF475569)
 
     // Standard Stitch Color Aliases
     val OnSurface = SlateText

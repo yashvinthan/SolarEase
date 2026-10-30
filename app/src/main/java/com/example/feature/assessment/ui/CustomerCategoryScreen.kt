@@ -69,63 +69,70 @@ fun CustomerCategoryScreen(
             }
         }
     ) { innerPadding ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 20.dp, vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .verticalScroll(rememberScrollState()),
+            contentAlignment = androidx.compose.ui.Alignment.TopCenter
         ) {
-            // Visual Hero Illustration from Stitch
-            StitchHeroIllustration(
-                drawableRes = R.drawable.ic_stitch_property_type,
-                contentDescription = "Property Type Illustration"
-            )
+            Column(
+                modifier = Modifier
+                    .widthIn(max = 640.dp)
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                // Visual Hero Illustration from Stitch
+                StitchHeroIllustration(
+                    drawableRes = R.drawable.ic_stitch_property_type,
+                    contentDescription = "Property Type Illustration"
+                )
 
-            // Header info
-            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text(
-                    text = "Where will you install solar?",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = StitchOnSurface,
-                    letterSpacing = (-0.3).sp
+                // Header info
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Text(
+                        text = "Where will you install solar?",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = StitchOnSurface,
+                        letterSpacing = (-0.3).sp
+                    )
+                    Text(
+                        text = "Choose the property where the solar system will be installed.",
+                        fontSize = 15.sp,
+                        color = StitchSecondary,
+                        lineHeight = 22.sp
+                    )
+                }
+
+                // Exactly 2 options matching Stitch design
+                // 1. Home
+                StitchSelectableCard(
+                    selected = selectedCategory == "Home" || selectedCategory == "Residential",
+                    title = "Home",
+                    subtitle = "Home — For residential houses, villas, or flats",
+                    icon = Icons.Default.Home,
+                    onClick = { onSelectCategory("Home") }
                 )
-                Text(
-                    text = "Choose the property where the solar system will be installed.",
-                    fontSize = 15.sp,
-                    color = StitchSecondary,
-                    lineHeight = 22.sp
+
+                // 2. Business
+                StitchSelectableCard(
+                    selected = selectedCategory == "Business" || selectedCategory == "Commercial",
+                    title = "Business",
+                    subtitle = "Business — For shops, offices, clinics and commercial spaces",
+                    icon = Icons.Default.Business,
+                    onClick = { onSelectCategory("Business") }
                 )
+
+                // Why we ask this?
+                StitchInfoCard(
+                    icon = Icons.Default.Lightbulb,
+                    title = "Why we ask this?",
+                    description = "Tariff rates, sanction loads, and government subsidies (like PM Surya Ghar) depend on whether your setup is residential or commercial."
+                )
+                Spacer(modifier = Modifier.height(24.dp))
             }
-
-            // Exactly 2 options matching Stitch design
-            // 1. Home
-            StitchSelectableCard(
-                selected = selectedCategory == "Home" || selectedCategory == "Residential",
-                title = "Home",
-                subtitle = "Home — For residential houses, villas, or flats",
-                icon = Icons.Default.Home,
-                onClick = { onSelectCategory("Home") }
-            )
-
-            // 2. Business
-            StitchSelectableCard(
-                selected = selectedCategory == "Business" || selectedCategory == "Commercial",
-                title = "Business",
-                subtitle = "Business — For shops, offices, clinics and commercial spaces",
-                icon = Icons.Default.Business,
-                onClick = { onSelectCategory("Business") }
-            )
-
-            // Why we ask this?
-            StitchInfoCard(
-                icon = Icons.Default.Lightbulb,
-                title = "Why we ask this?",
-                description = "Tariff rates, sanction loads, and government subsidies (like PM Surya Ghar) depend on whether your setup is residential or commercial."
-            )
-            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }

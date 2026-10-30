@@ -157,18 +157,28 @@ fun DashboardEmptyState(message: String) {
 }
 
 @Composable
-fun DashboardContent(dashboardData: CustomerDashboard, onNavigateToMySolarSystem: () -> Unit = {}, onNavigateToPerformance: () -> Unit = {},
+fun DashboardContent(
+    dashboardData: CustomerDashboard,
+    onNavigateToMySolarSystem: () -> Unit = {},
+    onNavigateToPerformance: () -> Unit = {},
     onNavigateToFinancial: () -> Unit = {},
-    onNavigateToEnvironmental: () -> Unit = {}) {
+    onNavigateToEnvironmental: () -> Unit = {}
+) {
     val currencyFormat = remember { NumberFormat.getCurrencyInstance(Locale("en", "IN")).apply { maximumFractionDigits = 0 } }
     
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(rememberScrollState()),
+        contentAlignment = Alignment.TopCenter
     ) {
-        // Header
-        Column(modifier = Modifier.padding(24.dp)) {
+        Column(
+            modifier = Modifier
+                .widthIn(max = 840.dp)
+                .fillMaxWidth()
+        ) {
+            // Header
+            Column(modifier = Modifier.padding(24.dp)) {
             val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
             val greeting = if (currentHour < 12) "Good Morning" else if (currentHour < 18) "Good Afternoon" else "Good Evening"
             
@@ -420,6 +430,7 @@ fun DashboardContent(dashboardData: CustomerDashboard, onNavigateToMySolarSystem
         }
 
         Spacer(modifier = Modifier.height(24.dp))
+        }
     }
 }
 
@@ -432,19 +443,19 @@ fun SummaryCard(
     contentColor: Color
 ) {
     Card(
-        modifier = Modifier.width(140.dp).height(120.dp),
+        modifier = Modifier.widthIn(min = 140.dp).heightIn(min = 120.dp),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = containerColor),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp).fillMaxSize(),
-            verticalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Icon(imageVector = icon, contentDescription = null, tint = contentColor, modifier = Modifier.size(28.dp))
             Column {
                 Text(text = value, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = contentColor)
-                Text(text = title, style = MaterialTheme.typography.labelMedium, color = contentColor.copy(alpha = 0.8f))
+                Text(text = title, style = MaterialTheme.typography.labelMedium, color = contentColor.copy(alpha = 0.85f))
             }
         }
     }
@@ -455,22 +466,22 @@ data class QuickAction(val title: String, val description: String, val icon: Ima
 @Composable
 fun QuickActionCard(modifier: Modifier = Modifier, action: QuickAction) {
     Card(
-        modifier = modifier.height(130.dp),
+        modifier = modifier.heightIn(min = 130.dp),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         border = androidx.compose.foundation.BorderStroke(1.dp, androidx.compose.ui.graphics.Color(0xFFDDE4D5)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         onClick = action.onClick
     ) {
-        Column(modifier = Modifier.padding(16.dp).fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
+        Column(modifier = Modifier.padding(16.dp).fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Top) {
                 Icon(imageVector = action.icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(28.dp))
-                Icon(imageVector = Icons.Default.ArrowForward, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f), modifier = Modifier.size(16.dp))
+                Icon(imageVector = Icons.Default.ArrowForward, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(16.dp))
             }
             Column {
-                Text(text = action.title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(text = action.title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface, maxLines = 2, overflow = TextOverflow.Ellipsis)
                 Spacer(modifier = Modifier.height(2.dp))
-                Text(text = action.description, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(text = action.description, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
             }
         }
     }

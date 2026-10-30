@@ -28,9 +28,12 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.core.legal.LegalComplianceDialog
+import com.example.core.legal.LegalSection
 import com.example.feature.ebservice.util.formatConsumerNumber
 
 // Official SolarEase Design Palette
@@ -42,7 +45,7 @@ private val InfoBlueContainer = Color(0xFFEAF3FF)
 private val InfoBlueText = Color(0xFF18324B)
 private val CardBorderColor = Color(0xFFDDE4D5)
 private val TextDark = Color(0xFF191C18)
-private val TextMuted = Color(0xFF747873)
+private val TextMuted = Color(0xFF525651)
 private val ErrorContainer = Color(0xFFFFDAD6)
 private val ErrorText = Color(0xFFBA1A1A)
 
@@ -145,6 +148,14 @@ fun TnebBillStatusEntryScreen(
     val isValid by viewModel.isValid.collectAsState()
     val isChecking by viewModel.isChecking.collectAsState()
     var showHelpDialog by remember { mutableStateOf(false) }
+    var activeLegalSection by remember { mutableStateOf<LegalSection?>(null) }
+
+    activeLegalSection?.let { section ->
+        LegalComplianceDialog(
+            initialSection = section,
+            onDismiss = { activeLegalSection = null }
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -438,22 +449,44 @@ fun TnebBillStatusEntryScreen(
             Spacer(modifier = Modifier.height(20.dp))
 
             // Trust & Security Footer
-            Row(
+            Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                Icon(
-                    imageVector = Icons.Default.Lock,
-                    contentDescription = null,
-                    tint = Color(0xFF718096),
-                    modifier = Modifier.size(14.dp)
-                )
-                Spacer(modifier = Modifier.width(6.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Lock,
+                        contentDescription = null,
+                        tint = Color(0xFF475569),
+                        modifier = Modifier.size(14.dp)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = "Official TNPDCL Portal Sync • AES-256-GCM Encrypted",
+                        fontSize = 11.sp,
+                        color = Color(0xFF475569),
+                        fontWeight = FontWeight.Medium
+                    )
+                }
                 Text(
-                    text = "Official TNPDCL Consumer Portal Integration • 256-bit Encrypted",
+                    text = "Uses transient session cookies (JSESSIONID) on tnebltd.gov.in and automatically strips Aadhaar/PAN numbers before local encryption.",
+                    fontSize = 10.5.sp,
+                    color = Color(0xFF475569),
+                    textAlign = TextAlign.Center,
+                    lineHeight = 14.sp
+                )
+                Text(
+                    text = "Cookie & Data Minimization Policy",
                     fontSize = 11.sp,
-                    color = Color(0xFF718096)
+                    color = SolarEaseEmerald,
+                    fontWeight = FontWeight.SemiBold,
+                    textDecoration = TextDecoration.Underline,
+                    modifier = Modifier.clickable { activeLegalSection = LegalSection.COOKIE_STORAGE }
                 )
             }
         }

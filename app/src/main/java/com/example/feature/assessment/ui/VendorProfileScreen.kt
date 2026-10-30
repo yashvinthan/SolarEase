@@ -25,6 +25,11 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -46,12 +51,15 @@ fun VendorProfileRoute(
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun VendorProfileScreen(
     vendorName: String,
     onNavigateNext: () -> Unit,
     onNavigateBack: () -> Unit
 ) {
+    var isBookmarked by remember { mutableStateOf(false) }
+
     Scaffold(
         containerColor = StitchSurface,
         topBar = {
@@ -63,73 +71,92 @@ fun VendorProfileScreen(
         bottomBar = {
             Surface(
                 color = StitchSurface,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 14.dp)
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Row(
+                Box(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    contentAlignment = Alignment.Center
                 ) {
-                    // Bookmark Button
-                    Surface(
-                        shape = RoundedCornerShape(10.dp),
-                        color = StitchSurfaceContainerHigh,
-                        modifier = Modifier.size(44.dp)
-                    ) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Icon(
-                                imageVector = Icons.Default.Bookmark,
-                                contentDescription = "Save",
-                                tint = StitchOnSurface,
-                                modifier = Modifier.size(20.dp)
-                            )
-                        }
-                    }
-
-                    // Request Estimate Button
-                    Button(
-                        onClick = onNavigateNext,
+                    Row(
                         modifier = Modifier
-                            .weight(1f)
-                            .height(44.dp),
-                        shape = RoundedCornerShape(10.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = StitchPrimaryContainer,
-                            contentColor = StitchOnPrimary
-                        ),
-                        contentPadding = PaddingValues(0.dp)
+                            .widthIn(max = 640.dp)
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp, vertical = 14.dp),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        // Bookmark Button (48dp minimum touch target)
+                        Surface(
+                            shape = RoundedCornerShape(10.dp),
+                            color = if (isBookmarked) StitchPrimaryFixed else StitchSurfaceContainerHigh,
+                            modifier = Modifier
+                                .size(48.dp)
+                                .clip(RoundedCornerShape(10.dp))
+                                .clickable(role = Role.Button) { isBookmarked = !isBookmarked }
+                                .semantics {
+                                    role = Role.Button
+                                    stateDescription = if (isBookmarked) "Saved" else "Not saved"
+                                }
                         ) {
-                            Text(
-                                text = "REQUEST ESTIMATE",
-                                fontSize = 13.sp,
-                                fontWeight = FontWeight.Bold,
-                                letterSpacing = 0.5.sp
-                            )
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                                contentDescription = null,
-                                modifier = Modifier.size(16.dp)
-                            )
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(
+                                    imageVector = Icons.Default.Bookmark,
+                                    contentDescription = "Save Vendor",
+                                    tint = if (isBookmarked) StitchPrimaryContainer else StitchOnSurface,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                            }
+                        }
+
+                        // Request Estimate Button
+                        Button(
+                            onClick = onNavigateNext,
+                            modifier = Modifier
+                                .weight(1f)
+                                .heightIn(min = 48.dp),
+                            shape = RoundedCornerShape(10.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = StitchPrimaryContainer,
+                                contentColor = StitchOnPrimary
+                            ),
+                            contentPadding = PaddingValues(0.dp)
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                Text(
+                                    text = "REQUEST ESTIMATE",
+                                    fontSize = 13.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    letterSpacing = 0.5.sp
+                                )
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                            }
                         }
                     }
                 }
             }
         }
     ) { innerPadding ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 20.dp, vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .verticalScroll(rememberScrollState()),
+            contentAlignment = Alignment.TopCenter
         ) {
+            Column(
+                modifier = Modifier
+                    .widthIn(max = 640.dp)
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
             // Header: Vendor Title, Badge, and Experience
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -306,13 +333,13 @@ fun VendorProfileScreen(
                                     )
                                 }
                                 Text(
-                                    text = "⭐ 4.8",
+                                    text = "4.8 / 5.0",
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = StitchOnSurface
                                 )
                                 Text(
-                                    text = "126 reviews",
+                                    text = "MNRE Empaneled",
                                     fontSize = 11.sp,
                                     fontWeight = FontWeight.Medium,
                                     color = StitchPrimaryContainer
@@ -423,9 +450,10 @@ fun VendorProfileScreen(
                                 letterSpacing = 0.8.sp
                             )
 
-                            Row(
+                            FlowRow(
                                 modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                                verticalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
                                 listOf("On-Grid", "Off-Grid", "Hybrid").forEach { s ->
                                     Surface(
@@ -479,17 +507,24 @@ fun VendorProfileScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Customer Reviews",
+                            text = "Customer Feedback (Sample)",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             color = StitchOnSurface
                         )
                         Text(
-                            text = "126 reviews",
+                            text = "MNRE Verified Partner",
                             fontSize = 12.sp,
                             color = StitchSecondary
                         )
                     }
+
+                    Text(
+                        text = "Representative installation feedback from verified Tamil Nadu residential deployments (BIS IS 19000:2022 disclosure).",
+                        fontSize = 11.sp,
+                        color = StitchSecondary,
+                        lineHeight = 15.sp
+                    )
 
                     // Review 1
                     Surface(
@@ -605,6 +640,7 @@ fun VendorProfileScreen(
                 }
             }
             Spacer(modifier = Modifier.height(24.dp))
+            }
         }
     }
 }

@@ -14,6 +14,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,6 +52,7 @@ fun NearbyVendorsRoute(
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun NearbyVendorsScreen(
     capacityKw: Double,
@@ -98,266 +101,279 @@ fun NearbyVendorsScreen(
             )
         }
     ) { innerPadding ->
-        LazyColumn(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding),
-            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            contentAlignment = Alignment.TopCenter
         ) {
-            item {
-                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text(
-                        text = "Solar vendors near you",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = StitchOnSurface,
-                        letterSpacing = (-0.3).sp
-                    )
-                    Text(
-                        text = "Choose a trusted vendor to request an estimate.",
-                        fontSize = 15.sp,
-                        color = StitchSecondary
-                    )
-                }
-            }
-
-            // Requirement Matched Filter Banner
-            item {
-                Surface(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                    color = StitchSurfaceContainerHigh,
-                    shadowElevation = 0.5.dp
-                ) {
-                    Row(
-                        modifier = Modifier.padding(14.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        Surface(
-                            shape = RoundedCornerShape(8.dp),
-                            color = StitchPrimaryContainer,
-                            modifier = Modifier.size(32.dp)
-                        ) {
-                            Box(contentAlignment = Alignment.Center) {
-                                Icon(
-                                    imageVector = Icons.Default.Tune,
-                                    contentDescription = null,
-                                    tint = StitchOnPrimary,
-                                    modifier = Modifier.size(18.dp)
-                                )
-                            }
-                        }
-
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                text = "REQUIREMENT MATCHED",
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = StitchSecondary,
-                                letterSpacing = 0.8.sp
-                            )
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(4.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Bolt,
-                                    contentDescription = null,
-                                    tint = StitchPrimaryContainer,
-                                    modifier = Modifier.size(15.dp)
-                                )
-                                Text(
-                                    text = "${String.format("%.1f", capacityKw)} kW • $propertyType • $systemType • $mountType • $panelType",
-                                    fontSize = 13.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = StitchOnSurface,
-                                    maxLines = 1
-                                )
-                            }
-                        }
+            LazyColumn(
+                modifier = Modifier
+                    .widthIn(max = 640.dp)
+                    .fillMaxSize(),
+                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                item {
+                    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        Text(
+                            text = "Solar vendors near you",
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = StitchOnSurface,
+                            letterSpacing = (-0.3).sp
+                        )
+                        Text(
+                            text = "Choose a trusted vendor to request an estimate.",
+                            fontSize = 15.sp,
+                            color = StitchSecondary
+                        )
                     }
                 }
-            }
 
-            // Vendor Cards (Exact Stitch layout)
-            items(vendors) { vendor ->
-                Surface(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
-                    color = StitchSurfaceContainerLowest,
-                    border = BorderStroke(1.dp, StitchOutline.copy(alpha = 0.5f)),
-                    shadowElevation = 0.5.dp
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                // Requirement Matched Filter Banner
+                item {
+                    Surface(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp),
+                        color = StitchSurfaceContainerHigh,
+                        shadowElevation = 0.5.dp
                     ) {
-                        // Header row: Name, rating, distance & verified pill
                         Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.Top
+                            modifier = Modifier.padding(14.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
-                            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Surface(
+                                shape = RoundedCornerShape(8.dp),
+                                color = StitchPrimaryContainer,
+                                modifier = Modifier.size(32.dp)
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    Icon(
+                                        imageVector = Icons.Default.Tune,
+                                        contentDescription = null,
+                                        tint = StitchOnPrimary,
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                }
+                            }
+
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = "REQUIREMENT MATCHED",
+                                    fontSize = 11.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = StitchSecondary,
+                                    letterSpacing = 0.8.sp
+                                )
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                                 ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Bolt,
+                                        contentDescription = null,
+                                        tint = StitchPrimaryContainer,
+                                        modifier = Modifier.size(15.dp)
+                                    )
                                     Text(
-                                        text = vendor.name,
-                                        fontSize = 17.sp,
-                                        fontWeight = FontWeight.Bold,
+                                        text = "${String.format("%.1f", capacityKw)} kW • $propertyType • $systemType • $mountType • $panelType",
+                                        fontSize = 13.sp,
+                                        fontWeight = FontWeight.SemiBold,
                                         color = StitchOnSurface
                                     )
-                                    Icon(
-                                        imageVector = Icons.Default.CheckCircle,
-                                        contentDescription = null,
-                                        tint = StitchPrimaryContainer,
-                                        modifier = Modifier.size(16.dp)
-                                    )
                                 }
-
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.Star,
-                                        contentDescription = null,
-                                        tint = Color(0xFFFBBF24),
-                                        modifier = Modifier.size(14.dp)
-                                    )
-                                    Text(
-                                        text = "${vendor.rating}",
-                                        fontSize = 13.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = StitchPrimaryContainer
-                                    )
-                                    Text(
-                                        text = "(${vendor.reviewCount} reviews)",
-                                        fontSize = 12.sp,
-                                        color = StitchSecondary
-                                    )
-                                    Text(
-                                        text = "•",
-                                        fontSize = 12.sp,
-                                        color = StitchSecondary
-                                    )
-                                    Text(
-                                        text = vendor.distance,
-                                        fontSize = 12.sp,
-                                        color = StitchSecondary
-                                    )
-                                }
-                            }
-
-                            Surface(
-                                shape = RoundedCornerShape(6.dp),
-                                color = StitchPrimaryContainer.copy(alpha = 0.12f)
-                            ) {
-                                Row(
-                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.Verified,
-                                        contentDescription = null,
-                                        tint = StitchPrimaryContainer,
-                                        modifier = Modifier.size(13.dp)
-                                    )
-                                    Text(
-                                        text = "Verified Vendor",
-                                        fontSize = 11.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = StitchPrimaryContainer
-                                    )
-                                }
-                            }
-                        }
-
-                        // Tags row
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
-                        ) {
-                            vendor.chips.forEach { tag ->
-                                Surface(
-                                    shape = RoundedCornerShape(4.dp),
-                                    color = StitchSurfaceContainerHigh
-                                ) {
-                                    Text(
-                                        text = tag,
-                                        fontSize = 11.sp,
-                                        fontWeight = FontWeight.Medium,
-                                        color = StitchSecondary,
-                                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
-                                    )
-                                }
-                            }
-                        }
-
-                        // View Profile Button
-                        Button(
-                            onClick = { onSelectVendor(vendor.id, vendor.name) },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(40.dp),
-                            shape = RoundedCornerShape(8.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = StitchPrimary,
-                                contentColor = StitchOnPrimary
-                            ),
-                            contentPadding = PaddingValues(0.dp)
-                        ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(4.dp)
-                            ) {
-                                Text(
-                                    text = "View Profile",
-                                    fontSize = 13.sp,
-                                    fontWeight = FontWeight.SemiBold
-                                )
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(15.dp)
-                                )
                             }
                         }
                     }
                 }
-            }
 
-            // Bottom trust card
-            item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.VerifiedUser,
-                        contentDescription = null,
-                        tint = StitchPrimaryContainer,
-                        modifier = Modifier.size(18.dp)
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text(
-                        text = "All vendors are licensed and certified for TNEB grid-tied installations.",
-                        fontSize = 12.sp,
-                        color = StitchSecondary
-                    )
+                // Vendor Cards (Exact Stitch layout)
+                items(vendors) { vendor ->
+                    Surface(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(16.dp),
+                        color = StitchSurfaceContainerLowest,
+                        border = BorderStroke(1.dp, StitchOutline.copy(alpha = 0.5f)),
+                        shadowElevation = 0.5.dp
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            // Header row: Name, rating, distance & verified pill
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.Top
+                            ) {
+                                Column(
+                                    modifier = Modifier.weight(1f),
+                                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                                ) {
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                    ) {
+                                        Text(
+                                            text = vendor.name,
+                                            fontSize = 17.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = StitchOnSurface
+                                        )
+                                        Icon(
+                                            imageVector = Icons.Default.CheckCircle,
+                                            contentDescription = null,
+                                            tint = StitchPrimaryContainer,
+                                            modifier = Modifier.size(16.dp)
+                                        )
+                                    }
+
+                                    Row(
+                                        modifier = Modifier.semantics(mergeDescendants = true) {
+                                            contentDescription = "Rating ${vendor.rating} out of 5 from ${vendor.reviewCount} reviews, ${vendor.distance}"
+                                        },
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Star,
+                                            contentDescription = null,
+                                            tint = StitchPrimaryContainer,
+                                            modifier = Modifier.size(14.dp)
+                                        )
+                                        Text(
+                                            text = "${vendor.rating}",
+                                            fontSize = 13.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = StitchPrimaryContainer
+                                        )
+                                        Text(
+                                            text = "(${vendor.reviewCount} reviews)",
+                                            fontSize = 12.sp,
+                                            color = StitchSecondary
+                                        )
+                                        Text(
+                                            text = "•",
+                                            fontSize = 12.sp,
+                                            color = StitchSecondary
+                                        )
+                                        Text(
+                                            text = vendor.distance,
+                                            fontSize = 12.sp,
+                                            color = StitchSecondary
+                                        )
+                                    }
+                                }
+
+                                Surface(
+                                    shape = RoundedCornerShape(6.dp),
+                                    color = StitchPrimaryContainer.copy(alpha = 0.12f)
+                                ) {
+                                    Row(
+                                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Verified,
+                                            contentDescription = null,
+                                            tint = StitchPrimaryContainer,
+                                            modifier = Modifier.size(13.dp)
+                                        )
+                                        Text(
+                                            text = "Verified Vendor",
+                                            fontSize = 11.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = StitchPrimaryContainer
+                                        )
+                                    }
+                                }
+                            }
+
+                            // Tags row
+                            FlowRow(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                                verticalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                vendor.chips.forEach { tag ->
+                                    Surface(
+                                        shape = RoundedCornerShape(4.dp),
+                                        color = StitchSurfaceContainerHigh
+                                    ) {
+                                        Text(
+                                            text = tag,
+                                            fontSize = 11.sp,
+                                            fontWeight = FontWeight.Medium,
+                                            color = StitchSecondary,
+                                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+                                        )
+                                    }
+                                }
+                            }
+
+                            // View Profile Button
+                            Button(
+                                onClick = { onSelectVendor(vendor.id, vendor.name) },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .heightIn(min = 48.dp),
+                                shape = RoundedCornerShape(8.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = StitchPrimary,
+                                    contentColor = StitchOnPrimary
+                                ),
+                                contentPadding = PaddingValues(0.dp)
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                ) {
+                                    Text(
+                                        text = "View Profile",
+                                        fontSize = 13.sp,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                    Icon(
+                                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(15.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
-            }
 
-            item {
-                Spacer(modifier = Modifier.height(24.dp))
+                // Bottom trust card
+                item {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.VerifiedUser,
+                            contentDescription = null,
+                            tint = StitchPrimaryContainer,
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = "All vendors are licensed and certified for TNEB grid-tied installations.",
+                            fontSize = 12.sp,
+                            color = StitchSecondary
+                        )
+                    }
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(24.dp))
+                }
             }
         }
     }

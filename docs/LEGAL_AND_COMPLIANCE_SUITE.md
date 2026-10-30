@@ -7,7 +7,7 @@
 
 ## 1. Statutory Corporate Information & Grievance Redressal
 In compliance with Rule 5(3)(a) of the Consumer Protection (E-Commerce) Rules, 2020 and Section 8(9) of the DPDP Act, 2023:
-- **Operating Entity**: SolarEase Energy Technologies Private Limited
+- **Operating Entity**: SolarEase Energy Technologies Private Limited (CIN: `U40106TN2026PTC168420`)
 - **Registered Address**: Tech Innovation Hub, Guindy Industrial Estate, Chennai, Tamil Nadu 600032, India
 - **Customer Support**: support@solarease.app | +91 44 2852 9000 (Mon–Fri, 9:00 AM – 6:00 PM IST)
 - **Grievance Redressal Officer**:

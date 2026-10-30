@@ -50,7 +50,7 @@ object UserSession {
     private fun getPrefs(context: Context? = null): SharedPreferences {
         val ctx = context?.applicationContext ?: appContext
             ?: throw IllegalStateException("UserSession has not been initialized with Context")
-        return SecurePreferencesHelper.getEncryptedPrefs(ctx, SECURE_PREFS_NAME)
+        return SecureSessionPreferences.getEncryptedPrefs(ctx, SECURE_PREFS_NAME)
     }
 
     fun init(context: Context) {

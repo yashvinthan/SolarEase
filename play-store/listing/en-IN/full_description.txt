@@ -1,0 +1,37 @@
+Take complete control of your household electricity bills and power your home with rooftop solar. SolarEase is India’s smart energy utility field guide—helping you scan your EB meter, calculate bi-monthly TNEB electricity bills, audit home appliance wattages, and get verified solar installation estimates with government subsidies.
+
+⚡ ACCURATE TNEB BILL CALCULATOR & TARIFF BREAKDOWN
+• Check your bi-monthly TNEB domestic (Tariff 1A) electricity charges before the official bill arrives.
+• Understand your exact consumption slabs (0-100 free units, 101-200, 201-500, and 500+ units).
+• Avoid high-tier penalty slabs with proactive consumption alerts and energy budgeting.
+• Save multiple EB Consumer Numbers for home, parents, and commercial connections.
+
+📸 CAMERA EB METER SCANNER (OFFLINE OCR)
+• Scan your digital or analog electricity meter instantly using your phone camera.
+• Automatic on-device OCR extracts current kWh readings with zero manual typing.
+• Log historical meter readings to track real daily and weekly unit consumption.
+• Works 100% offline without uploading private utility images to the cloud.
+
+☀️ ROOFTOP SOLAR FEASIBILITY & PM SURYA GHAR SUBSIDY
+• Calculate the exact solar system size (1 kW, 2 kW, 3 kW, or 5 kW) your roof needs.
+• Check your eligibility for the PM Surya Ghar: Muft Bijli Yojana central subsidy (up to ₹78,000).
+• Compare Ongrid, Offgrid, and Hybrid solar inverter systems with battery storage options.
+• Accurate financial ROI modeling: See your monthly electricity bill savings, payback period (typically 3–4 years), and 25-year lifetime savings.
+
+🔍 SOLAR LENS: AI APPLIANCE LOAD AUDIT
+• Audit household energy consumption appliance by appliance.
+• Scan air conditioners, refrigerators, water heaters, and pumps to discover high-wattage power hogs.
+• Calculate how many solar panels are required to run your heavy appliances for free.
+
+🤝 VERIFIED LOCAL SOLAR EPC INSTALLERS
+• Browse verified, accredited solar installers and vendors near your pin code.
+• Request customized turnkey quotations for Tier-1 monocrystalline panels and inverters.
+• Track your solar site survey, subsidy documentation, and installation milestones inside the app.
+
+🔒 PRIVACY FIRST & DPDP ACT 2023 COMPLIANT
+• All meter scans and energy calculations are processed directly on your Android device.
+• Zero telemetry selling, zero spam telecalling, and strict data protection compliance.
+
+Whether you want to verify your bi-monthly TNEB electricity bill, avoid slab tariff surprises, or transition your home to free clean solar energy, SolarEase is your trusted household energy guide.
+
+Download SolarEase today and calculate your solar savings!

@@ -46,6 +46,7 @@ mlkitObjectDetection = "17.0.2"
 mlkitImageLabeling = "17.0.9"
 mlkitTextRecognition = "16.0.1"
 securityCrypto = "1.1.0-alpha06"
+playReview = "2.0.2"
 
 
 [libraries]
@@ -108,6 +109,7 @@ mlkit-objectdetection = { group = "com.google.mlkit", name = "object-detection",
 mlkit-imagelabeling = { group = "com.google.mlkit", name = "image-labeling", version.ref = "mlkitImageLabeling" }
 mlkit-text-recognition = { group = "com.google.mlkit", name = "text-recognition", version.ref = "mlkitTextRecognition" }
 androidx-security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "securityCrypto" }
+play-review = { group = "com.google.android.play", name = "review-ktx", version.ref = "playReview" }
 
 
 [plugins]

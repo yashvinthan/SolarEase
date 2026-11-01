@@ -37,10 +37,28 @@ class MainActivity : ComponentActivity() {
     }
   }
 
+  private fun resolveIntentDestination(intent: android.content.Intent?): Any? {
+    if (intent == null) return null
+    val extraDest = intent.getStringExtra("START_DESTINATION")
+    val fromExtra = resolveDestination(extraDest)
+    if (fromExtra != null) return fromExtra
+
+    val uri = intent.data ?: return null
+    val path = uri.path?.lowercase() ?: ""
+    val host = uri.host?.lowercase() ?: ""
+
+    return when {
+      path.contains("calc") || host.contains("calc") -> com.example.navigation.Screen.BillCalculator
+      path.contains("meter") || host.contains("meter") -> com.example.navigation.Screen.MeterScanner
+      path.contains("solar") || host.contains("solar") -> com.example.navigation.Screen.EbServiceNumber
+      else -> com.example.navigation.Screen.Home
+    }
+  }
+
   override fun onNewIntent(intent: android.content.Intent) {
     super.onNewIntent(intent)
     setIntent(intent)
-    val dest = resolveDestination(intent.getStringExtra("START_DESTINATION"))
+    val dest = resolveIntentDestination(intent)
     if (dest != null) {
       destinationState.value = dest
     }
@@ -48,7 +66,7 @@ class MainActivity : ComponentActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    destinationState.value = resolveDestination(intent?.getStringExtra("START_DESTINATION"))
+    destinationState.value = resolveIntentDestination(intent)
     com.example.core.session.UserSession.init(this)
     com.example.feature.home.ui.modules.TnebBillCache.init(this)
     com.example.feature.home.ui.modules.MeterReadingCache.init(this)

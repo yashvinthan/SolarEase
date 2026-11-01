@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">SolarEase</string>
+    <string name="store_title">SolarEase: TNEB Bill &amp; Solar</string>
+    <string name="tneb_calculator">TNEB Bill Calculator</string>
+    <string name="meter_scanner">EB Meter Scanner</string>
+    <string name="solar_estimate">Rooftop Solar Estimate</string>
+    <string name="pm_surya_ghar_subsidy">PM Surya Ghar Subsidy</string>
+    <string name="verified_vendors">Verified Solar Vendors</string>
+    <string name="explore_guest">Explore as Guest</string>
+    <string name="save_electricity">Save on Electricity Bills</string>
 </resources>

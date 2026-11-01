@@ -365,6 +365,32 @@ fun AuthMainRoute(
                         }
                     }
 
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    // =========================================================
+                    // A2. EXPLORE AS GUEST (Zero-Friction Activation)
+                    // =========================================================
+                    OutlinedButton(
+                        onClick = onNavigateToHome,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(48.dp),
+                        shape = RoundedCornerShape(12.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            containerColor = Color.Transparent,
+                            contentColor = primaryGreen
+                        ),
+                        border = BorderStroke(1.dp, primaryGreen.copy(alpha = 0.5f))
+                    ) {
+                        Text(
+                            text = "Explore SolarEase as Guest",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Medium,
+                            color = primaryGreen,
+                            fontSize = 14.sp
+                        )
+                    }
+
                     Spacer(modifier = Modifier.height(18.dp))
 
                     // =========================================================

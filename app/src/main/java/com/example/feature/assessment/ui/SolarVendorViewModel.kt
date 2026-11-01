@@ -44,8 +44,8 @@ data class SolarVendorState(
     val panelType: String = "DCR Panels", // DCR Panels, Non-DCR Panels
 
     // Step 9: Nearby Vendors
-    val selectedVendorId: String = "abc_solar",
-    val selectedVendorName: String = "ABC Solar",
+    val selectedVendorId: String = "kaveri_solar",
+    val selectedVendorName: String = "Kaveri Solar Systems",
 
     // Step 11: Request Details
     val customerName: String = "Sanjai",

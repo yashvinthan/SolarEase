@@ -264,6 +264,12 @@ fun BillCalculatorRoute(
                 }
                 CalculatorScreenState.RESULT -> {
                     billResult?.let { result ->
+                        LaunchedEffect(result) {
+                            com.example.core.review.InAppReviewHelper.recordPositiveMilestone(context)
+                            (context as? android.app.Activity)?.let { activity ->
+                                com.example.core.review.InAppReviewHelper.maybeLaunchReviewFlow(activity)
+                            }
+                        }
                         BillCalculatorResultView(
                             result = result,
                             billingCycle = billingCycle,

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#F2F5EE"/>
+    </linearGradient>
+    <filter id="subtleShadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#17201B" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)"/>
+  <rect width="510" height="510" x="1" y="1" rx="111" fill="none" stroke="#D2DBD1" stroke-width="2"/>
+
+  <!-- Field Guide Calibration Circle -->
+  <circle cx="256" cy="256" r="180" fill="none" stroke="#E2E8DD" stroke-width="2" stroke-dasharray="6 6"/>
+  <circle cx="256" cy="256" r="150" fill="#EEF2E9" filter="url(#subtleShadow)"/>
+  <circle cx="256" cy="256" r="150" fill="none" stroke="#D2DBD1" stroke-width="1.5"/>
+
+  <!-- Solar Sun Core -->
+  <circle cx="256" cy="256" r="64" fill="#245B3A"/>
+
+  <!-- Botanical Solar Rays -->
+  <!-- 8 Cardinal & Ordinal Primary Beams -->
+  <g stroke="#245B3A" stroke-width="14" stroke-linecap="round">
+    <line x1="256" y1="144" x2="256" y2="116"/>
+    <line x1="256" y1="368" x2="256" y2="396"/>
+    <line x1="144" y1="256" x2="116" y2="256"/>
+    <line x1="368" y1="256" x2="396" y2="256"/>
+    <line x1="177" y1="177" x2="157" y2="157"/>
+    <line x1="335" y1="335" x2="355" y2="355"/>
+    <line x1="177" y1="335" x2="157" y2="355"/>
+    <line x1="335" y1="177" x2="355" y2="157"/>
+  </g>
+
+  <!-- Precision Inset Grid Lines -->
+  <path d="M 236 256 L 276 256 M 256 236 L 256 276" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- Subtle Solar Amber Glow Dot -->
+  <circle cx="316" cy="196" r="8" fill="#B45309"/>
+</svg>

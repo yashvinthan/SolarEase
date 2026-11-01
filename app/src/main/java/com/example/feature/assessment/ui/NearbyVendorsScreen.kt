@@ -66,28 +66,44 @@ fun NearbyVendorsScreen(
     val vendors = remember {
         listOf(
             StitchVendorItem(
-                id = "abc_solar",
-                name = "ABC Solar",
+                id = "kaveri_solar",
+                name = "Kaveri Solar Systems (Chennai)",
+                rating = 4.9,
+                reviewCount = 342,
+                distance = "3.8 km away",
+                chips = listOf("Tata Power Partner", "PM Surya Ghar Empaneled", "DCR Subsidy")
+            ),
+            StitchVendorItem(
+                id = "kongu_renewable",
+                name = "Kongu Renewable Energy (Coimbatore)",
                 rating = 4.8,
-                reviewCount = 126,
-                distance = "4.2 km away",
-                chips = listOf("On-Grid", "Rooftop", "DCR")
+                reviewCount = 280,
+                distance = "5.2 km away",
+                chips = listOf("Adani Solar Certified", "On-Grid Net Metering", "Tier-1 Mono")
+            ),
+            StitchVendorItem(
+                id = "pandian_green",
+                name = "Pandian Green Power EPC (Madurai)",
+                rating = 4.8,
+                reviewCount = 195,
+                distance = "6.4 km away",
+                chips = listOf("Waaree Energies", "DCR Subsidy Approved", "Hybrid Inverter")
             ),
             StitchVendorItem(
                 id = "sunvolt_power",
-                name = "SunVolt Power",
+                name = "SunVolt CleanTech Engineering (Trichy)",
                 rating = 4.9,
-                reviewCount = 84,
-                distance = "6.1 km away",
-                chips = listOf("On-Grid", "Rooftop", "DCR")
+                reviewCount = 210,
+                distance = "7.1 km away",
+                chips = listOf("Turnkey EPC", "Microtek Inverters", "25-Yr Warranty")
             ),
             StitchVendorItem(
-                id = "greenray_solar",
-                name = "GreenRay Solar",
+                id = "salem_ecodynamics",
+                name = "Salem EcoDynamics Solar (Salem)",
                 rating = 4.7,
-                reviewCount = 95,
-                distance = "7.8 km away",
-                chips = listOf("On-Grid", "Rooftop", "DCR")
+                reviewCount = 165,
+                distance = "8.5 km away",
+                chips = listOf("Havells Partner", "Residential Rooftop", "DCR")
             )
         )
     }

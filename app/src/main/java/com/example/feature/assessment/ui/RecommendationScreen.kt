@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ui.theme.*
@@ -28,6 +29,14 @@ fun RecommendationRoute(
     onNavigateBack: () -> Unit
 ) {
     val state by vendorViewModel.state.collectAsState()
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        com.example.core.review.InAppReviewHelper.recordPositiveMilestone(context)
+        (context as? android.app.Activity)?.let { activity ->
+            com.example.core.review.InAppReviewHelper.maybeLaunchReviewFlow(activity)
+        }
+    }
 
     RecommendationScreen(
         recommendedCapacityKw = state.recommendedCapacityKw,

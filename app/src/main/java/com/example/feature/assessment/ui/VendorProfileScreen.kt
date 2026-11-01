@@ -64,7 +64,7 @@ fun VendorProfileScreen(
         containerColor = StitchSurface,
         topBar = {
             StitchVendorTopBar(
-                title = vendorName.ifBlank { "ABC Solar" },
+                title = vendorName.ifBlank { "Kaveri Solar Systems" },
                 onNavigateBack = onNavigateBack
             )
         },

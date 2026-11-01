@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SolarEase</string>
+    <string name="store_title">SolarEase: TNEB பில் &amp; சோலார்</string>
+    <string name="tneb_calculator">TNEB மின் கட்டணக் கணக்கீடு</string>
+    <string name="meter_scanner">மின் மீட்டர் ஸ்கேனர்</string>
+    <string name="solar_estimate">சோலார் கூரை மதிப்பீடு</string>
+    <string name="pm_surya_ghar_subsidy">PM சூர்யா கர் மானியம்</string>
+    <string name="verified_vendors">சரிபார்க்கப்பட்ட விற்பனையாளர்கள்</string>
+    <string name="explore_guest">பதிவு செய்யாமல் ஆராயுங்கள்</string>
+    <string name="save_electricity">மின்சாரக் கட்டணத்தைச் சேமியுங்கள்</string>
+</resources>

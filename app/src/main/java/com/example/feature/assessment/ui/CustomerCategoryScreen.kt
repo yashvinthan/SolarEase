@@ -92,11 +92,11 @@ fun CustomerCategoryScreen(
                 // Header info
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Text(
-                        text = "Where will you install solar?",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
+                        text = "Property Classification",
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Medium,
                         color = StitchOnSurface,
-                        letterSpacing = (-0.3).sp
+                        letterSpacing = 0.sp
                     )
                     Text(
                         text = "Choose the property where the solar system will be installed.",

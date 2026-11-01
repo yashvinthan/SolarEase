@@ -70,58 +70,59 @@ object LensColors {
 object LensTypography {
     val displayLg = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Bold,
-        fontSize = 30.sp,
-        lineHeight = 36.sp,
-        letterSpacing = (-0.02).sp
+        fontWeight = FontWeight.Medium,
+        fontSize = 28.sp,
+        lineHeight = 34.sp,
+        letterSpacing = 0.sp
     )
 
     val headlineLg = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 24.sp,
-        lineHeight = 30.sp,
-        letterSpacing = (-0.015).sp
+        fontWeight = FontWeight.Medium,
+        fontSize = 22.sp,
+        lineHeight = 28.sp,
+        letterSpacing = 0.sp
     )
 
     val headlineMd = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 20.sp,
-        lineHeight = 26.sp,
-        letterSpacing = (-0.01).sp
+        fontWeight = FontWeight.Medium,
+        fontSize = 18.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.sp
     )
 
     val headlineSm = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 16.sp,
-        lineHeight = 22.sp
+        fontWeight = FontWeight.Medium,
+        fontSize = 15.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.sp
     )
 
     // Tabular Numerical Telemetry (Geist inspired)
     val metricValLg = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 28.sp,
-        lineHeight = 32.sp,
-        letterSpacing = (-0.03).sp
+        fontWeight = FontWeight.Medium,
+        fontSize = 26.sp,
+        lineHeight = 30.sp,
+        letterSpacing = 0.sp
     )
 
     val metricValMd = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 20.sp,
-        lineHeight = 24.sp,
-        letterSpacing = (-0.02).sp
+        fontWeight = FontWeight.Medium,
+        fontSize = 18.sp,
+        lineHeight = 22.sp,
+        letterSpacing = 0.sp
     )
 
     val labelCaps = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.SemiBold,
+        fontWeight = FontWeight.Medium,
         fontSize = 11.sp,
         lineHeight = 14.sp,
-        letterSpacing = 0.6.sp // +0.06em uppercase
+        letterSpacing = 0.2.sp
     )
 
     val labelSm = TextStyle(

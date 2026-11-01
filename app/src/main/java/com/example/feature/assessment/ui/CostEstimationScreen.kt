@@ -169,8 +169,8 @@ fun CostEstimationRoute(
                         
                         HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp), color = MaterialTheme.colorScheme.outline.copy(alpha = 0.45f))
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                            Text("Net Payable", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                            Text(currencyFormat.format(result.netPayable), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                            Text("Net Payable", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Medium)
+                            Text(currencyFormat.format(result.netPayable), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.primary)
                         }
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(

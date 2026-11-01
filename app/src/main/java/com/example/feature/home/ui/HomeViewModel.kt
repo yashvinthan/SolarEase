@@ -128,7 +128,7 @@ data class HomeUiState(
     val userName: String? = null,
     val userInitial: Char = 'S',
     val userAddress: String? = null,
-    val greeting: String = "Good morning",
+    val greeting: String = "Energy Overview",
     val hasConnectedBill: Boolean = false,
     val billData: TnebConsumerBillData? = null,
     val unitsConsumed: Double? = null,
@@ -235,12 +235,7 @@ class HomeViewModel(
         val firstName = displayName?.trim()?.split(" ")?.firstOrNull()?.takeIf { it.isNotBlank() }
         val initial = firstName?.firstOrNull()?.uppercaseChar() ?: 'S'
 
-        val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-        val greetingText = when {
-            hour < 12 -> "Good morning"
-            hour < 17 -> "Good afternoon"
-            else -> "Good evening"
-        }
+        val greetingText = "Energy Overview"
 
         val address = currentUser?.houseAddress?.takeIf { it.isNotBlank() }
         val billData = TnebBillCache.billData.value
@@ -425,12 +420,7 @@ class HomeViewModel(
         val firstName = displayName?.trim()?.split(" ")?.firstOrNull()?.takeIf { it.isNotBlank() }
         val initial = firstName?.firstOrNull()?.uppercaseChar() ?: 'S'
 
-        val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-        val greetingText = when {
-            hour < 12 -> "Good morning"
-            hour < 17 -> "Good afternoon"
-            else -> "Good evening"
-        }
+        val greetingText = "Energy Overview"
 
         val address = currentUser?.houseAddress?.takeIf { it.isNotBlank() }
 

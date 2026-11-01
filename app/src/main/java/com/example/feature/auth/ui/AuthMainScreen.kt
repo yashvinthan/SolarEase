@@ -202,11 +202,11 @@ fun AuthMainRoute(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = if (authMode == AuthMode.SIGN_IN) "Welcome back to" else "Start your journey with",
+                    text = if (authMode == AuthMode.SIGN_IN) "Sign in to" else "Create account with",
                     style = MaterialTheme.typography.titleMedium,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = textPrimary,
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = textSecondary,
                     textAlign = TextAlign.Center
                 )
 
@@ -214,7 +214,7 @@ fun AuthMainRoute(
                     text = "SolarEase",
                     style = MaterialTheme.typography.headlineMedium,
                     fontSize = 28.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.Medium,
                     color = primaryGreen,
                     textAlign = TextAlign.Center
                 )
@@ -1084,128 +1084,38 @@ private fun GreenAbstractWaveHeader(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(220.dp)
+            .height(180.dp)
+            .background(Color(0xFFEEF2E9)),
+        contentAlignment = Alignment.Center
     ) {
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            val width = size.width
-            val height = size.height
-
-            // 1. Base soft gradient background
-            drawRect(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFFEAF5E7),
-                        Color(0xFFD4EBD0),
-                        Color(0xFFBFDFB8)
-                    )
-                )
-            )
-
-            // 2. Layer 1: Soft translucent back wave
-            val path1 = Path().apply {
-                moveTo(0f, height * 0.40f)
-                cubicTo(
-                    width * 0.25f, height * 0.28f,
-                    width * 0.65f, height * 0.68f,
-                    width, height * 0.46f
-                )
-                lineTo(width, height)
-                lineTo(0f, height)
-                close()
-            }
-            drawPath(
-                path = path1,
-                brush = Brush.horizontalGradient(
-                    colors = listOf(
-                        Color(0x3881C784),
-                        Color(0x4866BB6A)
-                    )
-                )
-            )
-
-            // 3. Layer 2: Middle accent organic wave
-            val path2 = Path().apply {
-                moveTo(0f, height * 0.62f)
-                cubicTo(
-                    width * 0.32f, height * 0.82f,
-                    width * 0.72f, height * 0.48f,
-                    width, height * 0.66f
-                )
-                lineTo(width, height)
-                lineTo(0f, height)
-                close()
-            }
-            drawPath(
-                path = path2,
-                brush = Brush.horizontalGradient(
-                    colors = listOf(
-                        Color(0x444CAF50),
-                        Color(0x5543A047)
-                    )
-                )
-            )
-
-            // 4. Layer 3: Foreground crisp bottom curve into #FBFCF3 background
-            val path3 = Path().apply {
-                moveTo(0f, height * 0.76f)
-                cubicTo(
-                    width * 0.30f, height * 0.94f,
-                    width * 0.66f, height * 0.72f,
-                    width, height * 0.86f
-                )
-                lineTo(width, height)
-                lineTo(0f, height)
-                close()
-            }
-            drawPath(
-                path = path3,
-                color = Color(0xFFFBFCF3)
-            )
-        }
-
-        // Centered SolarEase Logo Squircle & Brand Name
         Column(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .padding(bottom = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Box(
                 modifier = Modifier
-                    .size(58.dp)
-                    .shadow(
-                        elevation = 4.dp,
-                        shape = RoundedCornerShape(18.dp),
-                        spotColor = Color(0x33386A20),
-                        ambientColor = Color(0x22386A20)
-                    )
-                    .clip(RoundedCornerShape(18.dp))
+                    .size(56.dp)
+                    .clip(RoundedCornerShape(16.dp))
                     .background(Color.White)
-                    .border(1.dp, Color(0xFFE2EAD8), RoundedCornerShape(18.dp)),
+                    .border(1.dp, Color(0xFFD2DBD1), RoundedCornerShape(16.dp)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = Icons.Default.WbSunny,
                     contentDescription = "SolarEase Logo",
-                    tint = Color(0xFF386A20),
-                    modifier = Modifier.size(32.dp)
+                    tint = Color(0xFF245B3A),
+                    modifier = Modifier.size(30.dp)
                 )
             }
 
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-                text = buildAnnotatedString {
-                    withStyle(style = SpanStyle(color = Color(0xFF191C18), fontWeight = FontWeight.Bold)) {
-                        append("Solar")
-                    }
-                    withStyle(style = SpanStyle(color = Color(0xFF386A20), fontWeight = FontWeight.Bold)) {
-                        append("Ease")
-                    }
-                },
+                text = "SolarEase",
                 style = MaterialTheme.typography.titleLarge,
                 fontSize = 22.sp,
-                letterSpacing = (-0.5).sp
+                fontWeight = FontWeight.Medium,
+                letterSpacing = 0.sp,
+                color = Color(0xFF17201B)
             )
         }
     }

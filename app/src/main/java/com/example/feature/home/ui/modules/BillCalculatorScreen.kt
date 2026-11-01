@@ -1128,9 +1128,9 @@ private fun BillCalculatorResultView(
                         Text(
                             text = currencyFormat.format(result.totalEnergyCharge),
                             fontSize = 32.sp,
-                            fontWeight = FontWeight.ExtraBold,
+                            fontWeight = FontWeight.Medium,
                             color = StitchOnSurface,
-                            letterSpacing = (-0.5).sp
+                            letterSpacing = 0.sp
                         )
                     }
                     Surface(

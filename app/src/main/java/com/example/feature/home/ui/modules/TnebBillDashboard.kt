@@ -252,10 +252,10 @@ private fun CurrentBillView(
 
                     Text(
                         text = displayAmount,
-                        fontSize = 36.sp,
-                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 34.sp,
+                        fontWeight = FontWeight.Medium,
                         color = TextDark,
-                        letterSpacing = (-0.5).sp
+                        letterSpacing = 0.sp
                     )
 
                     Spacer(modifier = Modifier.height(10.dp))
@@ -1046,7 +1046,7 @@ internal fun BillDetailsView(
 
                     val rawAmt = bill.amountDue.trim()
                     val displayAmt = if (bill.isPaid) "₹0.00" else (if (rawAmt.startsWith("₹")) rawAmt else "₹$rawAmt.00")
-                    Text(displayAmt, fontSize = 32.sp, fontWeight = FontWeight.ExtraBold, color = TextDark)
+                    Text(displayAmt, fontSize = 32.sp, fontWeight = FontWeight.Medium, color = TextDark)
 
                     Spacer(modifier = Modifier.height(12.dp))
 

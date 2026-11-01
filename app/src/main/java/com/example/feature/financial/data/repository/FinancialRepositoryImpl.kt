@@ -82,7 +82,7 @@ class FinancialRepositoryImpl : FinancialRepository {
             milestones = MilestonesData(
                 achieved = SavingsMilestone(
                     amountSaved = 75000.0,
-                    title = "You have saved ₹75,000!",
+                    title = "₹75,000 cumulative savings reached",
                     equivalents = listOf(
                         "15 months of electricity bills",
                         "1 premium smartphone",

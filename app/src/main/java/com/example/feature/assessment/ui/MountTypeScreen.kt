@@ -91,11 +91,11 @@ fun MountTypeScreen(
                 // Header Group
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Text(
-                        text = "Where would you like to install the panels?",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
+                        text = "Mounting Location",
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Medium,
                         color = StitchOnSurface,
-                        letterSpacing = (-0.3).sp
+                        letterSpacing = 0.sp
                     )
                     Text(
                         text = "Choose the location where you plan to install the solar panels.",

@@ -702,9 +702,9 @@ private fun StitchTopBar(
                     Text(
                         text = "SolarEase",
                         fontSize = 17.sp,
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.SemiBold,
                         color = HomeColors.TextPrimary,
-                        letterSpacing = (-0.3).sp
+                        letterSpacing = 0.sp
                     )
                     Box(
                         modifier = Modifier
@@ -796,14 +796,14 @@ private fun GreetingHeader(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = when (onboardingStep) {
-                        1 -> if (!userName.isNullOrBlank()) "Welcome, $userName!" else "Welcome to SolarEase!"
-                        2 -> "Your electricity connection is ready!"
-                        else -> if (!userName.isNullOrBlank()) "$greeting, $userName!" else "$greeting!"
+                        1 -> if (!userName.isNullOrBlank()) "$userName's Overview" else "SolarEase"
+                        2 -> "Electricity connection active"
+                        else -> if (!userName.isNullOrBlank()) "$userName's Energy" else "Energy Overview"
                     },
-                    fontSize = 26.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Medium,
                     color = HomeColors.TextPrimary,
-                    letterSpacing = (-0.5).sp
+                    letterSpacing = 0.sp
                 )
             }
 
@@ -1400,10 +1400,10 @@ private fun PrimaryEnergyCard(
                         Row(verticalAlignment = Alignment.Bottom) {
                             Text(
                                 text = if (units % 1.0 == 0.0) units.toInt().toString() else String.format(Locale.getDefault(), "%.1f", units),
-                                fontSize = 34.sp,
-                                fontWeight = FontWeight.Bold,
+                                fontSize = 32.sp,
+                                fontWeight = FontWeight.Medium,
                                 color = HomeColors.TextPrimary,
-                                letterSpacing = (-1).sp
+                                letterSpacing = 0.sp
                             )
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
@@ -2322,10 +2322,10 @@ fun PendingElectricityBillHeroCard(
                 )
                 Text(
                     text = state.amountFormatted,
-                    fontSize = 34.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Medium,
                     color = HomeColors.TextPrimary,
-                    letterSpacing = (-0.5).sp
+                    letterSpacing = 0.sp
                 )
             }
 
@@ -3512,7 +3512,7 @@ private fun ReapJourneyStepper(activeStage: Int) {
             ) {
                 Column {
                     Text(
-                        text = "Your Energy Journey",
+                        text = "Household Energy Roadmap",
                         fontSize = 15.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = StitchOnSurface

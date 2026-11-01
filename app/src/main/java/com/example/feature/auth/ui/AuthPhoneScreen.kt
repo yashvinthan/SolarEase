@@ -79,15 +79,15 @@ fun AuthPhoneRoute(
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                text = "Welcome to SolarEase",
+                text = "Sign In",
                 style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
             
             Text(
-                text = "Enter your details to start your solar journey.",
+                text = "Enter your details to manage electricity bills and equipment estimates.",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(bottom = 32.dp)

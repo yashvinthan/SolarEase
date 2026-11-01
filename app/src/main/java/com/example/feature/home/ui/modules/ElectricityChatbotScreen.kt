@@ -631,10 +631,10 @@ private fun EmptyWelcomeStateStitch(
                             color = LensColors.PrimaryFixed.copy(alpha = 0.25f)
                         ) {
                             Text(
-                                text = "READY",
+                                text = "Ready",
                                 fontFamily = GeistFontFamily,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 10.sp,
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 11.sp,
                                 color = LensColors.Primary,
                                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                             )
@@ -1507,10 +1507,10 @@ private fun SessionCard(
                         color = LensColors.PrimaryFixed.copy(alpha = 0.25f)
                     ) {
                         Text(
-                            text = session.category.uppercase(),
+                            text = session.category.replaceFirstChar { it.uppercase() },
                             fontFamily = GeistFontFamily,
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Medium,
                             color = LensColors.Primary,
                             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                         )

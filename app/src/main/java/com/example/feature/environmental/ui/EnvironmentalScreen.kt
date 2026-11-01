@@ -112,7 +112,7 @@ fun EmptyEnvironmentalState() {
     Column(modifier = Modifier.fillMaxSize().padding(32.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
         Icon(Icons.Default.Eco, contentDescription = null, modifier = Modifier.size(72.dp), tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f))
         Spacer(modifier = Modifier.height(24.dp))
-        Text("No Impact Data Yet", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
+        Text("No Impact Data Yet", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onBackground)
         Spacer(modifier = Modifier.height(8.dp))
         Text("Environmental statistics will appear as your solar system generates clean energy.", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
     }
@@ -151,7 +151,7 @@ fun EnvironmentalOverviewCard(overview: EnvironmentalSummary) {
     ) {
         Column(modifier = Modifier.padding(20.dp)) {
             Text("CO₂ Emissions Prevented", style = MaterialTheme.typography.bodyMedium, color = Color(0xFF1B5E20))
-            Text("${overview.co2SavedTons} Tons", style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.Bold, color = Color(0xFF1B5E20))
+            Text("${overview.co2SavedTons} Tons", style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.Medium, color = Color(0xFF1B5E20))
             
             Spacer(modifier = Modifier.height(16.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -160,7 +160,7 @@ fun EnvironmentalOverviewCard(overview: EnvironmentalSummary) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Default.Park, contentDescription = null, tint = Color(0xFF1B5E20), modifier = Modifier.size(16.dp))
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("${overview.treesEquivalent} Trees", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color(0xFF1B5E20))
+                        Text("${overview.treesEquivalent} Trees", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Medium, color = Color(0xFF1B5E20))
                     }
                 }
                 Column(horizontalAlignment = Alignment.End) {
@@ -523,7 +523,7 @@ fun SmartInsightsSection(insights: List<EnvironmentalInsight>) {
 @Composable
 fun ImpactTimelineSection(timeline: ImpactTimeline) {
     Column {
-        Text("Your Personal Impact Journey", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 4.dp, bottom = 12.dp))
+        Text("Impact Timeline", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(start = 4.dp, bottom = 12.dp))
         
         Card(
             modifier = Modifier.fillMaxWidth(),

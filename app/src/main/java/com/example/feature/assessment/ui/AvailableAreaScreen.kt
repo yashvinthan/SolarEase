@@ -114,11 +114,11 @@ fun AvailableAreaScreen(
                 // Header block
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Text(
-                        text = "How much space is available?",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
+                        text = "Available Installation Area",
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Medium,
                         color = StitchOnSurface,
-                        letterSpacing = (-0.3).sp
+                        letterSpacing = 0.sp
                     )
                     Text(
                         text = "Enter the approximate area where solar panels can be installed.",
@@ -275,9 +275,9 @@ fun AvailableAreaScreen(
                                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                                     textStyle = TextStyle(
                                         fontSize = 28.sp,
-                                        fontWeight = FontWeight.Bold,
+                                        fontWeight = FontWeight.Medium,
                                         color = StitchOnSurface,
-                                        letterSpacing = (-0.5).sp
+                                        letterSpacing = 0.sp
                                     ),
                                     cursorBrush = SolidColor(StitchPrimaryContainer),
                                     modifier = Modifier.weight(1f)

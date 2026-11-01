@@ -103,11 +103,11 @@ fun RecommendationScreen(
                 // Header block
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Text(
-                        text = "Your solar recommendation",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
+                        text = "Recommended Solar Plant",
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Medium,
                         color = StitchOnSurface,
-                        letterSpacing = (-0.3).sp
+                        letterSpacing = 0.sp
                     )
                     Text(
                         text = "Based on your electricity usage and available installation space.",
@@ -123,35 +123,34 @@ fun RecommendationScreen(
                     shape = RoundedCornerShape(16.dp),
                     color = StitchSurfaceContainerLowest,
                     border = BorderStroke(1.dp, StitchOutline.copy(alpha = 0.5f)),
-                    shadowElevation = 0.5.dp
+                    shadowElevation = 0.dp
                 ) {
                     Column(
                         modifier = Modifier.padding(20.dp),
                         verticalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         Text(
-                            text = "RECOMMENDED PLANT CAPACITY",
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = StitchSecondary,
-                            letterSpacing = 0.8.sp
+                            text = "Recommended plant capacity",
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = StitchSecondary
                         )
 
                         Row(verticalAlignment = Alignment.Bottom) {
                             Text(
                                 text = String.format("%.1f", recommendedCapacityKw),
-                                fontSize = 38.sp,
-                                fontWeight = FontWeight.ExtraBold,
+                                fontSize = 34.sp,
+                                fontWeight = FontWeight.Medium,
                                 color = StitchPrimaryContainer,
-                                letterSpacing = (-1).sp
+                                letterSpacing = 0.sp
                             )
                             Spacer(modifier = Modifier.width(6.dp))
                             Text(
                                 text = "kW",
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Medium,
                                 color = StitchPrimaryContainer,
-                                modifier = Modifier.padding(bottom = 6.dp)
+                                modifier = Modifier.padding(bottom = 4.dp)
                             )
                         }
 

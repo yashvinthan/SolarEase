@@ -117,14 +117,14 @@ fun NearbyVendorsScreen(
                 item {
                     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Text(
-                            text = "Solar vendors near you",
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.Bold,
+                            text = "Nearby Solar Vendors",
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Medium,
                             color = StitchOnSurface,
-                            letterSpacing = (-0.3).sp
+                            letterSpacing = 0.sp
                         )
                         Text(
-                            text = "Choose a trusted vendor to request an estimate.",
+                            text = "Choose an empaneled vendor to request an official proposal.",
                             fontSize = 15.sp,
                             color = StitchSecondary
                         )

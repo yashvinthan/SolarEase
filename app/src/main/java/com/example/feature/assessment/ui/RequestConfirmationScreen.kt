@@ -205,11 +205,11 @@ fun RequestConfirmationScreen(
                 verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 Text(
-                    text = "Request sent",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
+                    text = "Estimate request submitted",
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Medium,
                     color = StitchOnSurface,
-                    letterSpacing = (-0.3).sp
+                    letterSpacing = 0.sp
                 )
                 Text(
                     text = "Your request has been sent to $vendorName. You can check the status from My Requests.",

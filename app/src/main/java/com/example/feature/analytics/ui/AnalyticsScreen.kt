@@ -194,9 +194,9 @@ private fun AnalyticsTopBar(
                     Text(
                         text = "SolarEase",
                         fontSize = 17.sp,
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.SemiBold,
                         color = StitchOnSurface,
-                        letterSpacing = (-0.3).sp,
+                        letterSpacing = 0.sp,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -290,9 +290,9 @@ private fun EmptyAnalyticsView(
             Text(
                 text = "Energy Analytics",
                 fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Medium,
                 color = StitchOnSurface,
-                letterSpacing = (-0.3).sp
+                letterSpacing = 0.sp
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
@@ -643,9 +643,9 @@ private fun PopulatedAnalyticsView(
                     Text(
                         text = "Energy Analytics",
                         fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.Medium,
                         color = StitchOnSurface,
-                        letterSpacing = (-0.3).sp
+                        letterSpacing = 0.sp
                     )
                     Box(
                         modifier = Modifier
@@ -880,7 +880,7 @@ private fun PopulatedAnalyticsView(
                         Text("Daily Consumption", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = StitchOnSurface)
                         Text("Detailed day-by-day meter progression & daily burn rate", fontSize = 11.sp, color = StitchOnSurfaceVariant)
                     }
-                    val periodBadge = cycle?.periodDisplay?.uppercase(Locale.US) ?: "CURRENT CYCLE"
+                    val periodBadge = cycle?.periodDisplay ?: "Current cycle"
                     Surface(shape = RoundedCornerShape(12.dp), color = StitchBlueContainer) {
                         Text(periodBadge, fontSize = 9.sp, fontWeight = FontWeight.Bold, color = StitchBlueAccent, modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp))
                     }
@@ -1375,9 +1375,9 @@ private fun MetricBox(
                 Text(
                     text = value,
                     fontSize = if (isValueLarge) 20.sp else 13.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.Medium,
                     color = StitchOnSurface,
-                    letterSpacing = (-0.2).sp
+                    letterSpacing = 0.sp
                 )
                 if (unit.isNotBlank()) {
                     Spacer(modifier = Modifier.width(3.dp))

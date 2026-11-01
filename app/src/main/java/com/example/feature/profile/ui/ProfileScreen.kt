@@ -464,9 +464,9 @@ private fun ProfileHeaderSection(
             Text(
                 text = "Profile",
                 fontSize = 24.sp,
-                fontWeight = FontWeight.ExtraBold,
+                fontWeight = FontWeight.Medium,
                 color = StitchOnSurface,
-                letterSpacing = (-0.5).sp
+                letterSpacing = 0.sp
             )
             Text(
                 text = "Consumer Dashboard & Hardware Tier",
@@ -539,9 +539,9 @@ private fun ProfileHeaderSection(
                         Text(
                             text = displayName,
                             fontSize = 20.sp,
-                            fontWeight = FontWeight.ExtraBold,
+                            fontWeight = FontWeight.Medium,
                             color = StitchOnSurface,
-                            letterSpacing = (-0.3).sp,
+                            letterSpacing = 0.sp,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -659,9 +659,9 @@ private fun EnergyDetailsSection() {
                 Text(
                     text = "Energy Details",
                     fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.Medium,
                     color = StitchOnSurface,
-                    letterSpacing = (-0.3).sp
+                    letterSpacing = 0.sp
                 )
                 Text(
                     text = if (currentPeriod.isNotEmpty()) "Billing cycle: $currentPeriod" else "Verified billing cycle consumption",
@@ -855,9 +855,9 @@ private fun EnergyMetricCard(
                     Text(
                         text = value,
                         fontSize = 17.sp,
-                        fontWeight = FontWeight.ExtraBold,
+                        fontWeight = FontWeight.Medium,
                         color = valueTint,
-                        letterSpacing = (-0.3).sp
+                        letterSpacing = 0.sp
                     )
                     if (unit.isNotEmpty()) {
                         Spacer(modifier = Modifier.width(3.dp))

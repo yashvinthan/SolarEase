@@ -187,11 +187,11 @@ fun MonthlyConsumptionScreen(
                 // Header titles
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Text(
-                        text = "How much electricity do you use?",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
+                        text = "Monthly Electricity Consumption",
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Medium,
                         color = StitchOnSurface,
-                        letterSpacing = (-0.3).sp
+                        letterSpacing = 0.sp
                     )
                     Text(
                         text = "Confirm or adjust your typical monthly power consumption.",
@@ -231,10 +231,10 @@ fun MonthlyConsumptionScreen(
                                 ) {
                                     Text(
                                         text = "${consumptionKwh.toInt()}",
-                                        fontSize = 36.sp,
-                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 32.sp,
+                                        fontWeight = FontWeight.Medium,
                                         color = StitchOnSurface,
-                                        letterSpacing = (-0.5).sp
+                                        letterSpacing = 0.sp
                                     )
                                     Text(
                                         text = "kWh / month",

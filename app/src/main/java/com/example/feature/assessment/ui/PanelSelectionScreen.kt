@@ -122,11 +122,11 @@ fun PanelSelectionScreen(
                 // Header titles
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Text(
-                        text = "Choose your panel type",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
+                        text = "Solar Module Selection",
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Medium,
                         color = StitchOnSurface,
-                        letterSpacing = (-0.3).sp
+                        letterSpacing = 0.sp
                     )
                     Text(
                         text = "Select your solar module manufacturing compliance category.",

@@ -92,11 +92,11 @@ fun SystemTypeScreen(
                 // Header Section
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Text(
-                        text = "What type of solar system do you need?",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
+                        text = "Solar System Architecture",
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Medium,
                         color = StitchOnSurface,
-                        letterSpacing = (-0.3).sp
+                        letterSpacing = 0.sp
                     )
                     Text(
                         text = "Choose the configuration that best matches your energy goals.",

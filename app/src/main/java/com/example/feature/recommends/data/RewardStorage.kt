@@ -208,7 +208,7 @@ object RewardStorage : IRewardStorage {
                 amount = RewardConfig.STREAK_MILESTONE_COINS,
                 timestamp = System.currentTimeMillis(),
                 idempotencyKey = milestoneKey,
-                description = "Completed $nextStreakCount-day streak milestone!",
+                description = "Completed $nextStreakCount-day streak milestone",
                 referenceId = "milestone_$nextStreakCount"
             )
             newTransactions.add(milestoneTx)

@@ -109,7 +109,7 @@ fun EmptyFinancialState() {
     Column(modifier = Modifier.fillMaxSize().padding(32.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
         Icon(Icons.Default.AccountBalanceWallet, contentDescription = null, modifier = Modifier.size(72.dp), tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f))
         Spacer(modifier = Modifier.height(24.dp))
-        Text("No Financial Data Yet", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
+        Text("No Financial Data Yet", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onBackground)
         Spacer(modifier = Modifier.height(8.dp))
         Text("Financial data will become more accurate as your system continues generating electricity.", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
     }
@@ -185,13 +185,13 @@ fun FinancialOverviewCard(summary: InvestmentSummary, format: NumberFormat) {
     ) {
         Column(modifier = Modifier.padding(20.dp)) {
             Text("Net Amount Paid", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f))
-            Text(format.format(summary.netAmountPaid), style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
+            Text(format.format(summary.netAmountPaid), style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onPrimaryContainer)
             
             Spacer(modifier = Modifier.height(16.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Column {
                     Text("Total Investment", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f))
-                    Text(format.format(summary.totalInvestment), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                    Text(format.format(summary.totalInvestment), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onPrimaryContainer)
                 }
                 Column(horizontalAlignment = Alignment.End) {
                     Text("Govt Subsidy", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f))
@@ -234,7 +234,7 @@ fun SavingsMilestoneCard(milestones: MilestonesData, format: NumberFormat) {
                     Icon(Icons.Default.EmojiEvents, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(32.dp))
                     Spacer(modifier = Modifier.width(12.dp))
                     Column {
-                        Text("Congratulations!", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSecondaryContainer)
+                        Text("Savings Milestone", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSecondaryContainer)
                         Text(milestones.achieved.title, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f))
                     }
                 }
@@ -402,7 +402,7 @@ fun RoiSection(roi: RoiSummary, format: NumberFormat) {
                     )
                 }
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("${roi.roiPercentage}%", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+                    Text("${roi.roiPercentage}%", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface)
                     Text("Recovered", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
@@ -582,7 +582,7 @@ fun TwentyFiveYearSavingsSection(savings: Projectedsavings, format: NumberFormat
             Spacer(modifier = Modifier.height(24.dp))
             
             Text("Net Profit", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Text(format.format(savings.netProfit), style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+            Text(format.format(savings.netProfit), style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.primary)
             
             Spacer(modifier = Modifier.height(16.dp))
             HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.45f))

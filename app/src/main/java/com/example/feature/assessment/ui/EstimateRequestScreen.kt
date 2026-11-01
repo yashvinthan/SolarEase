@@ -179,9 +179,9 @@ fun EstimateRequestScreen(
                         Text(
                             text = "Request an estimate",
                             fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
+                            fontWeight = FontWeight.Medium,
                             color = StitchOnSurface,
-                            letterSpacing = (-0.3).sp
+                            letterSpacing = 0.sp
                         )
                         Text(
                             text = "Send your solar requirement to ${state.selectedVendorName} to prepare an official proposal.",

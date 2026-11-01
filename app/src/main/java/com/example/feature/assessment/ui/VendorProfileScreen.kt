@@ -189,9 +189,9 @@ fun VendorProfileScreen(
                         Text(
                             text = vendorName.ifBlank { "ABC Solar" },
                             fontSize = 22.sp,
-                            fontWeight = FontWeight.Bold,
+                            fontWeight = FontWeight.Medium,
                             color = StitchOnSurface,
-                            letterSpacing = (-0.3).sp
+                            letterSpacing = 0.sp
                         )
 
                         Surface(

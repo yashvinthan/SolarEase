@@ -8,7 +8,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -179,109 +178,119 @@ fun DashboardContent(
         ) {
             // Header
             Column(modifier = Modifier.padding(24.dp)) {
-            val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-            val greeting = if (currentHour < 12) "Good Morning" else if (currentHour < 18) "Good Afternoon" else "Good Evening"
+                Text(
+                    text = "Rooftop Generation",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "${dashboardData.username}'s System",
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+                Text(
+                    text = "Live telemetry and generation summary.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                
+                Surface(
+                    shape = RoundedCornerShape(8.dp),
+                    color = if (dashboardData.systemStatus == "Online") MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.errorContainer
+                ) {
+                    Row(modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Box(modifier = Modifier.size(8.dp).clip(CircleShape).background(if (dashboardData.systemStatus == "Online") MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error))
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = dashboardData.systemStatus,
+                            style = MaterialTheme.typography.labelMedium,
+                            color = if (dashboardData.systemStatus == "Online") MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onErrorContainer
+                        )
+                    }
+                }
+            }
             
-            Text(text = greeting, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Text(text = dashboardData.username, style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Your solar system is generating clean energy.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            Surface(
-                shape = CircleShape,
-                color = if (dashboardData.systemStatus == "Online") MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.errorContainer
+            // System Summary Card
+            Card(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
-                Row(modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Box(modifier = Modifier.size(8.dp).clip(CircleShape).background(if (dashboardData.systemStatus == "Online") MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error))
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text(
-                        text = dashboardData.systemStatus,
-                        style = MaterialTheme.typography.labelMedium,
-                        color = if (dashboardData.systemStatus == "Online") MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onErrorContainer
-                    )
-                }
-            }
-        }
-        
-        // System Summary Card
-        Card(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary),
-            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-        ) {
-            Column(modifier = Modifier.padding(24.dp)) {
-                Text("System Summary", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f))
-                Spacer(modifier = Modifier.height(16.dp))
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                    Column {
-                        Text("${dashboardData.capacity} kW", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimary)
-                        Text("Capacity", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f))
+                Column(modifier = Modifier.padding(24.dp)) {
+                    Text("System Summary", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.85f))
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                        Column {
+                            Text("${dashboardData.capacity} kW", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onPrimary)
+                            Text("Capacity", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.85f))
+                        }
+                        Column(horizontalAlignment = Alignment.End) {
+                            Text(dashboardData.systemType, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onPrimary)
+                            Text("Type", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.85f))
+                        }
                     }
-                    Column(horizontalAlignment = Alignment.End) {
-                        Text(dashboardData.systemType, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimary)
-                        Text("Type", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f))
-                    }
-                }
-                Spacer(modifier = Modifier.height(24.dp))
-                HorizontalDivider(color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.2f))
-                Spacer(modifier = Modifier.height(16.dp))
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                    Column {
-                        Text("Installed On", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f))
-                        Text(dashboardData.installationDate, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onPrimary)
-                    }
-                    Column(horizontalAlignment = Alignment.End) {
-                        Text("Status", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f))
-                        Text(if (dashboardData.systemStatus == "Online") "Generating" else "Standby", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onPrimary)
+                    Spacer(modifier = Modifier.height(24.dp))
+                    HorizontalDivider(color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.2f))
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                        Column {
+                            Text("Installed On", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.85f))
+                            Text(dashboardData.installationDate, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onPrimary)
+                        }
+                        Column(horizontalAlignment = Alignment.End) {
+                            Text("Status", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.85f))
+                            Text(if (dashboardData.systemStatus == "Online") "Generating" else "Standby", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onPrimary)
+                        }
                     }
                 }
             }
-        }
-        
-        Spacer(modifier = Modifier.height(24.dp))
-        
-        // Today's Summary
-        Text(
-            text = "Today's Summary",
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
-        )
-        
-        LazyRow(
-            contentPadding = PaddingValues(horizontal = 24.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            item {
+            
+            Spacer(modifier = Modifier.height(24.dp))
+            
+            // Today's Summary
+            Text(
+                text = "Today's Summary",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
+            )
+            
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
                 SummaryCard(
+                    modifier = Modifier.weight(1f),
                     title = "Generation",
                     value = "${dashboardData.todayGeneration} kWh",
                     icon = Icons.Default.Bolt,
-                    containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = MaterialTheme.colorScheme.onSurface
                 )
-            }
-            item {
                 SummaryCard(
+                    modifier = Modifier.weight(1f),
                     title = "Savings",
                     value = currencyFormat.format(dashboardData.todaySavings),
                     icon = Icons.Default.Savings,
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = MaterialTheme.colorScheme.primary
                 )
-            }
-            item {
                 SummaryCard(
+                    modifier = Modifier.weight(1f),
                     title = "CO₂ Saved",
                     value = "${dashboardData.todayCo2} kg",
                     icon = Icons.Default.Eco,
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = MaterialTheme.colorScheme.onSurface
                 )
             }
-        }
         
         Spacer(modifier = Modifier.height(24.dp))
         
@@ -440,22 +449,24 @@ fun SummaryCard(
     value: String,
     icon: ImageVector,
     containerColor: Color,
-    contentColor: Color
+    contentColor: Color,
+    modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = Modifier.widthIn(min = 140.dp).heightIn(min = 120.dp),
-        shape = RoundedCornerShape(16.dp),
+        modifier = modifier.heightIn(min = 110.dp),
+        shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = containerColor),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            modifier = Modifier.padding(14.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Icon(imageVector = icon, contentDescription = null, tint = contentColor, modifier = Modifier.size(28.dp))
+            Icon(imageVector = icon, contentDescription = null, tint = contentColor, modifier = Modifier.size(24.dp))
             Column {
-                Text(text = value, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = contentColor)
-                Text(text = title, style = MaterialTheme.typography.labelMedium, color = contentColor.copy(alpha = 0.85f))
+                Text(text = value, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Medium, color = contentColor)
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(text = title, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
     }

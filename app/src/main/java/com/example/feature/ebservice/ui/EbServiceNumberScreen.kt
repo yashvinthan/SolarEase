@@ -284,8 +284,8 @@ fun EbServiceNumberScreen(
                 // Why we ask this?
                 StitchInfoCard(
                     icon = Icons.Default.HelpOutline,
-                    title = "Why we ask this?",
-                    description = "Your consumer number helps connect your solar journey with your electricity connection and verify baseline demand."
+                    title = "Consumer number verification",
+                    description = "Your consumer number verifies tariff classification, sanctioned load, and baseline demand with TNEB records."
                 )
 
                 // Trust & Verification Badge

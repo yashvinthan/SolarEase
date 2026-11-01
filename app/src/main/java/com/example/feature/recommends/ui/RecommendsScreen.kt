@@ -227,9 +227,9 @@ private fun RecommendsTopBar(
                     Text(
                         text = "SolarEase",
                         fontSize = 17.sp,
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.SemiBold,
                         color = StitchOnSurface,
-                        letterSpacing = (-0.3).sp,
+                        letterSpacing = 0.sp,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -292,15 +292,15 @@ private fun RecommendsHeroHeader() {
             .padding(top = 4.dp, bottom = 2.dp)
     ) {
         Text(
-            text = "Recommends",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.ExtraBold,
+            text = "Efficiency Guidelines",
+            fontSize = 22.sp,
+            fontWeight = FontWeight.Medium,
             color = StitchOnSurface,
-            letterSpacing = (-0.3).sp
+            letterSpacing = 0.sp
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "Follow the 9 Energy-Saving Mantras and build your energy-saving journey.",
+            text = "Follow the 9 verified guidelines to reduce electricity consumption.",
             fontSize = 12.sp,
             color = StitchOnSurfaceVariant,
             lineHeight = 16.sp
@@ -362,21 +362,17 @@ private fun SolarEaseCoinsCard(
                 ) {
                     Box(
                         modifier = Modifier
-                            .size(if (isExpanded) 44.dp else 38.dp)
-                            .clip(CircleShape)
-                            .background(
-                                Brush.linearGradient(
-                                    listOf(Color(0xFFFBBF24), Color(0xFFF59E0B))
-                                )
-                            )
-                            .border(2.dp, Color(0xFFFDE68A), CircleShape),
+                            .size(if (isExpanded) 40.dp else 36.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(Color(0xFFFDF6E2))
+                            .border(1.dp, Color(0xFFE5D5A5), RoundedCornerShape(10.dp)),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             imageVector = Icons.Default.MonetizationOn,
                             contentDescription = null,
-                            tint = Color.White,
-                            modifier = Modifier.size(if (isExpanded) 24.dp else 20.dp)
+                            tint = Color(0xFFB45309),
+                            modifier = Modifier.size(if (isExpanded) 22.dp else 18.dp)
                         )
                     }
 
@@ -1892,9 +1888,9 @@ private fun MantrasSection(
                 Text(
                     text = "9 Energy-Saving Mantras",
                     fontSize = 16.sp,
-                    fontWeight = FontWeight.ExtraBold,
+                    fontWeight = FontWeight.Medium,
                     color = Color(0xFF0F172A),
-                    letterSpacing = (-0.2).sp
+                    letterSpacing = 0.sp
                 )
                 Text(
                     text = "Check in regularly, build the habit and reduce your electricity consumption.",

@@ -75,9 +75,9 @@ fun StitchVendorTopBar(
                 Text(
                     text = title,
                     fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight.Medium,
                     color = StitchOnSurface,
-                    letterSpacing = (-0.3).sp
+                    letterSpacing = 0.sp
                 )
             }
 
@@ -146,11 +146,10 @@ fun StitchStepProgressBar(
                     )
                 }
                 Text(
-                    text = stepTitle.uppercase(),
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = StitchPrimary,
-                    letterSpacing = 0.5.sp
+                    text = stepTitle,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = StitchPrimary
                 )
             }
             val rightLabel = percentageText ?: category ?: categoryText
@@ -246,8 +245,8 @@ fun StitchPrimaryButton(
             Text(
                 text = text,
                 fontSize = 15.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = (-0.2).sp
+                fontWeight = FontWeight.Medium,
+                letterSpacing = 0.sp
             )
             Spacer(modifier = Modifier.width(8.dp))
             Icon(
@@ -425,9 +424,9 @@ fun StitchSelectableCard(
                     Text(
                         text = title,
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.Medium,
                         color = StitchOnSurface,
-                        letterSpacing = (-0.2).sp
+                        letterSpacing = 0.sp
                     )
                     Text(
                         text = subtitle,

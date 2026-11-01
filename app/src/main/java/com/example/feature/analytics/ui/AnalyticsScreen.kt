@@ -35,18 +35,19 @@ import com.example.ui.components.SolarEaseBottomNavigation
 import com.example.ui.components.SolarEaseNavTab
 import com.example.ui.components.SolarEaseNavigationRail
 import com.example.ui.theme.*
+import androidx.compose.foundation.isSystemInDarkTheme
 import java.util.Locale
 import kotlin.math.max
 
-// Stitch Color Palette Accents (WCAG 2.2 AA contrast verified)
-private val StitchBlueAccent = Color(0xFF1D4ED8)
-private val StitchBlueContainer = Color(0xFFEFF4FF)
-private val StitchEmeraldGreen = Color(0xFF047857)
-private val StitchEmeraldContainer = Color(0xFFECFDF5)
-private val StitchAmberAccent = Color(0xFF9A3412)
-private val StitchAmberContainer = Color(0xFFFFFBEB)
-private val StitchPurpleAccent = Color(0xFF6D28D9)
-private val StitchPurpleContainer = Color(0xFFF5F3FF)
+// Stitch Color Palette Accents with dark mode responsiveness
+private val StitchBlueAccent: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFF93C5FD) else Color(0xFF1D4ED8)
+private val StitchBlueContainer: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFF1E3A8A) else Color(0xFFEFF4FF)
+private val StitchEmeraldGreen: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFF6EE7B7) else Color(0xFF047857)
+private val StitchEmeraldContainer: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFF064E3B) else Color(0xFFECFDF5)
+private val StitchAmberAccent: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFFFFB77C) else Color(0xFF9A3412)
+private val StitchAmberContainer: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFF451A03) else Color(0xFFFFFBEB)
+private val StitchPurpleAccent: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFFC4B5FD) else Color(0xFF6D28D9)
+private val StitchPurpleContainer: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFF4C1D95) else Color(0xFFF5F3FF)
 
 @Composable
 fun AnalyticsRoute(
@@ -465,6 +466,7 @@ private fun EmptyAnalyticsView(
                         .background(StitchSurfaceContainerLow),
                     contentAlignment = Alignment.Center
                 ) {
+                    val primaryContainerColor = StitchPrimaryContainer.copy(alpha = 0.35f)
                     Canvas(modifier = Modifier.fillMaxSize()) {
                         val path = Path().apply {
                             moveTo(0f, size.height * 0.75f)
@@ -477,7 +479,7 @@ private fun EmptyAnalyticsView(
                         }
                         drawPath(
                             path = path,
-                            color = StitchPrimaryContainer.copy(alpha = 0.35f),
+                            color = primaryContainerColor,
                             style = Stroke(width = 2.5f)
                         )
                     }
@@ -1577,6 +1579,9 @@ private fun DailyConsumptionCanvas(
     onPointSelected: (DailyUsagePoint) -> Unit
 ) {
     val maxVal = max(20.0, points.maxOfOrNull { it.dailyKwh }?.let { it * 1.25 } ?: 20.0)
+    val gridColor = if (isSystemInDarkTheme()) OutlineDark else Color(0xFFE5EEFF)
+    val blueAccent = StitchBlueAccent
+    val whitePointColor = if (isSystemInDarkTheme()) SurfaceDark else Color.White
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Box(
@@ -1609,7 +1614,7 @@ private fun DailyConsumptionCanvas(
                 for (i in 0..gridSteps) {
                     val y = startY + (chartH / gridSteps) * i
                     drawLine(
-                        color = Color(0xFFE5EEFF),
+                        color = gridColor,
                         start = Offset(startX, y),
                         end = Offset(startX + chartW, y),
                         strokeWidth = 1f,
@@ -1658,8 +1663,8 @@ private fun DailyConsumptionCanvas(
                         path = areaPath,
                         brush = Brush.verticalGradient(
                             colors = listOf(
-                                StitchBlueAccent.copy(alpha = 0.35f),
-                                StitchBlueAccent.copy(alpha = 0.05f),
+                                blueAccent.copy(alpha = 0.35f),
+                                blueAccent.copy(alpha = 0.05f),
                                 Color.Transparent
                             ),
                             startY = startY,
@@ -1670,7 +1675,7 @@ private fun DailyConsumptionCanvas(
                     // Main Curve Line
                     drawPath(
                         path = linePath,
-                        color = StitchBlueAccent,
+                        color = blueAccent,
                         style = Stroke(width = 2.5f, cap = StrokeCap.Round, join = StrokeJoin.Round)
                     )
 
@@ -1681,11 +1686,11 @@ private fun DailyConsumptionCanvas(
                         val isSelected = selectedPoint?.dateLabel == p.dateLabel
 
                         if (isSelected) {
-                            drawCircle(color = StitchBlueAccent, radius = 6f, center = Offset(x, y))
-                            drawCircle(color = Color.White, radius = 4f, center = Offset(x, y))
+                            drawCircle(color = blueAccent, radius = 6f, center = Offset(x, y))
+                            drawCircle(color = whitePointColor, radius = 4f, center = Offset(x, y))
                         } else {
-                            drawCircle(color = Color.White, radius = 3.5f, center = Offset(x, y))
-                            drawCircle(color = StitchBlueAccent, radius = 3.5f, center = Offset(x, y), style = Stroke(width = 1.5f))
+                            drawCircle(color = whitePointColor, radius = 3.5f, center = Offset(x, y))
+                            drawCircle(color = blueAccent, radius = 3.5f, center = Offset(x, y), style = Stroke(width = 1.5f))
                         }
                     }
                 }
@@ -1779,6 +1784,10 @@ private fun ConsumptionHistoryBarChart(
             }
         }
 
+        val gridColor = if (isSystemInDarkTheme()) OutlineDark else Color(0xFFE5EEFF)
+        val blueAccent = StitchBlueAccent
+        val previousCycleColor = if (isSystemInDarkTheme()) Color(0xFF60A5FA) else Color(0xFF93C5FD)
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -1795,7 +1804,7 @@ private fun ConsumptionHistoryBarChart(
                 for (i in 0..steps) {
                     val y = startY + (chartH / steps) * i
                     drawLine(
-                        color = Color(0xFFE5EEFF),
+                        color = gridColor,
                         start = Offset(startX, y),
                         end = Offset(startX + chartW, y),
                         strokeWidth = 1f,
@@ -1806,7 +1815,7 @@ private fun ConsumptionHistoryBarChart(
                 // Average line
                 val avgY = startY + chartH - ((avgUnits / maxUnits) * chartH).toFloat().coerceIn(0f, chartH)
                 drawLine(
-                    color = StitchBlueAccent.copy(alpha = 0.6f),
+                    color = blueAccent.copy(alpha = 0.6f),
                     start = Offset(startX, avgY),
                     end = Offset(startX + chartW, avgY),
                     strokeWidth = 1.2f,
@@ -1823,7 +1832,7 @@ private fun ConsumptionHistoryBarChart(
                     val x = startX + i * spacing + (spacing - barWidth) / 2f
                     val y = startY + chartH - barH
 
-                    val barColor = if (c.isCurrent) StitchBlueAccent else Color(0xFF93C5FD)
+                    val barColor = if (c.isCurrent) blueAccent else previousCycleColor
 
                     drawRoundRect(
                         color = barColor,

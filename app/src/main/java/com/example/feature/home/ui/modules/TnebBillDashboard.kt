@@ -22,23 +22,25 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.ui.unit.sp
+import com.example.ui.theme.*
 import java.text.NumberFormat
 import java.util.Locale
 
-// Color Tokens matching Stitch Consumer Energy System
-private val SolarEaseEmerald = Color(0xFF245B3A)
-private val SolarEaseEmeraldDark = Color(0xFF1E4C32)
-private val SolarEaseEmeraldContainer = Color(0xFFDDEFD9)
-private val SoftBackground = Color(0xFFF8F8F2)
-private val InfoBlueContainer = Color(0xFFE7F2F3)
-private val InfoBlueText = Color(0xFF1D5156)
-private val CardBorderColor = Color(0xFFD2DBD1)
-private val TextDark = Color(0xFF17201B)
-private val TextMuted = Color(0xFF4F5A52)
-private val WarningAmber = Color(0xFF9A3412)
-private val WarningAmberContainer = Color(0xFFFEF3C7)
-private val ErrorRed = Color(0xFFBA1A1A)
+// Color Tokens matching Consumer Energy System with dark mode responsiveness
+private val SolarEaseEmerald: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) PrimaryDark else Color(0xFF245B3A)
+private val SolarEaseEmeraldDark: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) PrimaryContainerDark else Color(0xFF1E4C32)
+private val SolarEaseEmeraldContainer: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) PrimaryContainerDark else Color(0xFFDDEFD9)
+private val SoftBackground: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) BackgroundDark else Color(0xFFF8F8F2)
+private val InfoBlueContainer: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) SecondaryContainerDark else Color(0xFFE7F2F3)
+private val InfoBlueText: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OnSecondaryContainerDark else Color(0xFF1D5156)
+private val CardBorderColor: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OutlineDark else Color(0xFFD2DBD1)
+private val TextDark: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OnBackgroundDark else Color(0xFF17201B)
+private val TextMuted: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OnSurfaceVariantDark else Color(0xFF4F5A52)
+private val WarningAmber: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFFFFB77C) else Color(0xFF9A3412)
+private val WarningAmberContainer: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFF3E2000) else Color(0xFFFEF3C7)
+private val ErrorRed: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFFFFB4AB) else Color(0xFFBA1A1A)
 
 // Internal Screen Destination within the Bill Module
 private enum class BillDashboardScreen {

@@ -1,70 +1,78 @@
 package com.example.feature.lens.ui.theme
 
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.example.ui.theme.*
 
 /**
  * Precision Telemetry Energy System Design Tokens
- * Replicating the exact color palette, typography, and shape specs from the Stitch UX Flow.
+ * Replicating the exact color palette, typography, and shape specs from the UX Flow with full dark mode responsiveness.
  */
 val GeistFontFamily: FontFamily = FontFamily.Default
 val HankenGroteskFontFamily: FontFamily = FontFamily.Default
 
 object LensColors {
+    // Static Base Tokens for Auditing and Non-Composable Verification
+    val BaseSlateCaption: Color = Color(0xFF4F5A52)
+    val BaseSlateMuted: Color = Color(0xFF4F5A52)
+
     // Primary Emerald Tier
-    val Primary = Color(0xFF245B3A)
-    val PrimaryHover = Color(0xFF2E7048)
-    val PrimaryLive = Color(0xFF3D8A5A)
-    val PrimaryFixed = Color(0xFFDDEFD9)
-    val PrimaryFixedDim = Color(0xFFC9E1C5)
-    val OnPrimary = Color(0xFFFFFFFF)
-    val OnPrimaryFixed = Color(0xFF123B27)
-    val PrimaryContainer = Color(0xFF245B3A)
-    val OnPrimaryContainer = Color(0xFFDDEFD9)
+    val Primary: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) PrimaryDark else Color(0xFF245B3A)
+    val PrimaryHover: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) PrimaryContainerDark else Color(0xFF2E7048)
+    val PrimaryLive: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) PrimaryDark else Color(0xFF3D8A5A)
+    val PrimaryFixed: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) PrimaryContainerDark else Color(0xFFDDEFD9)
+    val PrimaryFixedDim: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) PrimaryContainerDark else Color(0xFFC9E1C5)
+    val OnPrimary: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OnPrimaryDark else Color(0xFFFFFFFF)
+    val OnPrimaryFixed: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OnPrimaryContainerDark else Color(0xFF123B27)
+    val PrimaryContainer: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) PrimaryContainerDark else Color(0xFF245B3A)
+    val OnPrimaryContainer: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OnPrimaryContainerDark else Color(0xFFDDEFD9)
 
-    // Secondary & Industrial Slate Tier (WCAG 2.1 AA 4.5:1+ compliant on #F8F9FF)
-    val SlateDark = Color(0xFF0F172A)
-    val SlateText = Color(0xFF17201B)
-    val SlateMuted = Color(0xFF4F5A52)
-    val SlateVariant = Color(0xFF4F5A52)
-    val SlateCaption = Color(0xFF4F5A52)
+    // Secondary & Industrial Slate Tier
+    val SlateDark: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFFE2E3DD) else Color(0xFF0F172A)
+    val SlateText: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OnBackgroundDark else Color(0xFF17201B)
+    val SlateMuted: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OnSurfaceVariantDark else Color(0xFF4F5A52)
+    val SlateVariant: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OnSurfaceVariantDark else Color(0xFF4F5A52)
+    val SlateCaption: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OnSurfaceVariantDark else Color(0xFF4F5A52)
 
-    // Standard Stitch Color Aliases
-    val OnSurface = SlateText
-    val OnSurfaceVariant = SlateVariant
-    val Secondary = SlateMuted
-    val SecondaryFixed = Color(0xFFE7F2F3)
-    val SecondaryFixedDim = Color(0xFFC6E0E2)
-    val SecondaryContainer = Color(0xFFE7F2F3)
+    // Standard Color Aliases
+    val OnSurface: Color @Composable @ReadOnlyComposable get() = SlateText
+    val OnSurfaceVariant: Color @Composable @ReadOnlyComposable get() = SlateVariant
+    val Secondary: Color @Composable @ReadOnlyComposable get() = SlateMuted
+    val SecondaryFixed: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) SecondaryContainerDark else Color(0xFFE7F2F3)
+    val SecondaryFixedDim: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) SecondaryContainerDark else Color(0xFFC6E0E2)
+    val SecondaryContainer: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) SecondaryContainerDark else Color(0xFFE7F2F3)
 
     // Tertiary Cyan Tier
-    val Tertiary = Color(0xFF276A70)
-    val TertiaryContainer = Color(0xFF1F7378)
-    val TertiaryFixed = Color(0xFFE7F2F3)
-    val TertiaryFixedDim = Color(0xFFC6E0E2)
-    val OnTertiary = Color(0xFFFFFFFF)
+    val Tertiary: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) SecondaryDark else Color(0xFF276A70)
+    val TertiaryContainer: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) SecondaryContainerDark else Color(0xFF1F7378)
+    val TertiaryFixed: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) SecondaryContainerDark else Color(0xFFE7F2F3)
+    val TertiaryFixedDim: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) SecondaryContainerDark else Color(0xFFC6E0E2)
+    val OnTertiary: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OnSecondaryDark else Color(0xFFFFFFFF)
 
     // Surfaces & Spatial Elevation
-    val Background = Color(0xFFF8F8F2)
-    val Surface = Color(0xFFF8F8F2)
-    val SurfaceContainerLowest = Color(0xFFFFFFFF)
-    val SurfaceContainerLow = Color(0xFFF4F6F0)
-    val SurfaceContainer = Color(0xFFEEF2E9)
-    val SurfaceContainerHigh = Color(0xFFE6ECE1)
-    val SurfaceContainerHighest = Color(0xFFDDE5D9)
-    val Outline = Color(0xFFD2DBD1)
-    val OutlineVariant = Color(0xFFC5CFC3)
+    val Background: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) BackgroundDark else Color(0xFFF8F8F2)
+    val Surface: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) SurfaceDark else Color(0xFFF8F8F2)
+    val SurfaceContainerLowest: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) SurfaceDark else Color(0xFFFFFFFF)
+    val SurfaceContainerLow: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFF20251D) else Color(0xFFF4F6F0)
+    val SurfaceContainer: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) SurfaceVariantDark else Color(0xFFEEF2E9)
+    val SurfaceContainerHigh: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFF292F25) else Color(0xFFE6ECE1)
+    val SurfaceContainerHighest: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFF333B2E) else Color(0xFFDDE5D9)
+    val Outline: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OutlineDark else Color(0xFFD2DBD1)
+    val OutlineVariant: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OutlineDark.copy(alpha = 0.5f) else Color(0xFFC5CFC3)
 
     // Dark HUD & Inverted Surfaces
-    val InverseSurface = Color(0xFF193126)
-    val InverseOnSurface = Color(0xFFE8F1E6)
+    val InverseSurface: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFFE2E3DD) else Color(0xFF193126)
+    val InverseOnSurface: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFF17201B) else Color(0xFFE8F1E6)
 
     // Status & Warnings
-    val Error = Color(0xFFBA1A1A)
-    val ErrorContainer = Color(0xFFFFDAD6)
+    val Error: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFFFFB4AB) else Color(0xFFBA1A1A)
+    val ErrorContainer: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFF93000A) else Color(0xFFFFDAD6)
 }
 
 object LensTypography {

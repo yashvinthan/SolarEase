@@ -50,22 +50,9 @@ import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import com.example.ui.theme.*
 
-// Stitch Palette Constants
-private val StitchPrimary = Color(0xFF245B3A)
-private val StitchPrimaryContainer = Color(0xFF245B3A)
-private val StitchPrimaryFixed = Color(0xFFDDEFD9)
-private val StitchOnPrimaryFixedVariant = Color(0xFF123B27)
-private val StitchBackground = Color(0xFFF8F8F2)
-private val StitchSurface = Color(0xFFF8F8F2)
-private val StitchSurfaceLowest = Color(0xFFFFFFFF)
-private val StitchSurfaceLow = Color(0xFFF4F6F0)
-private val StitchSurfaceContainer = Color(0xFFEEF2E9)
-private val StitchSurfaceHigh = Color(0xFFE6ECE1)
-private val StitchOnSurface = Color(0xFF17201B)
-private val StitchOnSurfaceVariant = Color(0xFF4F5A52)
-private val StitchOutline = Color(0xFFD2DBD1)
-private val StitchError = Color(0xFFBA1A1A)
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -550,7 +537,7 @@ private fun BillCalculatorEntryView(
                                 text = cycle.displayName,
                                 fontSize = 13.sp,
                                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                                color = if (isSelected) Color.White else StitchOnSurfaceVariant
+                                color = if (isSelected) StitchOnPrimary else StitchOnSurfaceVariant
                             )
                         }
                     }
@@ -656,7 +643,7 @@ private fun BillCalculatorEntryView(
                 colors = ButtonDefaults.buttonColors(
                     containerColor = StitchPrimary,
                     disabledContainerColor = StitchPrimary.copy(alpha = 0.4f),
-                    contentColor = Color.White
+                    contentColor = StitchOnPrimary
                 )
             ) {
                 Row(
@@ -1003,7 +990,7 @@ private fun CalculatingStepRow(
             } else if (isActive) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(16.dp),
-                    color = Color.White,
+                    color = StitchOnPrimary,
                     strokeWidth = 2.dp
                 )
             } else {
@@ -1685,7 +1672,7 @@ private fun BillCalculatorResultView(
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = StitchPrimary,
-                        contentColor = Color.White
+                        contentColor = StitchOnPrimary
                     )
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -1872,7 +1859,7 @@ private fun BillCalculatorHistoryView(
                 listOf("All", "Bi-monthly", "Monthly").forEach { filter ->
                     val isSelected = selectedFilter == filter
                     val bg = if (isSelected) StitchPrimary else StitchSurfaceContainer
-                    val txtColor = if (isSelected) Color.White else StitchOnSurface
+                    val txtColor = if (isSelected) StitchOnPrimary else StitchOnSurface
 
                     Box(
                         modifier = Modifier

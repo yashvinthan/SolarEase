@@ -3,6 +3,7 @@ package com.example.feature.recommends.ui
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -364,14 +365,14 @@ private fun SolarEaseCoinsCard(
                         modifier = Modifier
                             .size(if (isExpanded) 40.dp else 36.dp)
                             .clip(RoundedCornerShape(10.dp))
-                            .background(Color(0xFFFDF6E2))
-                            .border(1.dp, Color(0xFFE5D5A5), RoundedCornerShape(10.dp)),
+                            .background(if (isSystemInDarkTheme()) Color(0xFF3E2D00) else Color(0xFFFDF6E2))
+                            .border(1.dp, if (isSystemInDarkTheme()) Color(0xFF664D00) else Color(0xFFE5D5A5), RoundedCornerShape(10.dp)),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             imageVector = Icons.Default.MonetizationOn,
                             contentDescription = null,
-                            tint = Color(0xFFB45309),
+                            tint = if (isSystemInDarkTheme()) Color(0xFFFFD54F) else Color(0xFFB45309),
                             modifier = Modifier.size(if (isExpanded) 22.dp else 18.dp)
                         )
                     }
@@ -381,14 +382,14 @@ private fun SolarEaseCoinsCard(
                             text = "$coinBalance",
                             fontSize = if (isExpanded) 26.sp else 20.sp,
                             fontWeight = FontWeight.ExtraBold,
-                            color = Color(0xFF191C18),
+                            color = MaterialTheme.colorScheme.onSurface,
                             lineHeight = if (isExpanded) 28.sp else 22.sp
                         )
                         Text(
                             text = if (coinBalance == 1) "SolarEase Coin" else "SolarEase Coins",
                             fontSize = 12.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = Color(0xFF43483E)
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
@@ -400,8 +401,8 @@ private fun SolarEaseCoinsCard(
                 ) {
                     Surface(
                         shape = RoundedCornerShape(20.dp),
-                        color = Color(0xFFFFF7ED),
-                        border = BorderStroke(1.dp, Color(0xFFFFEDD5))
+                        color = if (isSystemInDarkTheme()) Color(0xFF3E1D00) else Color(0xFFFFF7ED),
+                        border = BorderStroke(1.dp, if (isSystemInDarkTheme()) Color(0xFF7C2D12) else Color(0xFFFFEDD5))
                     ) {
                         Row(
                             modifier = Modifier.padding(horizontal = 9.dp, vertical = 5.dp),
@@ -411,14 +412,14 @@ private fun SolarEaseCoinsCard(
                             Icon(
                                 imageVector = Icons.Default.LocalFireDepartment,
                                 contentDescription = "Streak",
-                                tint = Color(0xFFEA580C),
+                                tint = if (isSystemInDarkTheme()) Color(0xFFFFB77C) else Color(0xFFEA580C),
                                 modifier = Modifier.size(16.dp)
                             )
                             Text(
                                 text = if (streakState.currentStreak > 0) "${streakState.currentStreak} Day Streak" else "0 Day Streak",
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color(0xFFC2410C)
+                                color = if (isSystemInDarkTheme()) Color(0xFFFFB77C) else Color(0xFFC2410C)
                             )
                         }
                     }
@@ -430,7 +431,7 @@ private fun SolarEaseCoinsCard(
                         Icon(
                             imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                             contentDescription = if (isExpanded) "Collapse SolarEase Coins card" else "Expand SolarEase Coins card",
-                            tint = Color(0xFF43483E),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.size(20.dp)
                         )
                     }
@@ -466,12 +467,12 @@ private fun SolarEaseCoinsCard(
                                 text = "Recent Activity",
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color(0xFF191C18)
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                             Text(
                                 text = if (recentTransactions.isNotEmpty()) "Latest ${recentTransactions.size}" else "",
                                 fontSize = 11.sp,
-                                color = Color(0xFF525651)
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
 
@@ -480,8 +481,8 @@ private fun SolarEaseCoinsCard(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clip(RoundedCornerShape(8.dp))
-                                    .background(Color.White)
-                                    .border(1.dp, Color(0xFFF1F5F9), RoundedCornerShape(8.dp))
+                                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                                    .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.35f), RoundedCornerShape(8.dp))
                                     .padding(10.dp),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -489,7 +490,7 @@ private fun SolarEaseCoinsCard(
                                 Icon(
                                     imageVector = Icons.Outlined.Info,
                                     contentDescription = null,
-                                    tint = Color(0xFF525651),
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                     modifier = Modifier.size(16.dp)
                                 )
                                 Text(
@@ -566,18 +567,19 @@ private data class StatusPillConfig(
 private fun BillVerificationStatusPill(verificationResult: BillVerificationResult?) {
     val status = verificationResult?.status ?: BillVerificationStatus.WAITING_FOR_BILL
 
+    val isDark = isSystemInDarkTheme()
     val config = when (status) {
         BillVerificationStatus.WAITING_FOR_BILL -> StatusPillConfig(
-            bg = Color(0xFFF1F5F9),
-            border = Color(0xFFE2E8F0),
-            tint = Color(0xFF64748B),
+            bg = if (isDark) Color(0xFF1E293B) else Color(0xFFF1F5F9),
+            border = if (isDark) Color(0xFF334155) else Color(0xFFE2E8F0),
+            tint = if (isDark) Color(0xFF94A3B8) else Color(0xFF64748B),
             icon = Icons.Outlined.HourglassEmpty,
             text = "Waiting for next bill data"
         )
         BillVerificationStatus.PROCESSING -> StatusPillConfig(
-            bg = Color(0xFFEFF6FF),
-            border = Color(0xFFDBEAFE),
-            tint = Color(0xFF2563EB),
+            bg = if (isDark) Color(0xFF1E3A8A) else Color(0xFFEFF6FF),
+            border = if (isDark) Color(0xFF1E40AF) else Color(0xFFDBEAFE),
+            tint = if (isDark) Color(0xFF93C5FD) else Color(0xFF2563EB),
             icon = Icons.Outlined.Sync,
             text = "Evaluating electricity consumption..."
         )
@@ -586,9 +588,9 @@ private fun BillVerificationStatusPill(verificationResult: BillVerificationResul
             val bonus = verificationResult?.reductionBonusEarned ?: 0
             val process = verificationResult?.billProcessedRewardEarned ?: 0
             StatusPillConfig(
-                bg = Color(0xFFF0FDF4),
-                border = Color(0xFFDCFCE7),
-                tint = Color(0xFF16A34A),
+                bg = if (isDark) Color(0xFF064E3B) else Color(0xFFF0FDF4),
+                border = if (isDark) Color(0xFF065F46) else Color(0xFFDCFCE7),
+                tint = if (isDark) Color(0xFF86EFAC) else Color(0xFF16A34A),
                 icon = Icons.Default.CheckCircle,
                 text = "Verified: $reduction% reduction • +${bonus + process} coins"
             )
@@ -601,31 +603,31 @@ private fun BillVerificationStatusPill(verificationResult: BillVerificationResul
                 "No consumption reduction • +${verificationResult?.billProcessedRewardEarned ?: 0} bill coins"
             }
             StatusPillConfig(
-                bg = Color(0xFFF8FAFC),
-                border = Color(0xFFE2E8F0),
-                tint = Color(0xFF64748B),
+                bg = if (isDark) Color(0xFF1E293B) else Color(0xFFF8FAFC),
+                border = if (isDark) Color(0xFF334155) else Color(0xFFE2E8F0),
+                tint = if (isDark) Color(0xFF94A3B8) else Color(0xFF64748B),
                 icon = Icons.Outlined.Info,
                 text = text
             )
         }
         BillVerificationStatus.INSUFFICIENT_HISTORY -> StatusPillConfig(
-            bg = Color(0xFFFFFBEB),
-            border = Color(0xFFFEF3C7),
-            tint = Color(0xFFD97706),
+            bg = if (isDark) Color(0xFF451A03) else Color(0xFFFFFBEB),
+            border = if (isDark) Color(0xFF78350F) else Color(0xFFFEF3C7),
+            tint = if (isDark) Color(0xFFFDBA74) else Color(0xFFD97706),
             icon = Icons.Outlined.History,
             text = "Not enough bill history to verify yet (+${verificationResult?.billProcessedRewardEarned ?: 0} coins)"
         )
         BillVerificationStatus.INVALID_BILL -> StatusPillConfig(
-            bg = Color(0xFFFEF2F2),
-            border = Color(0xFFFEE2E2),
-            tint = Color(0xFFDC2626),
+            bg = if (isDark) Color(0xFF450A0A) else Color(0xFFFEF2F2),
+            border = if (isDark) Color(0xFF7F1D1D) else Color(0xFFFEE2E2),
+            tint = if (isDark) Color(0xFFFCA5A5) else Color(0xFFDC2626),
             icon = Icons.Outlined.Warning,
             text = "Bill record has invalid or missing consumption"
         )
         BillVerificationStatus.PROCESSING_ERROR -> StatusPillConfig(
-            bg = Color(0xFFFEF2F2),
-            border = Color(0xFFFEE2E2),
-            tint = Color(0xFFDC2626),
+            bg = if (isDark) Color(0xFF450A0A) else Color(0xFFFEF2F2),
+            border = if (isDark) Color(0xFF7F1D1D) else Color(0xFFFEE2E2),
+            tint = if (isDark) Color(0xFFFCA5A5) else Color(0xFFDC2626),
             icon = Icons.Outlined.ErrorOutline,
             text = "Consumption baseline calculation error"
         )
@@ -772,8 +774,8 @@ private fun MiniTransactionRow(tx: CoinTransaction) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(8.dp),
-        color = Color.White,
-        border = BorderStroke(1.dp, Color(0xFFF1F5F9))
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
         Row(
             modifier = Modifier
@@ -824,14 +826,14 @@ private fun MiniTransactionRow(tx: CoinTransaction) {
                         text = tx.description,
                         fontSize = 11.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = Color(0xFF191C18),
+                        color = MaterialTheme.colorScheme.onSurface,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
                         text = formatTransactionTimestamp(tx.timestamp),
                         fontSize = 10.sp,
-                        color = Color(0xFF525651)
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -840,7 +842,7 @@ private fun MiniTransactionRow(tx: CoinTransaction) {
                 text = "+${tx.amount}",
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF386A20)
+                color = MaterialTheme.colorScheme.primary
             )
         }
     }
@@ -859,8 +861,8 @@ private fun TodayProgressCard(
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(16.dp),
-        color = Color.White,
-        border = BorderStroke(1.dp, Color(0xFFE2E8F0)),
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         shadowElevation = 1.dp
     ) {
         Column(
@@ -880,13 +882,13 @@ private fun TodayProgressCard(
                         modifier = Modifier
                             .size(32.dp)
                             .clip(RoundedCornerShape(8.dp))
-                            .background(Color(0xFF386A20).copy(alpha = 0.12f)),
+                            .background(MaterialTheme.colorScheme.primaryContainer),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.CalendarToday,
                             contentDescription = null,
-                            tint = Color(0xFF386A20),
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer,
                             modifier = Modifier.size(16.dp)
                         )
                     }
@@ -894,7 +896,7 @@ private fun TodayProgressCard(
                         text = "Today's Mantra Progress",
                         fontSize = 13.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = Color(0xFF191C18)
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
 
@@ -902,7 +904,7 @@ private fun TodayProgressCard(
                     text = "$checkedCount of $totalCount completed",
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF386A20)
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
 
@@ -912,14 +914,14 @@ private fun TodayProgressCard(
                     .fillMaxWidth()
                     .height(6.dp)
                     .clip(RoundedCornerShape(3.dp))
-                    .background(Color(0xFFF1F5F9))
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth(progress)
                         .fillMaxHeight()
                         .clip(RoundedCornerShape(3.dp))
-                        .background(Color(0xFF386A20))
+                        .background(MaterialTheme.colorScheme.primary)
                 )
             }
         }
@@ -944,7 +946,7 @@ private fun CoinsRulesAndHistoryBottomSheet(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
-        containerColor = Color.White,
+        containerColor = MaterialTheme.colorScheme.surface,
         dragHandle = { BottomSheetDefaults.DragHandle() }
     ) {
         Column(
@@ -1019,9 +1021,9 @@ private fun CoinsRulesAndHistoryBottomSheet(
             // Tab Row
             TabRow(
                 selectedTabIndex = selectedTabIndex,
-                containerColor = Color.White,
-                contentColor = Color(0xFF386A20),
-                divider = { HorizontalDivider(color = Color(0xFFE2E8F0)) }
+                containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.primary,
+                divider = { HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant) }
             ) {
                 Tab(
                     selected = selectedTabIndex == 0,
@@ -1602,14 +1604,14 @@ private fun BillingSavingsCard(
                     Surface(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.surface,
                         border = BorderStroke(
                             1.dp,
                             when {
-                                isIncreased -> Color(0xFFFDE68A)
-                                isCompletedSaved -> Color(0xFFD1FAE5)
-                                isCurrentLower -> Color(0xFFBAE6FD)
-                                else -> Color(0xFFE2E8F0)
+                                isIncreased -> if (isSystemInDarkTheme()) Color(0xFF78350F) else Color(0xFFFDE68A)
+                                isCompletedSaved -> if (isSystemInDarkTheme()) Color(0xFF065F46) else Color(0xFFD1FAE5)
+                                isCurrentLower -> if (isSystemInDarkTheme()) Color(0xFF075985) else Color(0xFFBAE6FD)
+                                else -> MaterialTheme.colorScheme.outlineVariant
                             }
                         ),
                         shadowElevation = 0.5.dp
@@ -1977,8 +1979,8 @@ private fun MantraCard(
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        color = Color.White,
-        border = BorderStroke(1.dp, Color(0xFFF1F5F9)),
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         shadowElevation = 0.5.dp
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
@@ -1993,7 +1995,7 @@ private fun MantraCard(
                     text = item.number,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF525651),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(top = 2.dp)
                 )
 
@@ -2002,13 +2004,13 @@ private fun MantraCard(
                     modifier = Modifier
                         .size(38.dp)
                         .clip(CircleShape)
-                        .background(Color(item.iconBgColorHex)),
+                        .background(if (isSystemInDarkTheme()) MaterialTheme.colorScheme.primaryContainer else Color(item.iconBgColorHex)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = mantraVectorIcon,
                         contentDescription = null,
-                        tint = Color(0xFF19380A),
+                        tint = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.onPrimaryContainer else Color(0xFF19380A),
                         modifier = Modifier.size(20.dp)
                     )
                 }
@@ -2021,14 +2023,14 @@ private fun MantraCard(
                         text = item.title,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF0F172A),
+                        color = MaterialTheme.colorScheme.onSurface,
                         lineHeight = 16.sp
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = item.description,
                         fontSize = 11.sp,
-                        color = Color(0xFF525651),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         lineHeight = 15.sp,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
@@ -2081,17 +2083,17 @@ private fun MantraCard(
                             onClick = onClick,
                             modifier = Modifier.heightIn(min = 48.dp),
                             shape = RoundedCornerShape(14.dp),
-                            border = BorderStroke(1.dp, Color(0xFF16A34A)),
+                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
                             contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
                             colors = ButtonDefaults.outlinedButtonColors(
-                                containerColor = Color.White,
-                                contentColor = Color(0xFF15803D)
+                                containerColor = MaterialTheme.colorScheme.surface,
+                                contentColor = MaterialTheme.colorScheme.primary
                             )
                         ) {
                             Icon(
                                 imageVector = Icons.Outlined.CheckCircle,
                                 contentDescription = null,
-                                tint = Color(0xFF16A34A),
+                                tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(12.dp)
                             )
                             Spacer(modifier = Modifier.width(3.dp))

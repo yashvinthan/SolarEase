@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -35,19 +36,20 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.core.legal.LegalComplianceDialog
 import com.example.core.legal.LegalSection
 import com.example.feature.ebservice.util.formatConsumerNumber
+import com.example.ui.theme.*
 
-// Official SolarEase Design Palette
-private val SolarEaseEmerald = Color(0xFF245B3A)
-private val SolarEaseEmeraldDark = Color(0xFF1E4C32)
-private val SolarEaseEmeraldContainer = Color(0xFFDDEFD9)
-private val SoftBackground = Color(0xFFF8F8F2)
-private val InfoBlueContainer = Color(0xFFE7F2F3)
-private val InfoBlueText = Color(0xFF1D5156)
-private val CardBorderColor = Color(0xFFD2DBD1)
-private val TextDark = Color(0xFF17201B)
-private val TextMuted = Color(0xFF4F5A52)
-private val ErrorContainer = Color(0xFFFFDAD6)
-private val ErrorText = Color(0xFFBA1A1A)
+// Official SolarEase Design Palette with dark mode responsiveness
+private val SolarEaseEmerald: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) PrimaryDark else Color(0xFF245B3A)
+private val SolarEaseEmeraldDark: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) PrimaryContainerDark else Color(0xFF1E4C32)
+private val SolarEaseEmeraldContainer: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) PrimaryContainerDark else Color(0xFFDDEFD9)
+private val SoftBackground: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) BackgroundDark else Color(0xFFF8F8F2)
+private val InfoBlueContainer: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) SecondaryContainerDark else Color(0xFFE7F2F3)
+private val InfoBlueText: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OnSecondaryContainerDark else Color(0xFF1D5156)
+private val CardBorderColor: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OutlineDark else Color(0xFFD2DBD1)
+private val TextDark: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OnBackgroundDark else Color(0xFF17201B)
+private val TextMuted: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OnSurfaceVariantDark else Color(0xFF4F5A52)
+private val ErrorContainer: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFF93000A) else Color(0xFFFFDAD6)
+private val ErrorText: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFFFFDAD6) else Color(0xFFBA1A1A)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

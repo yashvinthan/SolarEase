@@ -87,23 +87,71 @@ import com.example.ui.components.SolarEaseBottomNavigation
 import com.example.ui.components.SolarEaseNavTab
 import com.example.ui.components.SolarEaseNavigationRail
 import com.example.ui.components.subtleTopRightGradient
+import androidx.compose.foundation.isSystemInDarkTheme
 import com.example.ui.theme.*
 import java.util.Locale
 
 // ─── SolarEase Minimalist Home Tokens ──────────────────────────────────────────
 private object HomeColors {
-    val Background = Color(0xFFF8F8F2)
-    val Primary = Color(0xFF245B3A)
-    val PrimaryContainer = Color(0xFFDDEFD9)
-    val TextPrimary = Color(0xFF17201B)
-    val TextSecondary = Color(0xFF4F5A52)
-    val Border = Color(0xFFD2DBD1)
-    val CardBg = Color(0xFFFFFFFF)
-    val SurfaceSecondary = Color(0xFFEEF2E9)
-    val AccentOrange = Color(0xFFAA5418)
-    val Success = Color(0xFF1E6B45)
-    val ChartHighlight = Color(0xFFF2C27C)
-    val LightBlue = Color(0xFFE7F2F3)
+    val Background: Color
+        @Composable
+        @ReadOnlyComposable
+        get() = if (isSystemInDarkTheme()) BackgroundDark else Color(0xFFF8F8F2)
+
+    val Primary: Color
+        @Composable
+        @ReadOnlyComposable
+        get() = if (isSystemInDarkTheme()) PrimaryDark else Color(0xFF245B3A)
+
+    val PrimaryContainer: Color
+        @Composable
+        @ReadOnlyComposable
+        get() = if (isSystemInDarkTheme()) PrimaryContainerDark else Color(0xFFDDEFD9)
+
+    val TextPrimary: Color
+        @Composable
+        @ReadOnlyComposable
+        get() = if (isSystemInDarkTheme()) OnBackgroundDark else Color(0xFF17201B)
+
+    val TextSecondary: Color
+        @Composable
+        @ReadOnlyComposable
+        get() = if (isSystemInDarkTheme()) OnSurfaceVariantDark else Color(0xFF4F5A52)
+
+    val Border: Color
+        @Composable
+        @ReadOnlyComposable
+        get() = if (isSystemInDarkTheme()) OutlineDark else Color(0xFFD2DBD1)
+
+    val CardBg: Color
+        @Composable
+        @ReadOnlyComposable
+        get() = if (isSystemInDarkTheme()) SurfaceDark else Color(0xFFFFFFFF)
+
+    val SurfaceSecondary: Color
+        @Composable
+        @ReadOnlyComposable
+        get() = if (isSystemInDarkTheme()) SurfaceVariantDark else Color(0xFFEEF2E9)
+
+    val AccentOrange: Color
+        @Composable
+        @ReadOnlyComposable
+        get() = if (isSystemInDarkTheme()) Color(0xFFFFB77C) else Color(0xFFAA5418)
+
+    val Success: Color
+        @Composable
+        @ReadOnlyComposable
+        get() = if (isSystemInDarkTheme()) Color(0xFF81C784) else Color(0xFF1E6B45)
+
+    val ChartHighlight: Color
+        @Composable
+        @ReadOnlyComposable
+        get() = if (isSystemInDarkTheme()) Color(0xFFFFD54F) else Color(0xFFF2C27C)
+
+    val LightBlue: Color
+        @Composable
+        @ReadOnlyComposable
+        get() = if (isSystemInDarkTheme()) SecondaryContainerDark else Color(0xFFE7F2F3)
 }
 
 // ─── Main Home Screen Entry Route ──────────────────────────────────────────────
@@ -3887,10 +3935,12 @@ private fun QuickToolCard(
     title: String,
     subtitle: String,
     icon: ImageVector,
-    containerBg: Color = HomeColors.SurfaceSecondary,
-    iconTint: Color = HomeColors.Primary,
+    containerBg: Color = Color.Unspecified,
+    iconTint: Color = Color.Unspecified,
     onClick: () -> Unit
 ) {
+    val actualContainerBg = if (containerBg != Color.Unspecified) containerBg else HomeColors.SurfaceSecondary
+    val actualIconTint = if (iconTint != Color.Unspecified) iconTint else HomeColors.Primary
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
     val scale by animateFloatAsState(
@@ -3925,13 +3975,13 @@ private fun QuickToolCard(
                     modifier = Modifier
                         .size(36.dp)
                         .clip(RoundedCornerShape(8.dp))
-                        .background(containerBg),
+                        .background(actualContainerBg),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = icon,
                         contentDescription = null,
-                        tint = iconTint,
+                        tint = actualIconTint,
                         modifier = Modifier.size(20.dp)
                     )
                 }

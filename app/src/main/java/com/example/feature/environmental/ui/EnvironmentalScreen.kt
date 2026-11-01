@@ -146,36 +146,37 @@ fun EnvironmentalOverviewCard(overview: EnvironmentalSummary) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        border = BorderStroke(1.dp, Color(0xFFC8E6C9)),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFE8F5E9)) // Light green
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
     ) {
         Column(modifier = Modifier.padding(20.dp)) {
-            Text("CO₂ Emissions Prevented", style = MaterialTheme.typography.bodyMedium, color = Color(0xFF1B5E20))
-            Text("${overview.co2SavedTons} Tons", style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.Medium, color = Color(0xFF1B5E20))
+            val contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+            Text("CO₂ Emissions Prevented", style = MaterialTheme.typography.bodyMedium, color = contentColor)
+            Text("${overview.co2SavedTons} Tons", style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.Medium, color = contentColor)
             
             Spacer(modifier = Modifier.height(16.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Column {
-                    Text("Trees Equivalent", style = MaterialTheme.typography.bodySmall, color = Color(0xFF1B5E20))
+                    Text("Trees Equivalent", style = MaterialTheme.typography.bodySmall, color = contentColor)
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Default.Park, contentDescription = null, tint = Color(0xFF1B5E20), modifier = Modifier.size(16.dp))
+                        Icon(Icons.Default.Park, contentDescription = null, tint = contentColor, modifier = Modifier.size(16.dp))
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("${overview.treesEquivalent} Trees", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Medium, color = Color(0xFF1B5E20))
+                        Text("${overview.treesEquivalent} Trees", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Medium, color = contentColor)
                     }
                 }
                 Column(horizontalAlignment = Alignment.End) {
-                    Text("Green Energy", style = MaterialTheme.typography.bodySmall, color = Color(0xFF1B5E20))
+                    Text("Green Energy", style = MaterialTheme.typography.bodySmall, color = contentColor)
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Default.Bolt, contentDescription = null, tint = Color(0xFF1B5E20), modifier = Modifier.size(16.dp))
+                        Icon(Icons.Default.Bolt, contentDescription = null, tint = contentColor, modifier = Modifier.size(16.dp))
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("${overview.greenEnergyKwh} kWh", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color(0xFF1B5E20))
+                        Text("${overview.greenEnergyKwh} kWh", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = contentColor)
                     }
                 }
             }
             
             Spacer(modifier = Modifier.height(16.dp))
             Surface(
-                color = Color(0xFFC8E6C9),
+                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -183,7 +184,7 @@ fun EnvironmentalOverviewCard(overview: EnvironmentalSummary) {
                     text = "Impact Score: ${overview.impactScore}",
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF1B5E20),
+                    color = contentColor,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(12.dp)
                 )

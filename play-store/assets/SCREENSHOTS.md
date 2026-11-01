@@ -69,3 +69,4 @@
 * **Sub-caption:** Complete milestone transparency with zero spam and DPDP 2023 compliance
 * **Visual Device Crop:** `SiteSurveyStatusScreen` showing 5 sequential stages: Site Survey $\to$ Feasibility Approval $\to$ Panel Mounting $\to$ Net-Meter Inspection $\to$ Grid Sync.
 * **Callout Pill:** `India DPDP Act 2023 Compliant`
+

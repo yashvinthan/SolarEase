@@ -52,9 +52,9 @@ class DesignSystemAndAccessibilityTest {
 
     @Test
     fun verifyWcagAaContrastRatiosForCentralizedThemeTokens() {
-        // Primary green (#386A20) on main background (#FBFCF3) and white surface (#FFFFFF)
-        val primaryOnBackground = contrastRatio(StitchPrimary, StitchSurface)
-        val primaryOnWhite = contrastRatio(StitchPrimary, StitchSurfaceContainerLowest)
+        // Light mode: Primary green on main background and white surface
+        val primaryOnBackground = contrastRatio(StitchLightTokens.Primary, StitchLightTokens.Surface)
+        val primaryOnWhite = contrastRatio(StitchLightTokens.Primary, StitchLightTokens.SurfaceContainerLowest)
         assertTrue(
             "Primary green on main background must exceed 4.5:1 (actual: $primaryOnBackground)",
             primaryOnBackground >= 4.5
@@ -64,16 +64,16 @@ class DesignSystemAndAccessibilityTest {
             primaryOnWhite >= 4.5
         )
 
-        // Primary text (#191C18) on main background (#FBFCF3)
-        val primaryTextOnBackground = contrastRatio(StitchOnSurface, StitchSurface)
+        // Light mode: Primary text on main background
+        val primaryTextOnBackground = contrastRatio(StitchLightTokens.OnSurface, StitchLightTokens.Surface)
         assertTrue(
             "Primary text on main background must exceed 7.0:1 (actual: $primaryTextOnBackground)",
             primaryTextOnBackground >= 7.0
         )
 
-        // Secondary text (#525651) on main background (#FBFCF3) and secondary surface (#F1F5E9)
-        val secondaryOnBackground = contrastRatio(StitchOnSurfaceVariant, StitchSurface)
-        val secondaryOnContainerLow = contrastRatio(StitchSecondary, StitchSurfaceContainerLow)
+        // Light mode: Secondary text on main background and secondary surface
+        val secondaryOnBackground = contrastRatio(StitchLightTokens.OnSurfaceVariant, StitchLightTokens.Surface)
+        val secondaryOnContainerLow = contrastRatio(StitchLightTokens.Secondary, StitchLightTokens.SurfaceContainerLow)
         assertTrue(
             "Secondary text on main background must meet WCAG AA 4.5:1 (actual: $secondaryOnBackground)",
             secondaryOnBackground >= 4.5
@@ -81,6 +81,18 @@ class DesignSystemAndAccessibilityTest {
         assertTrue(
             "Secondary text on container low surface must meet WCAG AA 4.5:1 (actual: $secondaryOnContainerLow)",
             secondaryOnContainerLow >= 4.5
+        )
+
+        // Dark mode: Primary and OnSurface contrast verification against dark background
+        val darkPrimaryOnBg = contrastRatio(StitchDarkTokens.Primary, StitchDarkTokens.Surface)
+        val darkTextOnBg = contrastRatio(StitchDarkTokens.OnSurface, StitchDarkTokens.Surface)
+        assertTrue(
+            "Dark primary on dark surface must meet WCAG AA 4.5:1 (actual: $darkPrimaryOnBg)",
+            darkPrimaryOnBg >= 4.5
+        )
+        assertTrue(
+            "Dark text on dark surface must meet WCAG AA 4.5:1 (actual: $darkTextOnBg)",
+            darkTextOnBg >= 4.5
         )
 
         // Semantic status colors (Success, Warning, Danger, Info)

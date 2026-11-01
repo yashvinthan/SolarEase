@@ -77,17 +77,21 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.selected
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
+import com.example.ui.theme.*
 
 // Blue accent theme for Consumption Analytics as required (WCAG 2.2 AA >= 4.5:1 verified)
-private val BluePrimary = Color(0xFF1D4ED8) // Energy Blue
-private val BluePrimaryLight = Color(0xFF3B82F6)
-private val BlueContainer = Color(0xFFEFF6FF)
-private val BlueBorder = Color(0xFFDBEAFE)
-private val TextDark = Color(0xFF1E222D)
-private val TextMuted = Color(0xFF475569)
-private val GridLineColor = Color(0xFFE2E8F0)
+private val BluePrimary: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFF93C5FD) else Color(0xFF1D4ED8)
+private val BluePrimaryLight: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFF60A5FA) else Color(0xFF3B82F6)
+private val BlueContainer: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFF1E3A8A) else Color(0xFFEFF6FF)
+private val BlueBorder: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFF1E40AF) else Color(0xFFDBEAFE)
+private val TextDark: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OnBackgroundDark else Color(0xFF1E222D)
+private val TextMuted: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OnSurfaceVariantDark else Color(0xFF475569)
+private val GridLineColor: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OutlineDark else Color(0xFFE2E8F0)
+private val GraphCardBg: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) SurfaceDark else Color(0xFFF8FAFC)
 
 enum class ConsumptionRange(val label: String, val days: Int) {
     D7("7D", 7),
@@ -152,7 +156,7 @@ fun DailyConsumptionGraph(
     Surface(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        color = Color(0xFFF8FAFC),
+        color = GraphCardBg,
         border = BorderStroke(1.dp, BlueBorder)
     ) {
         Column(
@@ -352,6 +356,9 @@ fun DailyConsumptionGraph(
 
                 val density = LocalDensity.current
                 var pointCoordinates by remember { mutableStateOf<List<Offset>>(emptyList()) }
+                val gridLineCol = GridLineColor
+                val bluePrimaryLightCol = BluePrimaryLight
+                val bluePrimaryCol = BluePrimary
 
                 Box(
                     modifier = Modifier
@@ -390,7 +397,7 @@ fun DailyConsumptionGraph(
                         for (i in 0..gridSteps) {
                             val y = topPadding + (chartHeight / gridSteps) * i
                             drawLine(
-                                color = GridLineColor.copy(alpha = 0.7f),
+                                color = gridLineCol.copy(alpha = 0.7f),
                                 start = Offset(leftPadding, y),
                                 end = Offset(canvasWidth - rightPadding, y),
                                 strokeWidth = 1.dp.toPx()
@@ -434,8 +441,8 @@ fun DailyConsumptionGraph(
                             path = fillPath,
                             brush = Brush.verticalGradient(
                                 colors = listOf(
-                                    BluePrimaryLight.copy(alpha = 0.25f),
-                                    BluePrimaryLight.copy(alpha = 0.01f)
+                                    bluePrimaryLightCol.copy(alpha = 0.25f),
+                                    bluePrimaryLightCol.copy(alpha = 0.01f)
                                 ),
                                 startY = topPadding,
                                 endY = topPadding + chartHeight
@@ -445,7 +452,7 @@ fun DailyConsumptionGraph(
                         // 3. Draw smooth line
                         drawPath(
                             path = path,
-                            color = BluePrimary,
+                            color = bluePrimaryCol,
                             style = Stroke(
                                 width = 2.5.dp.toPx(),
                                 cap = StrokeCap.Round
@@ -460,7 +467,7 @@ fun DailyConsumptionGraph(
                             if (isSelected) {
                                 // Vertical highlight guideline
                                 drawLine(
-                                    color = BluePrimary.copy(alpha = 0.5f),
+                                    color = bluePrimaryCol.copy(alpha = 0.5f),
                                     start = Offset(c.x, topPadding),
                                     end = Offset(c.x, topPadding + chartHeight),
                                     strokeWidth = 1.5.dp.toPx(),
@@ -468,7 +475,7 @@ fun DailyConsumptionGraph(
                                 )
                                 // Halo circle
                                 drawCircle(
-                                    color = BluePrimary.copy(alpha = 0.2f),
+                                    color = bluePrimaryCol.copy(alpha = 0.2f),
                                     radius = 8.dp.toPx(),
                                     center = c
                                 )
@@ -476,7 +483,7 @@ fun DailyConsumptionGraph(
 
                             // Outer point border
                             drawCircle(
-                                color = BluePrimary,
+                                color = bluePrimaryCol,
                                 radius = if (isSelected) 4.5.dp.toPx() else 3.5.dp.toPx(),
                                 center = c
                             )
@@ -564,14 +571,14 @@ private fun parseIsoDate(iso: String): Date? {
         null
     }
 }
-// SolarEase Energy Blue Palette for Weekly Meter Consumption Graph (WCAG 2.2 AA verified)
-private val GraphBluePrimary = Color(0xFF1D4ED8)
-private val GraphBluePrimaryDark = Color(0xFF1E40AF)
-private val GraphBlueContainer = Color(0xFFEFF6FF)
-private val GraphBlueBorder = Color(0xFFDBEAFE)
-private val AmberWarning = Color(0xFF9A3412)
-private val AmberContainer = Color(0xFFFFFBEB)
-private val BorderColor = Color(0xFFE2E8F0)
+// SolarEase Energy Blue Palette for Weekly Meter Consumption Graph with dark mode responsiveness
+private val GraphBluePrimary: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFF93C5FD) else Color(0xFF1D4ED8)
+private val GraphBluePrimaryDark: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFF60A5FA) else Color(0xFF1E40AF)
+private val GraphBlueContainer: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFF1E3A8A) else Color(0xFFEFF6FF)
+private val GraphBlueBorder: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFF1E40AF) else Color(0xFFDBEAFE)
+private val AmberWarning: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFFFFB77C) else Color(0xFF9A3412)
+private val AmberContainer: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFF451A03) else Color(0xFFFFFBEB)
+private val BorderColor: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OutlineDark else Color(0xFFE2E8F0)
 
 /**
  * Compact Modern Sunday–Saturday Weekly Meter Reading Bar Chart for the Home screen.
@@ -637,7 +644,7 @@ fun MeterReadingProgressionGraph(
                 )
             },
         shape = RoundedCornerShape(16.dp),
-        color = Color(0xFFF8FAFC),
+        color = GraphCardBg,
         border = BorderStroke(1.dp, GraphBlueBorder)
     ) {
         Column(
@@ -821,6 +828,12 @@ fun MeterReadingProgressionGraph(
                 val midVal = baselineVal + (span / 2.0)
 
                 // Weekly Bar Chart Container
+                val gridLineCol2 = GridLineColor
+                val graphBlueContainerCol = GraphBlueContainer
+                val amberWarningCol = AmberWarning
+                val graphBluePrimaryCol = GraphBluePrimary
+                val graphBluePrimaryDarkCol = GraphBluePrimaryDark
+
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -861,7 +874,7 @@ fun MeterReadingProgressionGraph(
                         for (i in 0..gridSteps) {
                             val y = topPad + (chartH / gridSteps) * i
                             drawLine(
-                                color = GridLineColor.copy(alpha = 0.7f),
+                                color = gridLineCol2.copy(alpha = 0.7f),
                                 start = Offset(leftPad, y),
                                 end = Offset(canvasW - rightPad, y),
                                 strokeWidth = 1.dp.toPx(),
@@ -880,7 +893,7 @@ fun MeterReadingProgressionGraph(
 
                             if (isSelected) {
                                 drawRoundRect(
-                                    color = GraphBlueContainer.copy(alpha = 0.6f),
+                                    color = graphBlueContainerCol.copy(alpha = 0.6f),
                                     topLeft = Offset(centerX - (colW / 2f) + 1.dp.toPx(), topPad - 2.dp.toPx()),
                                     size = androidx.compose.ui.geometry.Size(colW - 2.dp.toPx(), chartH + 4.dp.toPx()),
                                     cornerRadius = androidx.compose.ui.geometry.CornerRadius(6.dp.toPx(), 6.dp.toPx())
@@ -892,7 +905,7 @@ fun MeterReadingProgressionGraph(
                                     val barH = (chartH * 0.22f).coerceAtLeast(8.dp.toPx())
                                     val barTop = topPad + chartH - barH
                                     drawRoundRect(
-                                        color = AmberWarning,
+                                        color = amberWarningCol,
                                         topLeft = Offset(centerX - (barW / 2f), barTop),
                                         size = androidx.compose.ui.geometry.Size(barW, barH),
                                         cornerRadius = androidx.compose.ui.geometry.CornerRadius(4.dp.toPx(), 4.dp.toPx())
@@ -901,7 +914,7 @@ fun MeterReadingProgressionGraph(
                                     val anchorH = 6.dp.toPx()
                                     val barTop = topPad + chartH - anchorH
                                     drawRoundRect(
-                                        color = GraphBluePrimary,
+                                        color = graphBluePrimaryCol,
                                         topLeft = Offset(centerX - (barW / 2f), barTop),
                                         size = androidx.compose.ui.geometry.Size(barW, anchorH),
                                         cornerRadius = androidx.compose.ui.geometry.CornerRadius(3.dp.toPx(), 3.dp.toPx())
@@ -913,7 +926,7 @@ fun MeterReadingProgressionGraph(
                                     val barTop = topPad + chartH - barH
 
                                     drawRoundRect(
-                                        color = if (isSelected) GraphBluePrimaryDark else GraphBluePrimary,
+                                        color = if (isSelected) graphBluePrimaryDarkCol else graphBluePrimaryCol,
                                         topLeft = Offset(centerX - (barW / 2f), barTop),
                                         size = androidx.compose.ui.geometry.Size(barW, barH),
                                         cornerRadius = androidx.compose.ui.geometry.CornerRadius(4.dp.toPx(), 4.dp.toPx())
@@ -1198,7 +1211,7 @@ fun MeterReadingProgressionGraph(
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(12.dp)),
                         shape = RoundedCornerShape(12.dp),
-                        color = Color(0xFFF1F5F9),
+                        color = if (isSystemInDarkTheme()) SurfaceVariantDark else Color(0xFFF1F5F9),
                         border = BorderStroke(1.dp, BorderColor)
                     ) {
                         Row(

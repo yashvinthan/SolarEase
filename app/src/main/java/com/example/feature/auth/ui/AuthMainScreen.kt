@@ -312,12 +312,12 @@ fun AuthMainRoute(
                                 .padding(bottom = 16.dp)
                                 .semantics { liveRegion = LiveRegionMode.Polite },
                             shape = RoundedCornerShape(10.dp),
-                            color = Color(0xFFE8F5E9),
-                            border = BorderStroke(1.dp, primaryGreen.copy(alpha = 0.3f))
+                            color = MaterialTheme.colorScheme.primaryContainer,
+                            border = BorderStroke(1.dp, primaryGreen.copy(alpha = 0.4f))
                         ) {
                             Text(
                                 text = (uiState as AuthUiState.Success).message!!,
-                                color = primaryGreen,
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
                                 style = MaterialTheme.typography.bodySmall,
                                 fontSize = 13.sp,
                                 modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp)
@@ -335,7 +335,7 @@ fun AuthMainRoute(
                             .height(50.dp),
                         shape = RoundedCornerShape(12.dp),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = Color.White,
+                            containerColor = MaterialTheme.colorScheme.surface,
                             contentColor = textPrimary
                         ),
                         border = BorderStroke(1.dp, outlineBorder),
@@ -575,14 +575,14 @@ fun AuthMainRoute(
                                     if (uiState is AuthUiState.Loading) {
                                         CircularProgressIndicator(
                                             modifier = Modifier.size(20.dp),
-                                            color = Color.White,
+                                            color = MaterialTheme.colorScheme.onPrimary,
                                             strokeWidth = 2.dp
                                         )
                                     } else {
                                         Text(
                                             text = "Sign In",
                                             fontWeight = FontWeight.Bold,
-                                            color = Color.White,
+                                            color = MaterialTheme.colorScheme.onPrimary,
                                             fontSize = 15.sp
                                         )
                                     }
@@ -775,14 +775,14 @@ fun AuthMainRoute(
                                     if (uiState is AuthUiState.Loading) {
                                         CircularProgressIndicator(
                                             modifier = Modifier.size(20.dp),
-                                            color = Color.White,
+                                            color = MaterialTheme.colorScheme.onPrimary,
                                             strokeWidth = 2.dp
                                         )
                                     } else {
                                         Text(
                                             text = "Create Account",
                                             fontWeight = FontWeight.Bold,
-                                            color = Color.White,
+                                            color = MaterialTheme.colorScheme.onPrimary,
                                             fontSize = 15.sp
                                         )
                                     }
@@ -891,7 +891,7 @@ fun AuthMainRoute(
                     .fillMaxWidth()
                     .padding(16.dp),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 border = BorderStroke(1.dp, outlineBorder)
             ) {
                 Column(
@@ -982,11 +982,11 @@ fun AuthMainRoute(
                             if (uiState is AuthUiState.Loading) {
                                 CircularProgressIndicator(
                                     modifier = Modifier.size(16.dp),
-                                    color = Color.White,
+                                    color = MaterialTheme.colorScheme.onPrimary,
                                     strokeWidth = 2.dp
                                 )
                             } else {
-                                Text("Link Account", color = Color.White, fontSize = 13.sp)
+                                Text("Link Account", color = MaterialTheme.colorScheme.onPrimary, fontSize = 13.sp)
                             }
                         }
                     }
@@ -1005,7 +1005,7 @@ fun AuthMainRoute(
                     .fillMaxWidth()
                     .padding(16.dp),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 border = BorderStroke(1.dp, outlineBorder)
             ) {
                 Column(
@@ -1037,12 +1037,12 @@ fun AuthMainRoute(
                                 .fillMaxWidth()
                                 .padding(bottom = 14.dp),
                             shape = RoundedCornerShape(10.dp),
-                            color = Color(0xFFE8F5E9),
-                            border = BorderStroke(1.dp, primaryGreen.copy(alpha = 0.3f))
+                            color = MaterialTheme.colorScheme.primaryContainer,
+                            border = BorderStroke(1.dp, primaryGreen.copy(alpha = 0.4f))
                         ) {
                             Text(
                                 text = forgotPasswordStatus!!,
-                                color = primaryGreen,
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
                                 style = MaterialTheme.typography.bodySmall,
                                 fontSize = 13.sp,
                                 modifier = Modifier.padding(12.dp)
@@ -1091,7 +1091,7 @@ fun AuthMainRoute(
                             colors = ButtonDefaults.buttonColors(containerColor = primaryGreen),
                             enabled = forgotPasswordEmail.isNotBlank()
                         ) {
-                            Text("Send Link", color = Color.White, fontSize = 13.sp)
+                            Text("Send Link", color = MaterialTheme.colorScheme.onPrimary, fontSize = 13.sp)
                         }
                     }
                 }
@@ -1111,7 +1111,7 @@ private fun GreenAbstractWaveHeader(
         modifier = modifier
             .fillMaxWidth()
             .height(180.dp)
-            .background(Color(0xFFEEF2E9)),
+            .background(MaterialTheme.colorScheme.surfaceVariant),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -1121,14 +1121,14 @@ private fun GreenAbstractWaveHeader(
                 modifier = Modifier
                     .size(56.dp)
                     .clip(RoundedCornerShape(16.dp))
-                    .background(Color.White)
-                    .border(1.dp, Color(0xFFD2DBD1), RoundedCornerShape(16.dp)),
+                    .background(MaterialTheme.colorScheme.surface)
+                    .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = Icons.Default.WbSunny,
                     contentDescription = "SolarEase Logo",
-                    tint = Color(0xFF245B3A),
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(30.dp)
                 )
             }
@@ -1141,7 +1141,7 @@ private fun GreenAbstractWaveHeader(
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Medium,
                 letterSpacing = 0.sp,
-                color = Color(0xFF17201B)
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
     }
@@ -1156,10 +1156,12 @@ private fun AnimatedSegmentedSwitcher(
     onModeSelected: (AuthMode) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val primaryGreen = Color(0xFF386A20)
-    val textMuted = Color(0xFF525651)
-    val trackBackground = Color(0xFFEEF3EA)
-    val trackBorder = Color(0xFFDDE4D5)
+    val primaryGreen = MaterialTheme.colorScheme.primary
+    val textMuted = MaterialTheme.colorScheme.onSurfaceVariant
+    val trackBackground = MaterialTheme.colorScheme.surfaceVariant
+    val trackBorder = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
+    val indicatorBg = MaterialTheme.colorScheme.surface
+    val indicatorBorder = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
     val reducedMotion = rememberIsReducedMotionEnabled()
 
     // 0f = SIGN_IN (left), 1f = SIGN_UP (right)
@@ -1185,7 +1187,7 @@ private fun AnimatedSegmentedSwitcher(
         val totalWidth = maxWidth
         val tabWidth = (totalWidth - 4.dp) / 2
 
-        // Animated Sliding Selection Indicator (White Pill with Subtle Shadow)
+        // Animated Sliding Selection Indicator (Pill adapting to surface color)
         Box(
             modifier = Modifier
                 .offset {
@@ -1198,8 +1200,8 @@ private fun AnimatedSegmentedSwitcher(
                 .fillMaxHeight()
                 .shadow(elevation = 2.dp, shape = RoundedCornerShape(11.dp))
                 .clip(RoundedCornerShape(11.dp))
-                .background(Color.White)
-                .border(0.5.dp, Color(0xFFE2E7DE), RoundedCornerShape(11.dp))
+                .background(indicatorBg)
+                .border(0.5.dp, indicatorBorder, RoundedCornerShape(11.dp))
         )
 
         // Tab Labels (Equal Width)

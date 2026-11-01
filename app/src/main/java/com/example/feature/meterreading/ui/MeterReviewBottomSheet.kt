@@ -57,20 +57,23 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.ReadOnlyComposable
 import com.example.feature.meterreading.model.MeterOcrStatus
 import com.example.feature.meterreading.model.MeterReadingCandidate
 import com.example.feature.meterreading.parser.ReadingPlausibilityStatus
-import com.example.ui.theme.SolarEaseSemanticColors
+import com.example.ui.theme.*
 import java.util.Locale
 
-private val BrandGreen = Color(0xFF386A20)
-private val BrandGreenLight = Color(0xFFE5F2D9)
+private val BrandGreen: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) PrimaryDark else Color(0xFF386A20)
+private val BrandGreenLight: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) PrimaryContainerDark else Color(0xFFE5F2D9)
 private val WarningAmber = SolarEaseSemanticColors.WarningText
 private val WarningAmberBg = SolarEaseSemanticColors.WarningContainer
 private val ErrorRed = SolarEaseSemanticColors.ErrorText
 private val ErrorRedBg = SolarEaseSemanticColors.ErrorContainer
-private val SlateText = Color(0xFF1E293B)
-private val SlateMuted = Color(0xFF475569)
+private val SlateText: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OnBackgroundDark else Color(0xFF1E293B)
+private val SlateMuted: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OnSurfaceVariantDark else Color(0xFF475569)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -93,7 +96,7 @@ fun MeterReviewBottomSheet(
     ModalBottomSheet(
         onDismissRequest = onRetake,
         sheetState = sheetState,
-        containerColor = Color.White,
+        containerColor = MaterialTheme.colorScheme.surface,
         shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         modifier = modifier
     ) {

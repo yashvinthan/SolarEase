@@ -3,8 +3,13 @@ package com.example.navigation
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.CubicBezierEasing
+import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
@@ -100,42 +105,58 @@ fun SolarEaseNavGraph(navController: NavHostController, startDestination: Any = 
         navController = navController,
         startDestination = startDestination,
         enterTransition = {
-            if (isReducedMotion || isTopLevelTransition(initialState.destination, targetState.destination)) {
+            if (isReducedMotion) {
                 EnterTransition.None
+            } else if (isTopLevelTransition(initialState.destination, targetState.destination)) {
+                fadeIn(animationSpec = tween(durationMillis = 180, easing = LinearOutSlowInEasing))
             } else {
                 slideInHorizontally(
-                    initialOffsetX = { fullWidth -> fullWidth },
-                    animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing)
+                    initialOffsetX = { fullWidth -> fullWidth / 5 },
+                    animationSpec = tween(durationMillis = 280, easing = CubicBezierEasing(0.2f, 0.0f, 0.0f, 1.0f))
+                ) + fadeIn(
+                    animationSpec = tween(durationMillis = 280, easing = FastOutSlowInEasing)
                 )
             }
         },
         exitTransition = {
-            if (isReducedMotion || isTopLevelTransition(initialState.destination, targetState.destination)) {
+            if (isReducedMotion) {
                 ExitTransition.None
+            } else if (isTopLevelTransition(initialState.destination, targetState.destination)) {
+                fadeOut(animationSpec = tween(durationMillis = 140, easing = FastOutLinearInEasing))
             } else {
                 slideOutHorizontally(
-                    targetOffsetX = { fullWidth -> -fullWidth },
-                    animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing)
+                    targetOffsetX = { fullWidth -> -fullWidth / 5 },
+                    animationSpec = tween(durationMillis = 280, easing = CubicBezierEasing(0.2f, 0.0f, 0.0f, 1.0f))
+                ) + fadeOut(
+                    animationSpec = tween(durationMillis = 200, easing = FastOutSlowInEasing)
                 )
             }
         },
         popEnterTransition = {
-            if (isReducedMotion || isTopLevelTransition(initialState.destination, targetState.destination)) {
+            if (isReducedMotion) {
                 EnterTransition.None
+            } else if (isTopLevelTransition(initialState.destination, targetState.destination)) {
+                fadeIn(animationSpec = tween(durationMillis = 180, easing = LinearOutSlowInEasing))
             } else {
                 slideInHorizontally(
-                    initialOffsetX = { fullWidth -> -fullWidth },
-                    animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing)
+                    initialOffsetX = { fullWidth -> -fullWidth / 5 },
+                    animationSpec = tween(durationMillis = 280, easing = CubicBezierEasing(0.2f, 0.0f, 0.0f, 1.0f))
+                ) + fadeIn(
+                    animationSpec = tween(durationMillis = 280, easing = FastOutSlowInEasing)
                 )
             }
         },
         popExitTransition = {
-            if (isReducedMotion || isTopLevelTransition(initialState.destination, targetState.destination)) {
+            if (isReducedMotion) {
                 ExitTransition.None
+            } else if (isTopLevelTransition(initialState.destination, targetState.destination)) {
+                fadeOut(animationSpec = tween(durationMillis = 140, easing = FastOutLinearInEasing))
             } else {
                 slideOutHorizontally(
-                    targetOffsetX = { fullWidth -> fullWidth },
-                    animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing)
+                    targetOffsetX = { fullWidth -> fullWidth / 5 },
+                    animationSpec = tween(durationMillis = 280, easing = CubicBezierEasing(0.2f, 0.0f, 0.0f, 1.0f))
+                ) + fadeOut(
+                    animationSpec = tween(durationMillis = 200, easing = FastOutSlowInEasing)
                 )
             }
         }

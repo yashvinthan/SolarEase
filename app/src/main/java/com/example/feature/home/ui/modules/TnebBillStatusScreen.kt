@@ -229,12 +229,17 @@ fun TnebBillStatusEntryScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             // Input Container Card
+            val inputBg = if (isSystemInDarkTheme()) Color(0xFF20251D) else Color(0xFFF9FBF8)
+            val inputBorder = MaterialTheme.colorScheme.outlineVariant
+            val inputFocusedBorder = MaterialTheme.colorScheme.primary
+            val inputPlaceholder = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, CardBorderColor),
-                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
                 Column(modifier = Modifier.padding(20.dp)) {
                     // Field 1: Service Connection Number
@@ -262,12 +267,16 @@ fun TnebBillStatusEntryScreen(
                     OutlinedTextField(
                         value = serviceConnectionNumber,
                         onValueChange = { viewModel.updateServiceConnectionNumber(it) },
-                        placeholder = { Text("e.g. 042345678901", color = Color(0xFFA0AEC0)) },
+                        placeholder = { Text("e.g. 042345678901", color = inputPlaceholder) },
                         leadingIcon = {
                             Icon(Icons.Default.Bolt, contentDescription = null, tint = SolarEaseEmerald)
                         },
                         trailingIcon = {
-                            if (serviceConnectionNumber.length in 11..12) {
+                            androidx.compose.animation.AnimatedVisibility(
+                                visible = serviceConnectionNumber.length in 11..12,
+                                enter = androidx.compose.animation.fadeIn(androidx.compose.animation.core.tween(150)) + androidx.compose.animation.scaleIn(androidx.compose.animation.core.tween(150)),
+                                exit = androidx.compose.animation.fadeOut(androidx.compose.animation.core.tween(150)) + androidx.compose.animation.scaleOut(androidx.compose.animation.core.tween(150))
+                            ) {
                                 Icon(Icons.Default.CheckCircle, contentDescription = "Valid", tint = SolarEaseEmerald)
                             }
                         },
@@ -276,10 +285,13 @@ fun TnebBillStatusEntryScreen(
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         shape = RoundedCornerShape(12.dp),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = SolarEaseEmerald,
-                            unfocusedBorderColor = CardBorderColor,
-                            focusedContainerColor = Color(0xFFFAFCFF),
-                            unfocusedContainerColor = Color(0xFFFAFCFF)
+                            focusedBorderColor = inputFocusedBorder,
+                            unfocusedBorderColor = inputBorder,
+                            focusedContainerColor = inputBg,
+                            unfocusedContainerColor = inputBg,
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            cursorColor = inputFocusedBorder
                         )
                     )
 
@@ -317,7 +329,7 @@ fun TnebBillStatusEntryScreen(
                     OutlinedTextField(
                         value = registeredMobileNumber,
                         onValueChange = { viewModel.updateRegisteredMobileNumber(it) },
-                        placeholder = { Text("10-digit mobile number", color = Color(0xFFA0AEC0)) },
+                        placeholder = { Text("10-digit mobile number", color = inputPlaceholder) },
                         leadingIcon = {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
@@ -334,12 +346,16 @@ fun TnebBillStatusEntryScreen(
                                     modifier = Modifier
                                         .width(1.dp)
                                         .height(18.dp)
-                                        .background(CardBorderColor)
+                                        .background(inputBorder)
                                 )
                             }
                         },
                         trailingIcon = {
-                            if (registeredMobileNumber.length == 10) {
+                            androidx.compose.animation.AnimatedVisibility(
+                                visible = registeredMobileNumber.length == 10,
+                                enter = androidx.compose.animation.fadeIn(androidx.compose.animation.core.tween(150)) + androidx.compose.animation.scaleIn(androidx.compose.animation.core.tween(150)),
+                                exit = androidx.compose.animation.fadeOut(androidx.compose.animation.core.tween(150)) + androidx.compose.animation.scaleOut(androidx.compose.animation.core.tween(150))
+                            ) {
                                 Icon(Icons.Default.CheckCircle, contentDescription = "Valid", tint = SolarEaseEmerald)
                             }
                         },
@@ -348,10 +364,13 @@ fun TnebBillStatusEntryScreen(
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         shape = RoundedCornerShape(12.dp),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = SolarEaseEmerald,
-                            unfocusedBorderColor = CardBorderColor,
-                            focusedContainerColor = Color(0xFFFAFCFF),
-                            unfocusedContainerColor = Color(0xFFFAFCFF)
+                            focusedBorderColor = inputFocusedBorder,
+                            unfocusedBorderColor = inputBorder,
+                            focusedContainerColor = inputBg,
+                            unfocusedContainerColor = inputBg,
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            cursorColor = inputFocusedBorder
                         )
                     )
                 }
@@ -362,7 +381,8 @@ fun TnebBillStatusEntryScreen(
             // Reassurance Callout
             Surface(
                 shape = RoundedCornerShape(12.dp),
-                color = InfoBlueContainer,
+                color = MaterialTheme.colorScheme.secondaryContainer,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
@@ -372,7 +392,7 @@ fun TnebBillStatusEntryScreen(
                     Icon(
                         imageVector = Icons.Default.Info,
                         contentDescription = null,
-                        tint = InfoBlueText,
+                        tint = MaterialTheme.colorScheme.onSecondaryContainer,
                         modifier = Modifier
                             .size(20.dp)
                             .padding(top = 1.dp)
@@ -381,7 +401,7 @@ fun TnebBillStatusEntryScreen(
                     Text(
                         text = "The mobile number must match the phone registered with your TNPDCL service connection to retrieve your billing records.",
                         fontSize = 13.sp,
-                        color = Color(0xFF0F3A66),
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
                         lineHeight = 18.sp
                     )
                 }
@@ -423,15 +443,15 @@ fun TnebBillStatusEntryScreen(
                 enabled = isValid && !isChecking,
                 shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = SolarEaseEmerald,
-                    contentColor = Color.White,
-                    disabledContainerColor = Color(0xFFA5D6A7),
-                    disabledContentColor = Color.White
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                 )
             ) {
                 if (isChecking) {
                     CircularProgressIndicator(
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier.size(22.dp),
                         strokeWidth = 2.dp
                     )
@@ -464,21 +484,21 @@ fun TnebBillStatusEntryScreen(
                     Icon(
                         imageVector = Icons.Default.Lock,
                         contentDescription = null,
-                        tint = Color(0xFF475569),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.size(14.dp)
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = "Official TNPDCL Portal Sync • AES-256-GCM Encrypted",
                         fontSize = 11.sp,
-                        color = Color(0xFF475569),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontWeight = FontWeight.Medium
                     )
                 }
                 Text(
                     text = "Uses transient session cookies (JSESSIONID) on tnebltd.gov.in and automatically strips Aadhaar/PAN numbers before local encryption.",
                     fontSize = 10.5.sp,
-                    color = Color(0xFF475569),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
                     textAlign = TextAlign.Center,
                     lineHeight = 14.sp
                 )
@@ -572,7 +592,7 @@ fun TnebCaptchaVerificationScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .clip(RoundedCornerShape(20.dp))
-                    .background(Color(0xFFE2E8F0))
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
                     .padding(horizontal = 12.dp, vertical = 6.dp)
             ) {
                 Box(
@@ -585,7 +605,7 @@ fun TnebCaptchaVerificationScreen(
                     Icon(
                         imageVector = Icons.Default.Check,
                         contentDescription = null,
-                        tint = Color.White,
+                        tint = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier.size(10.dp)
                     )
                 }
@@ -604,8 +624,8 @@ fun TnebCaptchaVerificationScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, CardBorderColor)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
             ) {
                 Row(
                     modifier = Modifier
@@ -677,12 +697,15 @@ fun TnebCaptchaVerificationScreen(
             }
 
             // Main CAPTCHA Card
+            val captchaInputBg = if (isSystemInDarkTheme()) Color(0xFF20251D) else Color(0xFFF9FBF8)
+            val captchaInputBorder = MaterialTheme.colorScheme.outlineVariant
+
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, CardBorderColor),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = BorderStroke(1.dp, captchaInputBorder),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
                 Column(
                     modifier = Modifier.padding(20.dp),
@@ -725,8 +748,8 @@ fun TnebCaptchaVerificationScreen(
                                 .width(200.dp)
                                 .height(60.dp)
                                 .clip(RoundedCornerShape(8.dp))
-                                .background(Color(0xFFE8F0FE))
-                                .border(1.dp, Color(0xFFC5D9F8), RoundedCornerShape(8.dp)),
+                                .background(if (isSystemInDarkTheme()) Color(0xFF20251D) else Color(0xFFE8F0FE))
+                                .border(1.dp, captchaInputBorder, RoundedCornerShape(8.dp)),
                             contentAlignment = Alignment.Center
                         ) {
                             if (bitmap != null) {
@@ -748,7 +771,7 @@ fun TnebCaptchaVerificationScreen(
                             modifier = Modifier
                                 .size(52.dp)
                                 .clip(RoundedCornerShape(12.dp))
-                                .background(Color(0xFFF1F5F9))
+                                .background(MaterialTheme.colorScheme.surfaceVariant)
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Refresh,
@@ -765,7 +788,7 @@ fun TnebCaptchaVerificationScreen(
                     OutlinedTextField(
                         value = captchaInput,
                         onValueChange = { viewModel.updateCaptchaInput(it.uppercase()) },
-                        placeholder = { Text("CAPTCHA Code", color = Color(0xFFA0AEC0)) },
+                        placeholder = { Text("CAPTCHA Code", color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(0.8f),
                         textStyle = LocalTextStyle.current.copy(
@@ -778,9 +801,11 @@ fun TnebCaptchaVerificationScreen(
                         shape = RoundedCornerShape(12.dp),
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = SolarEaseEmerald,
-                            unfocusedBorderColor = CardBorderColor,
-                            focusedContainerColor = Color(0xFFFAFCFF),
-                            unfocusedContainerColor = Color(0xFFFAFCFF)
+                            unfocusedBorderColor = captchaInputBorder,
+                            focusedContainerColor = captchaInputBg,
+                            unfocusedContainerColor = captchaInputBg,
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface
                         )
                     )
 
@@ -805,10 +830,10 @@ fun TnebCaptchaVerificationScreen(
                 enabled = captchaInput.isNotBlank() && submitState != SubmitState.SUBMITTING,
                 shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = SolarEaseEmerald,
-                    contentColor = Color.White,
-                    disabledContainerColor = Color(0xFFA5D6A7),
-                    disabledContentColor = Color.White
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                 )
             ) {
                 Text("Check Bill Status", fontWeight = FontWeight.Bold, fontSize = 16.sp)
@@ -875,9 +900,9 @@ fun TnebBillLoadingScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, CardBorderColor),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
                 Column(
                     modifier = Modifier.padding(24.dp),
@@ -922,9 +947,9 @@ fun TnebBillLoadingScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(Color(0xFFFAFCFF), RoundedCornerShape(12.dp))
+                            .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(12.dp))
                             .padding(14.dp),
-                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                            verticalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(Icons.Default.CheckCircle, contentDescription = null, tint = SolarEaseEmerald, modifier = Modifier.size(18.dp))
@@ -937,7 +962,7 @@ fun TnebBillLoadingScreen(
                             Text("Fetching bi-monthly ledger...", fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = SolarEaseEmerald)
                         }
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Box(modifier = Modifier.size(18.dp).clip(CircleShape).background(Color(0xFFE2E8F0)))
+                            Box(modifier = Modifier.size(18.dp).clip(CircleShape).background(MaterialTheme.colorScheme.outlineVariant))
                             Spacer(modifier = Modifier.width(8.dp))
                             Text("Computing Solar Rooftop savings", fontSize = 13.sp, color = TextMuted)
                         }
@@ -1025,8 +1050,8 @@ fun TnebBillErrorScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, CardBorderColor)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
             ) {
                 Column(
                     modifier = Modifier.padding(24.dp),
@@ -1066,8 +1091,8 @@ fun TnebBillErrorScreen(
                     // Diagnostic & credentials context
                     Surface(
                         shape = RoundedCornerShape(12.dp),
-                        color = Color(0xFFF8FAFC),
-                        border = BorderStroke(1.dp, CardBorderColor),
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Column(modifier = Modifier.padding(12.dp)) {

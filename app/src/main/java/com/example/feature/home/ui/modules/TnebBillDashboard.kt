@@ -204,9 +204,9 @@ private fun CurrentBillView(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, CardBorderColor),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
                 Column(modifier = Modifier.padding(20.dp)) {
                     Row(
@@ -265,7 +265,7 @@ private fun CurrentBillView(
                     // Due Date / Payment Status chip
                     Surface(
                         shape = RoundedCornerShape(8.dp),
-                        color = Color(0xFFF1F5F9)
+                        color = MaterialTheme.colorScheme.surfaceVariant
                     ) {
                         Row(
                             modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
@@ -306,7 +306,7 @@ private fun CurrentBillView(
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
-                    HorizontalDivider(color = Color(0xFFF1F5F9))
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                     Spacer(modifier = Modifier.height(16.dp))
 
                     // Metric Strip: Units, Billed Net, Bill Date
@@ -475,8 +475,8 @@ private fun CurrentBillView(
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                    border = BorderStroke(1.dp, CardBorderColor)
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Row(
@@ -517,7 +517,7 @@ private fun CurrentBillView(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(Color(0xFFF8FAFC), RoundedCornerShape(10.dp))
+                                .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(10.dp))
                                 .padding(12.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
@@ -550,8 +550,8 @@ private fun CurrentBillView(
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                    border = BorderStroke(1.dp, CardBorderColor)
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -575,8 +575,8 @@ private fun CurrentBillView(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, CardBorderColor)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Row(
@@ -601,7 +601,7 @@ private fun CurrentBillView(
 
                     AnimatedVisibility(visible = technicalExpanded) {
                         Column(modifier = Modifier.padding(top = 16.dp)) {
-                            HorizontalDivider(color = Color(0xFFF1F5F9))
+                            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                             Spacer(modifier = Modifier.height(12.dp))
 
                             TechnicalRow("Service Connection No.", consumerData.consumerNumber.ifBlank { serviceNo.ifBlank { "Not available" } })
@@ -675,8 +675,8 @@ internal fun BillHistoryView(
             // Consumer Header Pill
             Surface(
                 shape = RoundedCornerShape(12.dp),
-                color = Color.White,
-                border = BorderStroke(1.dp, CardBorderColor),
+                color = MaterialTheme.colorScheme.surface,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
@@ -718,8 +718,8 @@ internal fun BillHistoryView(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, CardBorderColor)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
             ) {
                 Column(modifier = Modifier.padding(14.dp)) {
                     Text("TNEB LT CONSUMPTION BASELINE", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = TextMuted, letterSpacing = 0.5.sp)
@@ -759,11 +759,11 @@ internal fun BillHistoryView(
                         label = { Text(filter) },
                         colors = FilterChipDefaults.filterChipColors(
                             selectedContainerColor = SolarEaseEmerald,
-                            selectedLabelColor = Color.White,
-                            containerColor = Color.White,
+                            selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
+                            containerColor = MaterialTheme.colorScheme.surface,
                             labelColor = TextDark
                         ),
-                        border = BorderStroke(1.dp, if (isSelected) SolarEaseEmerald else CardBorderColor)
+                        border = BorderStroke(1.dp, if (isSelected) SolarEaseEmerald else MaterialTheme.colorScheme.outlineVariant)
                     )
                 }
             }
@@ -775,8 +775,8 @@ internal fun BillHistoryView(
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                    border = BorderStroke(1.dp, CardBorderColor)
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
                 ) {
                     Column(
                         modifier = Modifier
@@ -797,8 +797,8 @@ internal fun BillHistoryView(
                             .padding(vertical = 4.dp)
                             .clickable { onSelectBill(bill) },
                         shape = RoundedCornerShape(14.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.White),
-                        border = BorderStroke(1.dp, CardBorderColor)
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             Row(
@@ -871,8 +871,8 @@ internal fun BillHistoryView(
             // Bottom Solar Lens Teaser
             Surface(
                 shape = RoundedCornerShape(12.dp),
-                color = Color.White,
-                border = BorderStroke(1.dp, CardBorderColor),
+                color = MaterialTheme.colorScheme.surface,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable(onClick = onNavigateToSolarLens)
@@ -934,7 +934,7 @@ internal fun BillDetailsView(
         },
         bottomBar = {
             Surface(
-                color = Color.White,
+                color = MaterialTheme.colorScheme.surface,
                 shadowElevation = 8.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -950,7 +950,7 @@ internal fun BillDetailsView(
                             .weight(1f)
                             .height(48.dp),
                         shape = RoundedCornerShape(12.dp),
-                        border = BorderStroke(1.dp, CardBorderColor)
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
                     ) {
                         Icon(Icons.Default.Download, contentDescription = null, modifier = Modifier.size(16.dp), tint = TextDark)
                         Spacer(modifier = Modifier.width(6.dp))
@@ -968,7 +968,8 @@ internal fun BillDetailsView(
                         shape = RoundedCornerShape(12.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = SolarEaseEmerald,
-                            disabledContainerColor = Color(0xFFE2E8F0),
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                            disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
                             disabledContentColor = TextMuted
                         )
                     ) {
@@ -991,8 +992,8 @@ internal fun BillDetailsView(
             // Consumer Header Ribbon
             Surface(
                 shape = RoundedCornerShape(12.dp),
-                color = Color.White,
-                border = BorderStroke(1.dp, CardBorderColor),
+                color = MaterialTheme.colorScheme.surface,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
@@ -1008,7 +1009,7 @@ internal fun BillDetailsView(
                             Text("No. ${consumerData.consumerNumber.ifBlank { serviceNo.ifBlank { "Not available" } }}", fontSize = 11.sp, color = TextMuted)
                         }
                     }
-                    Surface(shape = RoundedCornerShape(6.dp), color = Color(0xFFF1F5F9)) {
+                    Surface(shape = RoundedCornerShape(6.dp), color = MaterialTheme.colorScheme.surfaceVariant) {
                         Text(consumerData.normalizedTariff.displayLabel, fontSize = 10.sp, fontWeight = FontWeight.Bold, color = TextDark, modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp))
                     }
                 }
@@ -1020,8 +1021,8 @@ internal fun BillDetailsView(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, CardBorderColor)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
             ) {
                 Column(modifier = Modifier.padding(18.dp)) {
                     Row(
@@ -1055,7 +1056,7 @@ internal fun BillDetailsView(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(Color(0xFFF8FAFC), RoundedCornerShape(10.dp))
+                            .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(10.dp))
                             .padding(12.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
@@ -1077,8 +1078,8 @@ internal fun BillDetailsView(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, CardBorderColor)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
             ) {
                 Column(modifier = Modifier.padding(18.dp)) {
                     Text("METER READING & CONSUMPTION", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = SolarEaseEmerald, letterSpacing = 0.5.sp)
@@ -1087,7 +1088,7 @@ internal fun BillDetailsView(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(Color(0xFFF8FAFC), RoundedCornerShape(10.dp))
+                            .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(10.dp))
                             .padding(12.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
@@ -1107,8 +1108,8 @@ internal fun BillDetailsView(
                         Surface(
                             modifier = Modifier.weight(1f),
                             shape = RoundedCornerShape(8.dp),
-                            color = Color(0xFFFAFCFF),
-                            border = BorderStroke(1.dp, CardBorderColor)
+                            color = MaterialTheme.colorScheme.surfaceVariant,
+                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
                         ) {
                             Column(modifier = Modifier.padding(10.dp)) {
                                 Text("METER READING (KWH)", fontSize = 10.sp, color = TextMuted)
@@ -1119,8 +1120,8 @@ internal fun BillDetailsView(
                         Surface(
                             modifier = Modifier.weight(1f),
                             shape = RoundedCornerShape(8.dp),
-                            color = Color(0xFFFAFCFF),
-                            border = BorderStroke(1.dp, CardBorderColor)
+                            color = MaterialTheme.colorScheme.surfaceVariant,
+                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
                         ) {
                             Column(modifier = Modifier.padding(10.dp)) {
                                 Text("RECORDED DEMAND", fontSize = 10.sp, color = TextMuted)
@@ -1138,8 +1139,8 @@ internal fun BillDetailsView(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, CardBorderColor)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
             ) {
                 Column(modifier = Modifier.padding(18.dp)) {
                     Text("BILL ASSESSMENT BREAKDOWN", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = SolarEaseEmerald, letterSpacing = 0.5.sp)
@@ -1166,7 +1167,7 @@ internal fun BillDetailsView(
                     }
 
                     Spacer(modifier = Modifier.height(10.dp))
-                    HorizontalDivider(color = Color(0xFFF1F5F9))
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                     Spacer(modifier = Modifier.height(10.dp))
 
                     Row(
@@ -1187,8 +1188,8 @@ internal fun BillDetailsView(
                         Spacer(modifier = Modifier.height(12.dp))
                         Surface(
                             shape = RoundedCornerShape(10.dp),
-                            color = Color(0xFFF8FAFC),
-                            border = BorderStroke(1.dp, CardBorderColor),
+                            color = MaterialTheme.colorScheme.surfaceVariant,
+                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Column(modifier = Modifier.padding(12.dp)) {
@@ -1226,8 +1227,8 @@ private fun QuickActionItem(
     Card(
         modifier = modifier.clickable(onClick = onClick),
         shape = RoundedCornerShape(14.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        border = BorderStroke(1.dp, CardBorderColor)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
         Column(
             modifier = Modifier
@@ -1239,7 +1240,7 @@ private fun QuickActionItem(
                 modifier = Modifier
                     .size(36.dp)
                     .clip(CircleShape)
-                    .background(Color(0xFFF1F5F9)),
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(icon, contentDescription = null, tint = SolarEaseEmerald, modifier = Modifier.size(18.dp))

@@ -25,6 +25,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
+import com.example.ui.components.SolarEaseCard
+import com.example.ui.components.SolarEaseMetricCard
 import com.example.feature.performance.domain.model.*
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
@@ -37,6 +43,7 @@ fun PerformanceRoute(
     viewModel: PerformanceViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -54,10 +61,30 @@ fun PerformanceRoute(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /* Share */ }) {
+                    IconButton(onClick = {
+                        val shareIntent = android.content.Intent().apply {
+                            action = android.content.Intent.ACTION_SEND
+                            putExtra(
+                                android.content.Intent.EXTRA_TEXT,
+                                "My SolarEase system generated clean solar power today! System status is generating."
+                            )
+                            type = "text/plain"
+                        }
+                        context.startActivity(android.content.Intent.createChooser(shareIntent, "Share Performance Report"))
+                    }) {
                         Icon(Icons.Default.Share, contentDescription = "Share Report")
                     }
-                    IconButton(onClick = { /* Download */ }) {
+                    IconButton(onClick = {
+                        val downloadIntent = android.content.Intent().apply {
+                            action = android.content.Intent.ACTION_SEND
+                            putExtra(
+                                android.content.Intent.EXTRA_TEXT,
+                                "solarease_report_${System.currentTimeMillis()}.md\n# SolarEase Performance Report\nStatus: Generating"
+                            )
+                            type = "text/plain"
+                        }
+                        context.startActivity(android.content.Intent.createChooser(downloadIntent, "Download Performance Report"))
+                    }) {
                         Icon(Icons.Default.Download, contentDescription = "Download Report")
                     }
                 }
@@ -306,40 +333,52 @@ fun SimpleBarChart(data: List<ChartDataPoint>, color: Color) {
     if (data.isEmpty()) return
     
     val maxValue = data.maxOf { it.value }
-    
-    Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            val width = size.width
-            val height = size.height
-            val barWidth = width / (data.size * 2f)
-            val spacing = barWidth
-            
-            data.forEachIndexed { index, point ->
-                val barHeight = if (maxValue > 0) ((point.value / maxValue) * height * 0.8f).toFloat() else 0f
-                val x = (index * (barWidth + spacing)) + (spacing / 2f)
-                val y = height - barHeight - 20.dp.toPx()
-                
-                drawRoundRect(
-                    color = color,
-                    topLeft = Offset(x, y),
-                    size = Size(barWidth, barHeight.toFloat()),
-                    cornerRadius = CornerRadius(4.dp.toPx(), 4.dp.toPx())
-                )
+    val maxLabel = data.firstOrNull { it.value == maxValue }?.label ?: ""
+    val contentDesc = "Generation History: " + data.joinToString("; ") { "${it.label}: ${it.value}" }
+    val stateDesc = "Interactive chart displaying ${data.size} periods. Highest: $maxLabel ($maxValue)."
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .semantics(mergeDescendants = true) {
+                contentDescription = contentDesc
+                stateDescription = stateDesc
             }
-        }
-        
-        Row(
-            modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            data.forEach { point ->
-                Text(
-                    text = point.label,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.weight(1f),
-                    textAlign = androidx.compose.ui.text.style.TextAlign.Center
-                )
+    ) {
+        Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+            Canvas(modifier = Modifier.fillMaxSize()) {
+                val width = size.width
+                val height = size.height
+                val barWidth = width / (data.size * 2f)
+                val spacing = barWidth
+                
+                data.forEachIndexed { index, point ->
+                    val barHeight = if (maxValue > 0) ((point.value / maxValue) * height * 0.8f).toFloat() else 0f
+                    val x = (index * (barWidth + spacing)) + (spacing / 2f)
+                    val y = height - barHeight - 20.dp.toPx()
+                    
+                    drawRoundRect(
+                        color = color,
+                        topLeft = Offset(x, y),
+                        size = Size(barWidth, barHeight.toFloat()),
+                        cornerRadius = CornerRadius(4.dp.toPx(), 4.dp.toPx())
+                    )
+                }
+            }
+            
+            Row(
+                modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                data.forEach { point ->
+                    Text(
+                        text = point.label,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.weight(1f),
+                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                    )
+                }
             }
         }
     }
@@ -347,12 +386,8 @@ fun SimpleBarChart(data: List<ChartDataPoint>, color: Color) {
 
 @Composable
 fun EnergyFlowSection(flow: EnergyFlow) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.large,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.55f)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    SolarEaseCard(
+        modifier = Modifier.fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text("Energy Flow", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)

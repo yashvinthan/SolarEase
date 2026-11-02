@@ -75,6 +75,7 @@ import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
@@ -92,9 +93,6 @@ import com.google.accompanist.permissions.rememberPermissionState
 import java.util.concurrent.Executors
 import kotlinx.coroutines.delay
 
-private val BrandGreen = Color(0xFF245B3A)
-private val ReticleColor = Color(0xFF3D8A5A)
-
 @OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun MeterScannerScreen(
@@ -103,6 +101,8 @@ fun MeterScannerScreen(
     viewModel: MeterScannerViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
+    val brandGreen = MaterialTheme.colorScheme.primary
+    val reticleColor = MaterialTheme.colorScheme.primary
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
@@ -165,13 +165,13 @@ fun MeterScannerScreen(
                     Box(
                         modifier = Modifier
                             .size(56.dp)
-                            .background(BrandGreen.copy(alpha = 0.1f), CircleShape),
+                            .background(brandGreen.copy(alpha = 0.1f), CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             imageVector = Icons.Default.CameraAlt,
                             contentDescription = "Camera Required",
-                            tint = BrandGreen,
+                            tint = brandGreen,
                             modifier = Modifier.size(28.dp)
                         )
                     }
@@ -192,7 +192,7 @@ fun MeterScannerScreen(
 
                     Button(
                         onClick = { cameraPermissionState.launchPermissionRequest() },
-                        colors = ButtonDefaults.buttonColors(containerColor = BrandGreen),
+                        colors = ButtonDefaults.buttonColors(containerColor = brandGreen),
                         shape = RoundedCornerShape(12.dp),
                         modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
                     ) {
@@ -319,7 +319,11 @@ fun MeterScannerScreen(
             )
 
             // Guided Framing Overlay with Dark Scrim and Viewfinder Reticle
-            BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+            BoxWithConstraints(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .semantics { contentDescription = "Electricity meter viewfinder" }
+            ) {
                 val density = androidx.compose.ui.platform.LocalDensity.current
                 val viewWidthPx = with(density) { maxWidth.toPx() }
                 val viewHeightPx = with(density) { maxHeight.toPx() }
@@ -357,7 +361,7 @@ fun MeterScannerScreen(
 
                     // Reticle Border
                     drawRoundRect(
-                        color = ReticleColor.copy(alpha = 0.8f),
+                        color = reticleColor.copy(alpha = 0.8f),
                         topLeft = Offset(frameLeft, frameTop),
                         size = Size(frameWidth, frameHeight),
                         cornerRadius = CornerRadius(16.dp.toPx(), 16.dp.toPx()),
@@ -429,7 +433,7 @@ fun MeterScannerScreen(
                             .size(76.dp)
                             .border(3.dp, Color.White, CircleShape)
                             .padding(6.dp)
-                            .background(BrandGreen, CircleShape)
+                            .background(brandGreen, CircleShape)
                             .clickable(
                                 enabled = uiState is MeterScannerUiState.Ready,
                                 role = Role.Button
@@ -446,7 +450,10 @@ fun MeterScannerScreen(
                                     )
                                 }
                             }
-                            .semantics { role = Role.Button },
+                            .semantics {
+                                role = Role.Button
+                                contentDescription = "Capture Meter Display"
+                            },
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
@@ -488,7 +495,7 @@ fun MeterScannerScreen(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
-                            CircularProgressIndicator(color = ReticleColor)
+                            CircularProgressIndicator(color = reticleColor)
                             Text(
                                 text = (uiState as? MeterScannerUiState.Processing)?.message ?: "Processing photo...",
                                 color = Color.White,

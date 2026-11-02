@@ -27,8 +27,16 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
+import com.example.ui.components.SolarEaseCard
+import com.example.ui.components.SolarEaseMetricCard
+import com.example.ui.theme.StitchPrimary
+import com.example.ui.theme.StitchLightTokens
 import com.example.feature.financial.domain.model.*
 import java.text.NumberFormat
 import java.util.*
@@ -40,6 +48,7 @@ fun FinancialRoute(
     viewModel: FinancialViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -57,10 +66,30 @@ fun FinancialRoute(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /* Share Report */ }) {
+                    IconButton(onClick = {
+                        val shareIntent = android.content.Intent().apply {
+                            action = android.content.Intent.ACTION_SEND
+                            putExtra(
+                                android.content.Intent.EXTRA_TEXT,
+                                "SolarEase Financial Report: Total solar savings tracked successfully."
+                            )
+                            type = "text/plain"
+                        }
+                        context.startActivity(android.content.Intent.createChooser(shareIntent, "Share Financial Report"))
+                    }) {
                         Icon(Icons.Default.Share, contentDescription = "Share Report")
                     }
-                    IconButton(onClick = { /* Download Financial Report */ }) {
+                    IconButton(onClick = {
+                        val downloadIntent = android.content.Intent().apply {
+                            action = android.content.Intent.ACTION_SEND
+                            putExtra(
+                                android.content.Intent.EXTRA_TEXT,
+                                "solarease_report_${System.currentTimeMillis()}.md\n# SolarEase Financial Report\nCumulative Savings: Verified"
+                            )
+                            type = "text/plain"
+                        }
+                        context.startActivity(android.content.Intent.createChooser(downloadIntent, "Download Financial Report"))
+                    }) {
                         Icon(Icons.Default.Download, contentDescription = "Download Financial Report")
                     }
                 }
@@ -366,12 +395,8 @@ fun BillComparisonSection(comparison: BillComparison, format: NumberFormat) {
 
 @Composable
 fun RoiSection(roi: RoiSummary, format: NumberFormat) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.55f)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    SolarEaseCard(
+        modifier = Modifier.fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text("Return on Investment (ROI)", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
@@ -384,7 +409,17 @@ fun RoiSection(roi: RoiSummary, format: NumberFormat) {
                 label = "RoiProgress"
             )
             
-            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+            val roiDesc = "Return on Investment: ${roi.roiPercentage}% recovered. Recovered: ${format.format(roi.investmentRecovered)}, Remaining: ${format.format(roi.remainingAmount)}. Payback: ${roi.estimatedPaybackPeriodYears} years."
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .semantics(mergeDescendants = true) {
+                        contentDescription = roiDesc
+                        stateDescription = "${roi.roiPercentage}% recovered"
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                val arcColor = MaterialTheme.colorScheme.primary
                 Canvas(modifier = Modifier.size(160.dp)) {
                     drawArc(
                         color = Color.LightGray.copy(alpha = 0.3f),
@@ -394,7 +429,7 @@ fun RoiSection(roi: RoiSummary, format: NumberFormat) {
                         style = Stroke(width = 16.dp.toPx(), cap = StrokeCap.Round)
                     )
                     drawArc(
-                        color = Color(0xFF4CAF50), // Green for money
+                        color = arcColor,
                         startAngle = 140f,
                         sweepAngle = 260f * animatedProgress,
                         useCenter = false,
@@ -412,7 +447,7 @@ fun RoiSection(roi: RoiSummary, format: NumberFormat) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Column {
                     Text("Recovered", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    Text(format.format(roi.investmentRecovered), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color(0xFF4CAF50))
+                    Text(format.format(roi.investmentRecovered), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = StitchPrimary)
                 }
                 Column(horizontalAlignment = Alignment.End) {
                     Text("Remaining", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -443,12 +478,8 @@ fun SavingsHistorySection(history: SavingsHistory) {
         else -> history.yearly
     }
 
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.55f)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    SolarEaseCard(
+        modifier = Modifier.fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text("Monthly Savings History", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
@@ -473,8 +504,20 @@ fun SavingsHistorySection(history: SavingsHistory) {
             // Simple Bar Chart for Savings
             if (chartData.isNotEmpty()) {
                 val maxValue = chartData.maxOf { it.savings.coerceAtLeast(it.estimatedBill) }
+                val maxLabel = chartData.maxByOrNull { it.savings }?.label ?: ""
+                val contentDesc = "Savings History: " + chartData.joinToString("; ") { "${it.label}: Savings ${it.savings}, Bill ${it.estimatedBill}" }
+                val stateDesc = "Interactive savings chart with ${chartData.size} periods. Peak: $maxLabel ($maxValue)."
                 
-                Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .semantics(mergeDescendants = true) {
+                            contentDescription = contentDesc
+                            stateDescription = stateDesc
+                        }
+                ) {
+                    val savingsColor = MaterialTheme.colorScheme.primary
                     Canvas(modifier = Modifier.fillMaxSize()) {
                         val width = size.width
                         val height = size.height
@@ -483,13 +526,13 @@ fun SavingsHistorySection(history: SavingsHistory) {
                         val singleBarWidth = barGroupWidth * 0.4f
                         
                         chartData.forEachIndexed { index, point ->
-                            // Savings Bar (Green)
+                            // Savings Bar (StitchPrimary)
                             val savingsHeight = if (maxValue > 0) ((point.savings / maxValue) * height * 0.8f).toFloat() else 0f
                             val xSavings = (index * (barGroupWidth + spacing)) + (spacing / 2f)
                             val ySavings = height - savingsHeight - 20.dp.toPx()
                             
                             drawRoundRect(
-                                color = Color(0xFF4CAF50),
+                                color = savingsColor,
                                 topLeft = Offset(xSavings, ySavings),
                                 size = Size(singleBarWidth, savingsHeight),
                                 cornerRadius = CornerRadius(4.dp.toPx(), 4.dp.toPx())

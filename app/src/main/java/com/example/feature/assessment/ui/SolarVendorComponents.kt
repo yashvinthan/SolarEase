@@ -35,6 +35,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ui.theme.*
+import com.example.ui.components.SolarEaseSelectableCard
+import com.example.ui.components.SolarEaseStepProgressBar
 
 // ─────────────────────────────────────────────────────────────────────────────
 // REUSABLE STITCH UI COMPONENTS FOR SOLAR VENDOR FLOW
@@ -102,6 +104,10 @@ fun StitchVendorTopBar(
     }
 }
 
+@Deprecated(
+    message = "Use SolarEaseStepProgressBar instead",
+    replaceWith = ReplaceWith("SolarEaseStepProgressBar(currentStep = currentStep, totalSteps = totalSteps, stepTitle = stepTitle, category = category ?: categoryText, percentageText = percentageText, modifier = modifier)")
+)
 @Composable
 fun StitchStepProgressBar(
     currentStep: Int,
@@ -112,67 +118,14 @@ fun StitchStepProgressBar(
     percentageText: String? = null,
     modifier: Modifier = Modifier
 ) {
-    val progressFraction = (currentStep.toFloat() / totalSteps.toFloat()).coerceIn(0f, 1f)
-    Column(
+    SolarEaseStepProgressBar(
+        currentStep = currentStep,
+        totalSteps = totalSteps,
+        stepTitle = stepTitle,
+        category = category ?: categoryText,
+        percentageText = percentageText,
         modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 8.dp)
-            .semantics(mergeDescendants = true) {
-                contentDescription = "Step $currentStep of $totalSteps: $stepTitle"
-                stateDescription = "${(progressFraction * 100).toInt()} percent complete"
-            },
-        verticalArrangement = Arrangement.spacedBy(6.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(6.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(20.dp)
-                        .clip(CircleShape)
-                        .background(StitchPrimary),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "$currentStep",
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-                }
-                Text(
-                    text = stepTitle,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = StitchPrimary
-                )
-            }
-            val rightLabel = percentageText ?: category ?: categoryText
-            if (rightLabel != null) {
-                Text(
-                    text = rightLabel,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = StitchSecondary
-                )
-            }
-        }
-        LinearProgressIndicator(
-            progress = { progressFraction },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(4.dp)
-                .clip(RoundedCornerShape(2.dp)),
-            color = StitchPrimary,
-            trackColor = StitchSurfaceContainer
-        )
-    }
+    )
 }
 
 @Composable
@@ -346,6 +299,10 @@ fun StitchSecurityBadge(modifier: Modifier = Modifier) {
     }
 }
 
+@Deprecated(
+    message = "Use SolarEaseSelectableCard instead",
+    replaceWith = ReplaceWith("SolarEaseSelectableCard(selected = selected, onClick = onClick, title = title, subtitle = subtitle, icon = icon, badgeText = badgeText, minHeight = 64.dp, modifier = modifier)")
+)
 @Composable
 fun StitchSelectableCard(
     selected: Boolean,
@@ -356,113 +313,15 @@ fun StitchSelectableCard(
     modifier: Modifier = Modifier,
     badgeText: String? = null
 ) {
-    Surface(
+    SolarEaseSelectableCard(
+        selected = selected,
+        onClick = onClick,
+        title = title,
+        subtitle = subtitle,
+        icon = icon,
+        badgeText = badgeText,
+        minHeight = 64.dp,
         modifier = modifier
-            .fillMaxWidth()
-            .heightIn(min = 64.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .clickable(
-                role = Role.RadioButton,
-                onClick = onClick
-            )
-            .semantics(mergeDescendants = true) {
-                role = Role.RadioButton
-                this.selected = selected
-                stateDescription = if (selected) "Selected" else "Not selected"
-            },
-        shape = RoundedCornerShape(16.dp),
-        color = StitchSurfaceContainerLowest,
-        border = BorderStroke(
-            width = if (selected) 2.dp else 1.dp,
-            color = if (selected) StitchPrimaryContainer else StitchOutline.copy(alpha = 0.7f)
-        ),
-        shadowElevation = if (selected) 1.dp else 0.dp
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Row(
-                modifier = Modifier.weight(1f),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(14.dp)
-            ) {
-                if (icon != null) {
-                    Box(
-                        modifier = Modifier
-                            .size(46.dp)
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(if (selected) StitchPrimaryFixed.copy(alpha = 0.45f) else StitchSurfaceContainerLow),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = icon,
-                            contentDescription = null,
-                            tint = if (selected) StitchPrimaryContainer else StitchSecondary,
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
-                }
-                Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                    if (badgeText != null) {
-                        Surface(
-                            shape = RoundedCornerShape(4.dp),
-                            color = StitchPrimaryFixed.copy(alpha = 0.45f),
-                            modifier = Modifier.padding(bottom = 2.dp)
-                        ) {
-                            Text(
-                                text = badgeText,
-                                fontSize = 10.5.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = StitchPrimaryContainer,
-                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
-                            )
-                        }
-                    }
-                    Text(
-                        text = title,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = StitchOnSurface,
-                        letterSpacing = 0.sp
-                    )
-                    Text(
-                        text = subtitle,
-                        fontSize = 12.5.sp,
-                        color = StitchOnSurfaceVariant,
-                        lineHeight = 17.sp
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.width(10.dp))
-
-            // Selection Circle (Stitch Radio Indicator)
-            Box(
-                modifier = Modifier
-                    .size(24.dp)
-                    .clip(CircleShape)
-                    .border(
-                        width = if (selected) 0.dp else 1.5.dp,
-                        color = if (selected) Color.Transparent else StitchOutline,
-                        shape = CircleShape
-                    )
-                    .background(if (selected) StitchPrimaryContainer else StitchSurfaceContainerLow.copy(alpha = 0.5f)),
-                contentAlignment = Alignment.Center
-            ) {
-                if (selected) {
-                    Icon(
-                        imageVector = Icons.Default.Check,
-                        contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier.size(16.dp)
-                    )
-                }
-            }
-        }
-    }
+    )
 }
 

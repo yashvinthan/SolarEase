@@ -21,7 +21,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.ui.components.StepProgress
+import com.example.ui.components.SolarEaseStepProgressBar
 
 @Composable
 fun AuthPhoneRoute(
@@ -57,7 +57,12 @@ fun AuthPhoneRoute(
                 .fillMaxWidth()
                 .padding(24.dp)
         ) {
-            StepProgress(currentStep = 1, totalSteps = 11)
+            SolarEaseStepProgressBar(
+                currentStep = 1,
+                totalSteps = 11,
+                stepTitle = "Sign In",
+                category = "Authentication"
+            )
             
             Spacer(modifier = Modifier.height(24.dp))
             

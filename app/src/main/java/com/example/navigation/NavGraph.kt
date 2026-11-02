@@ -58,7 +58,6 @@ import com.example.feature.assessment.ui.VendorProfileRoute
 import com.example.feature.assessment.ui.EstimateRequestRoute
 import com.example.feature.assessment.ui.RequestConfirmationRoute
 import com.example.feature.assessment.ui.SolarVendorViewModel
-import com.example.feature.assessment.ui.AssessmentInputRoute
 import com.example.feature.assessment.ui.CostEstimationRoute
 import com.example.feature.assessment.util.SolarEstimateResult
 import com.example.feature.order.ui.PaymentOptionRoute
@@ -394,7 +393,10 @@ fun SolarEaseNavGraph(navController: NavHostController, startDestination: Any = 
         }
         
         composable<Screen.SolarPanel> {
-            SolarPanelRoute(onNavigateBack = { navController.popBackStack() })
+            SolarPanelRoute(
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToDashboard = { navController.navigate(Screen.CustomerDashboard) }
+            )
         }
 
         // ── Stitch 12-Step Solar Vendor Journey ──────────────────────────────
@@ -518,7 +520,8 @@ fun SolarEaseNavGraph(navController: NavHostController, startDestination: Any = 
                         )
                     )
                 },
-                onNavigateBack = { navController.popBackStack() }
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToMarketplace = { navController.navigate(Screen.NearbyVendors) }
             )
         }
 
@@ -564,7 +567,8 @@ fun SolarEaseNavGraph(navController: NavHostController, startDestination: Any = 
                             netPayable = route.netPayable
                         )
                     )
-                }
+                },
+                onNavigateBack = { navController.popBackStack() }
             )
         }
 
@@ -582,7 +586,8 @@ fun SolarEaseNavGraph(navController: NavHostController, startDestination: Any = 
                 netPayable = route.netPayable,
                 onNavigateNext = {
                     navController.navigate(Screen.InstallationTracking(systemType = route.systemType))
-                }
+                },
+                onNavigateBack = { navController.popBackStack() }
             )
         }
 
@@ -596,6 +601,57 @@ fun SolarEaseNavGraph(navController: NavHostController, startDestination: Any = 
                         popUpTo(Screen.Home) { inclusive = false }
                         launchSingleTop = true
                     }
+                },
+                onNavigateToDashboard = {
+                    navController.navigate(Screen.CustomerDashboard)
+                }
+            )
+        }
+
+        // Contractor Marketplace (Feature 22)
+        composable<Screen.NearbyVendors> {
+            NearbyVendorsRoute(
+                vendorViewModel = solarVendorViewModel,
+                onNavigateNext = { vendorId ->
+                    navController.navigate(Screen.VendorProfile(vendorId = vendorId))
+                },
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
+        composable<Screen.VendorProfile> {
+            VendorProfileRoute(
+                vendorViewModel = solarVendorViewModel,
+                onNavigateNext = { navController.navigate(Screen.EstimateRequest) },
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
+        composable<Screen.EstimateRequest> {
+            EstimateRequestRoute(
+                vendorViewModel = solarVendorViewModel,
+                onNavigateNext = { navController.navigate(Screen.RequestConfirmation) },
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
+        composable<Screen.RequestConfirmation> {
+            RequestConfirmationRoute(
+                vendorViewModel = solarVendorViewModel,
+                onNavigateHome = {
+                    navController.navigate(Screen.Home) {
+                        popUpTo(Screen.Home) { inclusive = false }
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
+
+        composable<Screen.SiteSurveyStatus> { backStackEntry ->
+            val route = backStackEntry.toRoute<Screen.SiteSurveyStatus>()
+            SiteSurveyStatusRoute(
+                onNavigateNext = {
+                    navController.navigate(Screen.InstallationTracking(systemType = route.systemType))
                 }
             )
         }
@@ -605,7 +661,16 @@ fun SolarEaseNavGraph(navController: NavHostController, startDestination: Any = 
                 onNavigateToMySolarSystem = { navController.navigate(Screen.MySolarSystem) },
                 onNavigateToPerformance = { navController.navigate(Screen.Performance) },
                 onNavigateToFinancial = { navController.navigate(Screen.Financial) },
-                onNavigateToEnvironmental = { navController.navigate(Screen.Environmental) }
+                onNavigateToEnvironmental = { navController.navigate(Screen.Environmental) },
+                onNavigateToHome = {
+                    navController.navigateToTopLevel(Screen.Home)
+                },
+                onNavigateToRecommends = {
+                    navController.navigateToTopLevel(Screen.Recommends)
+                },
+                onNavigateToProfile = {
+                    navController.navigateToTopLevel(Screen.Profile)
+                }
             )
         }
         

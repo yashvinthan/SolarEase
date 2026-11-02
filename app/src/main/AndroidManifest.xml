@@ -52,6 +52,13 @@
                 <data android:scheme="https" android:host="solarease.in" android:pathPrefix="/calc" />
                 <data android:scheme="https" android:host="solarease.in" android:pathPrefix="/solar" />
                 <data android:scheme="https" android:host="solarease.in" android:pathPrefix="/meter" />
+            </intent-filter>
+
+            <!-- Custom URI Scheme: In-App & External Direct Deep Linking -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="solarease" />
             </intent-filter>
         </activity>

@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="Theme.SolarEase" parent="android:Theme.DeviceDefault.NoActionBar" />
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- SolarEase Production Base Theme (Day / Light Mode) -->
+    <style name="Theme.SolarEase" parent="android:Theme.DeviceDefault.NoActionBar">
+        <!-- Cold-start window background matching Compose BackgroundLight (#F8F8F2) -->
+        <item name="android:windowBackground">@color/window_background</item>
+        
+        <!-- Fully transparent system bars for edge-to-edge drawing -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        
+        <!-- Light status bar icons (dark icons on light background) -->
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+        
+        <!-- Android 12+ (API 31+) Splash Screen System Attributes -->
+        <item name="android:windowSplashScreenBackground" tools:targetApi="s">@color/window_background</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">@mipmap/ic_launcher</item>
+        <item name="android:windowSplashScreenIconBackgroundColor" tools:targetApi="s">@android:color/transparent</item>
+    </style>
+
     <!-- Backward compatibility alias -->
     <style name="Theme.MyApplication" parent="Theme.SolarEase" />
+    <style name="Theme.SolarEase.Splash" parent="Theme.SolarEase" />
 </resources>

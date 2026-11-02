@@ -26,11 +26,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.feature.order.domain.model.MilestoneStatus
 import com.example.feature.order.domain.model.Milestone
+import com.example.ui.components.SolarEaseStepProgressBar
 
 @Composable
 fun InstallationTrackingRoute(
     systemType: String,
     onNavigateNext: () -> Unit,
+    onNavigateToDashboard: (() -> Unit)? = null,
     viewModel: InstallationTrackingViewModel = viewModel()
 ) {
     LaunchedEffect(systemType) {
@@ -93,7 +95,14 @@ fun InstallationTrackingRoute(
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(32.dp))
+            SolarEaseStepProgressBar(
+                currentStep = 12,
+                totalSteps = 12,
+                stepTitle = "Installation Tracking",
+                category = "Project Milestones"
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
                 
             Box(
                 modifier = Modifier
@@ -343,7 +352,11 @@ fun InstallationTrackingRoute(
                             }
                             snackbarHostState.showSnackbar("Congratulations! Your solar system is now live.")
                             delay(500)
-                            onNavigateNext()
+                            if (onNavigateToDashboard != null) {
+                                onNavigateToDashboard()
+                            } else {
+                                onNavigateNext()
+                            }
                         }
                     },
                     modifier = Modifier.fillMaxWidth().height(52.dp),
@@ -355,10 +368,25 @@ fun InstallationTrackingRoute(
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
                 ) {
                     Text(
-                        text = "Proceed to Dashboard",
+                        text = "View Full Monitoring Dashboard",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
+                }
+
+                if (onNavigateToDashboard != null) {
+                    Spacer(modifier = Modifier.height(10.dp))
+                    OutlinedButton(
+                        onClick = onNavigateNext,
+                        modifier = Modifier.fillMaxWidth().height(52.dp),
+                        shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
+                    ) {
+                        Text(
+                            text = "Return to Home",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
                 }
                 
                 Spacer(modifier = Modifier.height(24.dp))

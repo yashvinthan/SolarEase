@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.example.navigation.SolarEaseNavGraph
 import com.example.ui.theme.SolarEaseTheme
@@ -73,9 +75,21 @@ class MainActivity : ComponentActivity() {
     com.example.feature.home.ui.modules.BillCalculatorHistoryStorage.init(this)
     com.example.feature.lens.data.LensRoomStorage.init(this)
     com.example.feature.recommends.data.RewardStorage.init(this)
+
+    // Pre-composition decorView background synchronization to eliminate interim startup flash
+    val savedTheme = com.example.core.session.UserSession.themeMode
+    val isSystemDark = (resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK) == android.content.res.Configuration.UI_MODE_NIGHT_YES
+    val isDark = when (savedTheme) {
+        com.example.ui.theme.ThemeMode.SYSTEM -> isSystemDark
+        com.example.ui.theme.ThemeMode.LIGHT -> false
+        com.example.ui.theme.ThemeMode.DARK -> true
+    }
+    window.decorView.setBackgroundColor(if (isDark) 0xFF11140E.toInt() else 0xFFF8F8F2.toInt())
+
     enableEdgeToEdge()
     setContent {
-      SolarEaseTheme {
+      val currentThemeMode by com.example.core.session.UserSession.themeModeFlow.collectAsStateWithLifecycle()
+      SolarEaseTheme(themeMode = currentThemeMode) {
         Surface(modifier = Modifier.fillMaxSize()) {
             androidx.compose.foundation.layout.Box(
                 modifier = Modifier

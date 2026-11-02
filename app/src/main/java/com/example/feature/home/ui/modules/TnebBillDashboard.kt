@@ -25,22 +25,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.ui.unit.sp
 import com.example.ui.theme.*
+import com.example.ui.components.SolarEaseButton
+import com.example.ui.components.SolarEaseButtonVariant
+import com.example.ui.theme.SolarEaseSemanticColors
+
 import java.text.NumberFormat
 import java.util.Locale
 
-// Color Tokens matching Consumer Energy System with dark mode responsiveness
-private val SolarEaseEmerald: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) PrimaryDark else Color(0xFF245B3A)
-private val SolarEaseEmeraldDark: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) PrimaryContainerDark else Color(0xFF1E4C32)
-private val SolarEaseEmeraldContainer: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) PrimaryContainerDark else Color(0xFFDDEFD9)
-private val SoftBackground: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) BackgroundDark else Color(0xFFF8F8F2)
-private val InfoBlueContainer: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) SecondaryContainerDark else Color(0xFFE7F2F3)
-private val InfoBlueText: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OnSecondaryContainerDark else Color(0xFF1D5156)
-private val CardBorderColor: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OutlineDark else Color(0xFFD2DBD1)
-private val TextDark: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OnBackgroundDark else Color(0xFF17201B)
-private val TextMuted: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OnSurfaceVariantDark else Color(0xFF4F5A52)
-private val WarningAmber: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFFFFB77C) else Color(0xFF9A3412)
-private val WarningAmberContainer: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFF3E2000) else Color(0xFFFEF3C7)
-private val ErrorRed: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFFFFB4AB) else Color(0xFFBA1A1A)
 
 // Internal Screen Destination within the Bill Module
 private enum class BillDashboardScreen {
@@ -164,14 +155,14 @@ private fun CurrentBillView(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = SoftBackground,
-                    titleContentColor = TextDark,
-                    navigationIconContentColor = TextDark,
-                    actionIconContentColor = TextDark
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
+                    actionIconContentColor = MaterialTheme.colorScheme.onSurface
                 )
             )
         },
-        containerColor = SoftBackground
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         Column(
             modifier = Modifier
@@ -191,11 +182,11 @@ private fun CurrentBillView(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Default.CheckCircle, contentDescription = null, tint = SolarEaseEmerald, modifier = Modifier.size(14.dp))
+                    Icon(Icons.Default.CheckCircle, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(14.dp))
                     Spacer(modifier = Modifier.width(6.dp))
-                    Text("METRICS RETRIEVED • TNPDCL SYNCED", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = SolarEaseEmerald)
+                    Text("METRICS RETRIEVED • TNPDCL SYNCED", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
                 }
-                Text("LIVE", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = SolarEaseEmerald)
+                Text("LIVE", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -218,20 +209,20 @@ private fun CurrentBillView(
                             text = "CONSUMER INVOICE #${currentBill.id.ifBlank { serviceNo }}",
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Bold,
-                            color = TextMuted,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             letterSpacing = 0.5.sp
                         )
 
                         // Status Pill
                         Surface(
                             shape = RoundedCornerShape(8.dp),
-                            color = if (isPaid) SolarEaseEmeraldContainer else WarningAmberContainer
+                            color = if (isPaid) SolarEaseSemanticColors.SuccessContainer else SolarEaseSemanticColors.WarningContainer
                         ) {
                             Text(
                                 text = if (isPaid) "PAID" else "UNPAID",
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.ExtraBold,
-                                color = if (isPaid) SolarEaseEmerald else WarningAmber,
+                                color = if (isPaid) SolarEaseSemanticColors.SuccessText else SolarEaseSemanticColors.WarningText,
                                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
                             )
                         }
@@ -242,7 +233,7 @@ private fun CurrentBillView(
                     Text(
                         text = "Total Amount Due",
                         fontSize = 13.sp,
-                        color = TextMuted
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
                     val displayAmount = if (isPaid) {
@@ -256,7 +247,7 @@ private fun CurrentBillView(
                         text = displayAmount,
                         fontSize = 34.sp,
                         fontWeight = FontWeight.Medium,
-                        color = TextDark,
+                        color = MaterialTheme.colorScheme.onSurface,
                         letterSpacing = 0.sp
                     )
 
@@ -271,13 +262,13 @@ private fun CurrentBillView(
                             modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Icon(Icons.Default.Schedule, contentDescription = null, tint = TextMuted, modifier = Modifier.size(14.dp))
+                            Icon(Icons.Default.Schedule, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(14.dp))
                             Spacer(modifier = Modifier.width(6.dp))
                             Text(
                                 text = if (currentBill.dueDate.isNotBlank()) "Due by: ${currentBill.dueDate}" else "No dues pending",
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.SemiBold,
-                                color = TextDark
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                             if (!isPaid) {
                                 Spacer(modifier = Modifier.width(8.dp))
@@ -285,9 +276,9 @@ private fun CurrentBillView(
                                     text = "PAYMENT DUE",
                                     fontSize = 10.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = WarningAmber,
+                                    color = SolarEaseSemanticColors.WarningText,
                                     modifier = Modifier
-                                        .background(WarningAmberContainer, RoundedCornerShape(4.dp))
+                                        .background(SolarEaseSemanticColors.WarningContainer, RoundedCornerShape(4.dp))
                                         .padding(horizontal = 4.dp, vertical = 2.dp)
                                 )
                             } else if (currentBill.paymentDate.isNotBlank()) {
@@ -296,9 +287,9 @@ private fun CurrentBillView(
                                     text = "PAID ON ${currentBill.paymentDate}",
                                     fontSize = 10.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = SolarEaseEmerald,
+                                    color = MaterialTheme.colorScheme.primary,
                                     modifier = Modifier
-                                        .background(SolarEaseEmeraldContainer, RoundedCornerShape(4.dp))
+                                        .background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(4.dp))
                                         .padding(horizontal = 4.dp, vertical = 2.dp)
                                 )
                             }
@@ -315,27 +306,27 @@ private fun CurrentBillView(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Column {
-                            Text("Units Used", fontSize = 11.sp, color = TextMuted, fontWeight = FontWeight.Medium)
-                            Text("${currentBill.units.ifBlank { "0" }} kWh", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = TextDark)
-                            Text(currentBill.status.ifBlank { "NORMAL" }, fontSize = 10.sp, color = SolarEaseEmerald, fontWeight = FontWeight.SemiBold)
+                            Text("Units Used", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Medium)
+                            Text("${currentBill.units.ifBlank { "0" }} kWh", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+                            Text(currentBill.status.ifBlank { "NORMAL" }, fontSize = 10.sp, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
                         }
                         Column {
-                            Text("Billed Net", fontSize = 11.sp, color = TextMuted, fontWeight = FontWeight.Medium)
+                            Text("Billed Net", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Medium)
                             val netBilled = currentBill.totalCharges.ifBlank { currentBill.amountDue }.ifBlank { "0" }
-                            Text("₹$netBilled", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = TextDark)
-                            Text("Assessment", fontSize = 10.sp, color = TextMuted)
+                            Text("₹$netBilled", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+                            Text("Assessment", fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                         Column {
-                            Text("Bill Date", fontSize = 11.sp, color = TextMuted, fontWeight = FontWeight.Medium)
-                            Text(currentBill.assessmentDate.ifBlank { "Not available" }, fontSize = 14.sp, fontWeight = FontWeight.Bold, color = TextDark)
-                            Text(currentBill.period.ifBlank { "Bi-Monthly" }, fontSize = 10.sp, color = TextMuted)
+                            Text("Bill Date", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Medium)
+                            Text(currentBill.assessmentDate.ifBlank { "Not available" }, fontSize = 14.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+                            Text(currentBill.period.ifBlank { "Bi-Monthly" }, fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
 
                     Spacer(modifier = Modifier.height(20.dp))
 
                     // Pay Online Button (Disabled/No-dues indicator if paid)
-                    Button(
+                    SolarEaseButton(
                         onClick = {
                             val intent = android.content.Intent(
                                 android.content.Intent.ACTION_VIEW,
@@ -343,84 +334,38 @@ private fun CurrentBillView(
                             )
                             context.startActivity(intent)
                         },
+                        text = if (isPaid) "No Dues Pending" else "Pay on Official Portal",
                         enabled = !isPaid,
+                        trailingIcon = if (!isPaid) Icons.AutoMirrored.Filled.ArrowForward else null,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(50.dp),
-                        shape = RoundedCornerShape(14.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = SolarEaseEmerald,
-                            disabledContainerColor = Color(0xFFE2E8F0),
-                            disabledContentColor = TextMuted
-                        )
-                    ) {
-                        Text(if (isPaid) "No Dues Pending" else "Pay on Official Portal", fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                        if (!isPaid) {
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, modifier = Modifier.size(16.dp))
-                        }
-                    }
+                            .heightIn(min = 48.dp)
+                    )
 
                     Spacer(modifier = Modifier.height(10.dp))
 
                     // Secondary Action: Re-trigger fresh bill check flow
-                    OutlinedButton(
+                    SolarEaseButton(
                         onClick = onCheckBillAgain,
+                        text = "Check Bill Status Again",
+                        variant = SolarEaseButtonVariant.OUTLINED,
+                        leadingIcon = Icons.Default.Refresh,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(48.dp),
-                        shape = RoundedCornerShape(14.dp),
-                        border = BorderStroke(1.dp, SolarEaseEmerald),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            contentColor = SolarEaseEmerald
-                        )
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Refresh,
-                            contentDescription = null,
-                            modifier = Modifier.size(18.dp),
-                            tint = SolarEaseEmerald
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = "Check Bill Status Again",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 14.sp
-                        )
-                    }
+                            .heightIn(min = 48.dp)
+                    )
 
                     Spacer(modifier = Modifier.height(10.dp))
 
                     // Primary Action: Return to Home Screen (Step 2)
-                    Button(
+                    SolarEaseButton(
                         onClick = onReturnToHome,
+                        text = "Return to Home Screen",
+                        leadingIcon = Icons.Default.Home,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(48.dp),
-                        shape = RoundedCornerShape(14.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = SolarEaseEmerald,
-                            contentColor = Color.White
-                        )
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Home,
-                                contentDescription = null,
-                                modifier = Modifier.size(18.dp),
-                                tint = Color.White
-                            )
-                            Text(
-                                text = "Return to Home Screen",
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 14.sp,
-                                color = Color.White
-                            )
-                        }
-                    }
+                            .heightIn(min = 48.dp)
+                    )
                 }
             }
 
@@ -485,19 +430,19 @@ private fun CurrentBillView(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(Icons.Default.Bolt, contentDescription = null, tint = SolarEaseEmerald, modifier = Modifier.size(20.dp))
+                                Icon(Icons.Default.Bolt, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
                                 Spacer(modifier = Modifier.width(6.dp))
-                                Text("Solar Rooftop Sizing", fontWeight = FontWeight.Bold, fontSize = 15.sp, color = TextDark)
+                                Text("Solar Rooftop Sizing", fontWeight = FontWeight.Bold, fontSize = 15.sp, color = MaterialTheme.colorScheme.onSurface)
                             }
                             Surface(
                                 shape = RoundedCornerShape(6.dp),
-                                color = SolarEaseEmeraldContainer
+                                color = MaterialTheme.colorScheme.primaryContainer
                             ) {
                                 Text(
                                     "ESTIMATED",
                                     fontSize = 10.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = SolarEaseEmerald,
+                                    color = MaterialTheme.colorScheme.primary,
                                     modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                                 )
                             }
@@ -508,7 +453,7 @@ private fun CurrentBillView(
                         Text(
                             text = "Based on ${currentBill.units} kWh bi-monthly consumption, a recommended $solarKw kW solar system can offset grid demand under Tamil Nadu Net Metering.",
                             fontSize = 13.sp,
-                            color = TextMuted,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             lineHeight = 18.sp
                         )
 
@@ -522,12 +467,12 @@ private fun CurrentBillView(
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Column {
-                                Text("Projected Savings", fontSize = 11.sp, color = TextMuted)
-                                Text(savingsFormatted, fontSize = 16.sp, fontWeight = FontWeight.Bold, color = SolarEaseEmerald)
+                                Text("Projected Savings", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text(savingsFormatted, fontSize = 16.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
                             }
                             Column(horizontalAlignment = Alignment.End) {
-                                Text("Estimated Return", fontSize = 11.sp, color = TextMuted)
-                                Text(paybackYears, fontSize = 16.sp, fontWeight = FontWeight.Bold, color = TextDark)
+                                Text("Estimated Return", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text(paybackYears, fontSize = 16.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                             }
                         }
 
@@ -537,8 +482,8 @@ private fun CurrentBillView(
                             onClick = onNavigateToSolarLens,
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp),
-                            border = BorderStroke(1.dp, SolarEaseEmerald),
-                            colors = ButtonDefaults.outlinedButtonColors(contentColor = SolarEaseEmerald)
+                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary)
                         ) {
                             Icon(Icons.Default.Architecture, contentDescription = null, modifier = Modifier.size(16.dp))
                             Spacer(modifier = Modifier.width(8.dp))
@@ -555,15 +500,15 @@ private fun CurrentBillView(
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(Icons.Default.Info, contentDescription = null, tint = TextMuted, modifier = Modifier.size(20.dp))
+                            Icon(Icons.Default.Info, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(20.dp))
                             Spacer(modifier = Modifier.width(6.dp))
-                            Text("Solar Sizing Unavailable", fontWeight = FontWeight.Bold, fontSize = 15.sp, color = TextDark)
+                            Text("Solar Sizing Unavailable", fontWeight = FontWeight.Bold, fontSize = 15.sp, color = MaterialTheme.colorScheme.onSurface)
                         }
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
                             text = "Consumption units are not specified on this statement. Audit your connected appliances with Solar Lens for verified sizing.",
                             fontSize = 13.sp,
-                            color = TextMuted
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
@@ -587,15 +532,15 @@ private fun CurrentBillView(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column {
-                            Text("SERVICE CONNECTION DETAILS", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = SolarEaseEmerald, letterSpacing = 0.5.sp)
+                            Text("SERVICE CONNECTION DETAILS", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary, letterSpacing = 0.5.sp)
                             val displayConsumer = consumerData.consumerName.ifBlank { "TNEB Consumer" }
                             val displayTariff = consumerData.normalizedTariff.displayLabel
-                            Text("Consumer: $displayConsumer • $displayTariff", fontSize = 13.sp, color = TextDark, fontWeight = FontWeight.Medium)
+                            Text("Consumer: $displayConsumer • $displayTariff", fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Medium)
                         }
                         Icon(
                             imageVector = if (technicalExpanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
                             contentDescription = "Toggle",
-                            tint = SolarEaseEmerald
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
 
@@ -657,13 +602,13 @@ internal fun BillHistoryView(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = SoftBackground,
-                    titleContentColor = TextDark,
-                    navigationIconContentColor = TextDark
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onSurface
                 )
             )
         },
-        containerColor = SoftBackground
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         Column(
             modifier = Modifier
@@ -687,18 +632,18 @@ internal fun BillHistoryView(
                         modifier = Modifier
                             .size(36.dp)
                             .clip(CircleShape)
-                            .background(SolarEaseEmeraldContainer),
+                            .background(MaterialTheme.colorScheme.primaryContainer),
                         contentAlignment = Alignment.Center
                     ) {
-                        Icon(Icons.Default.Bolt, contentDescription = null, tint = SolarEaseEmerald, modifier = Modifier.size(20.dp))
+                        Icon(Icons.Default.Bolt, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
                     }
                     Spacer(modifier = Modifier.width(12.dp))
                     Column {
                         val name = consumerData.consumerName.ifBlank { "TNEB Consumer" }
                         val tariff = consumerData.normalizedTariff.displayLabel
-                        Text("$name • $tariff", fontSize = 11.sp, color = TextMuted, fontWeight = FontWeight.SemiBold)
+                        Text("$name • $tariff", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.SemiBold)
                         val circle = consumerData.region.ifBlank { consumerData.circle.ifBlank { "Tamil Nadu" } }
-                        Text("$serviceNo • $circle", fontSize = 13.sp, fontWeight = FontWeight.Bold, color = TextDark)
+                        Text("$serviceNo • $circle", fontSize = 13.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                     }
                 }
             }
@@ -722,23 +667,23 @@ internal fun BillHistoryView(
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
             ) {
                 Column(modifier = Modifier.padding(14.dp)) {
-                    Text("TNEB LT CONSUMPTION BASELINE", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = TextMuted, letterSpacing = 0.5.sp)
+                    Text("TNEB LT CONSUMPTION BASELINE", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant, letterSpacing = 0.5.sp)
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Column {
-                            Text("Avg Units", fontSize = 11.sp, color = TextMuted)
-                            Text("$avgUnits kWh", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = TextDark)
+                            Text("Avg Units", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text("$avgUnits kWh", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                         }
                         Column {
-                            Text("Avg Cycle Bill", fontSize = 11.sp, color = TextMuted)
-                            Text("₹$avgBill", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = TextDark)
+                            Text("Avg Cycle Bill", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text("₹$avgBill", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                         }
                         Column {
-                            Text("Settlement Rate", fontSize = 11.sp, color = TextMuted)
-                            Text("$settlementRate% on-time", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = SolarEaseEmerald)
+                            Text("Settlement Rate", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text("$settlementRate% on-time", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
                         }
                     }
                 }
@@ -758,12 +703,12 @@ internal fun BillHistoryView(
                         onClick = { selectedFilter = filter },
                         label = { Text(filter) },
                         colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = SolarEaseEmerald,
+                            selectedContainerColor = MaterialTheme.colorScheme.primary,
                             selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
                             containerColor = MaterialTheme.colorScheme.surface,
-                            labelColor = TextDark
+                            labelColor = MaterialTheme.colorScheme.onSurface
                         ),
-                        border = BorderStroke(1.dp, if (isSelected) SolarEaseEmerald else MaterialTheme.colorScheme.outlineVariant)
+                        border = BorderStroke(1.dp, if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant)
                     )
                 }
             }
@@ -784,9 +729,9 @@ internal fun BillHistoryView(
                             .padding(24.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Icon(Icons.Default.Info, contentDescription = null, tint = TextMuted, modifier = Modifier.size(32.dp))
+                        Icon(Icons.Default.Info, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(32.dp))
                         Spacer(modifier = Modifier.height(8.dp))
-                        Text("No billing records found for this filter.", color = TextMuted, fontSize = 13.sp)
+                        Text("No billing records found for this filter.", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 13.sp)
                     }
                 }
             } else {
@@ -810,17 +755,17 @@ internal fun BillHistoryView(
                                     text = bill.period.ifBlank { bill.assessmentDate },
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 15.sp,
-                                    color = TextDark
+                                    color = MaterialTheme.colorScheme.onSurface
                                 )
                                 Surface(
                                     shape = RoundedCornerShape(6.dp),
-                                    color = if (bill.isPaid) SolarEaseEmeraldContainer else WarningAmberContainer
+                                    color = if (bill.isPaid) MaterialTheme.colorScheme.primaryContainer else SolarEaseSemanticColors.WarningContainer
                                 ) {
                                     Text(
                                         text = if (bill.isPaid) "PAID" else "PENDING",
                                         fontSize = 10.sp,
                                         fontWeight = FontWeight.ExtraBold,
-                                        color = if (bill.isPaid) SolarEaseEmerald else WarningAmber,
+                                        color = if (bill.isPaid) MaterialTheme.colorScheme.primary else SolarEaseSemanticColors.WarningText,
                                         modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                                     )
                                 }
@@ -835,7 +780,7 @@ internal fun BillHistoryView(
                                 Text(
                                     text = "${bill.units.ifBlank { "0" }} kWh • Assessed: ${bill.assessmentDate.ifBlank { "Not available" }}",
                                     fontSize = 12.sp,
-                                    color = TextMuted
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                                 val rawAmt = bill.amountDue.trim()
                                 val formattedAmt = if (rawAmt.startsWith("₹")) rawAmt else "₹$rawAmt.00"
@@ -843,7 +788,7 @@ internal fun BillHistoryView(
                                     text = formattedAmt,
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 14.sp,
-                                    color = TextDark
+                                    color = MaterialTheme.colorScheme.onSurface
                                 )
                             }
 
@@ -854,10 +799,10 @@ internal fun BillHistoryView(
                                     horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
                                     if (bill.receiptNumber.isNotBlank()) {
-                                        Text("Receipt: ${bill.receiptNumber}", fontSize = 11.sp, color = SolarEaseEmerald)
+                                        Text("Receipt: ${bill.receiptNumber}", fontSize = 11.sp, color = MaterialTheme.colorScheme.primary)
                                     }
                                     if (bill.paymentDate.isNotBlank()) {
-                                        Text("Paid: ${bill.paymentDate}", fontSize = 11.sp, color = TextMuted)
+                                        Text("Paid: ${bill.paymentDate}", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                     }
                                 }
                             }
@@ -881,11 +826,11 @@ internal fun BillHistoryView(
                     modifier = Modifier.padding(14.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(Icons.Default.WbSunny, contentDescription = null, tint = SolarEaseEmerald, modifier = Modifier.size(24.dp))
+                    Icon(Icons.Default.WbSunny, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(24.dp))
                     Spacer(modifier = Modifier.width(12.dp))
                     Column(modifier = Modifier.weight(1f)) {
-                        Text("Simulate solar zero-bill setup", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = TextDark)
-                        Text("Calculate system size and savings in Solar Lens →", fontSize = 11.sp, color = SolarEaseEmeraldDark)
+                        Text("Simulate solar zero-bill setup", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurface)
+                        Text("Calculate system size and savings in Solar Lens →", fontSize = 11.sp, color = MaterialTheme.colorScheme.primary)
                     }
                 }
             }
@@ -925,10 +870,10 @@ internal fun BillDetailsView(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = SoftBackground,
-                    titleContentColor = TextDark,
-                    navigationIconContentColor = TextDark,
-                    actionIconContentColor = TextDark
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
+                    actionIconContentColor = MaterialTheme.colorScheme.onSurface
                 )
             )
         },
@@ -952,9 +897,9 @@ internal fun BillDetailsView(
                         shape = RoundedCornerShape(12.dp),
                         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
                     ) {
-                        Icon(Icons.Default.Download, contentDescription = null, modifier = Modifier.size(16.dp), tint = TextDark)
+                        Icon(Icons.Default.Download, contentDescription = null, modifier = Modifier.size(16.dp), tint = MaterialTheme.colorScheme.onSurface)
                         Spacer(modifier = Modifier.width(6.dp))
-                        Text("PDF Bill", color = TextDark, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+                        Text("PDF Bill", color = MaterialTheme.colorScheme.onSurface, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
                     }
 
                     val rawAmt = bill.amountDue.trim()
@@ -967,10 +912,10 @@ internal fun BillDetailsView(
                             .height(48.dp),
                         shape = RoundedCornerShape(12.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = SolarEaseEmerald,
+                            containerColor = MaterialTheme.colorScheme.primary,
                             contentColor = MaterialTheme.colorScheme.onPrimary,
                             disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                            disabledContentColor = TextMuted
+                            disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     ) {
                         Icon(Icons.Default.Lock, contentDescription = null, modifier = Modifier.size(14.dp))
@@ -980,7 +925,7 @@ internal fun BillDetailsView(
                 }
             }
         },
-        containerColor = SoftBackground
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         Column(
             modifier = Modifier
@@ -1002,15 +947,15 @@ internal fun BillDetailsView(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Default.AccountCircle, contentDescription = null, tint = SolarEaseEmerald, modifier = Modifier.size(24.dp))
+                        Icon(Icons.Default.AccountCircle, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(24.dp))
                         Spacer(modifier = Modifier.width(10.dp))
                         Column {
-                            Text(consumerData.consumerName.ifBlank { "TNEB Consumer" }, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = TextDark)
-                            Text("No. ${consumerData.consumerNumber.ifBlank { serviceNo.ifBlank { "Not available" } }}", fontSize = 11.sp, color = TextMuted)
+                            Text(consumerData.consumerName.ifBlank { "TNEB Consumer" }, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
+                            Text("No. ${consumerData.consumerNumber.ifBlank { serviceNo.ifBlank { "Not available" } }}", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
                     Surface(shape = RoundedCornerShape(6.dp), color = MaterialTheme.colorScheme.surfaceVariant) {
-                        Text(consumerData.normalizedTariff.displayLabel, fontSize = 10.sp, fontWeight = FontWeight.Bold, color = TextDark, modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp))
+                        Text(consumerData.normalizedTariff.displayLabel, fontSize = 10.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp))
                     }
                 }
             }
@@ -1030,16 +975,16 @@ internal fun BillDetailsView(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("TOTAL AMOUNT DUE", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = TextMuted)
+                        Text("TOTAL AMOUNT DUE", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Surface(
                             shape = RoundedCornerShape(6.dp),
-                            color = if (bill.isPaid) SolarEaseEmeraldContainer else WarningAmberContainer
+                            color = if (bill.isPaid) SolarEaseSemanticColors.SuccessContainer else SolarEaseSemanticColors.WarningContainer
                         ) {
                             Text(
                                 if (bill.isPaid) "PAID" else "PENDING",
                                 fontSize = 10.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = if (bill.isPaid) SolarEaseEmerald else WarningAmber,
+                                color = if (bill.isPaid) SolarEaseSemanticColors.SuccessText else SolarEaseSemanticColors.WarningText,
                                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                             )
                         }
@@ -1049,7 +994,7 @@ internal fun BillDetailsView(
 
                     val rawAmt = bill.amountDue.trim()
                     val displayAmt = if (bill.isPaid) "₹0.00" else (if (rawAmt.startsWith("₹")) rawAmt else "₹$rawAmt.00")
-                    Text(displayAmt, fontSize = 32.sp, fontWeight = FontWeight.Medium, color = TextDark)
+                    Text(displayAmt, fontSize = 32.sp, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface)
 
                     Spacer(modifier = Modifier.height(12.dp))
 
@@ -1061,12 +1006,12 @@ internal fun BillDetailsView(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Column {
-                            Text("Bill Date", fontSize = 11.sp, color = TextMuted)
-                            Text(bill.assessmentDate.ifBlank { "Not available" }, fontSize = 13.sp, fontWeight = FontWeight.Bold, color = TextDark)
+                            Text("Bill Date", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text(bill.assessmentDate.ifBlank { "Not available" }, fontSize = 13.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                         }
                         Column(horizontalAlignment = Alignment.End) {
-                            Text("Due Date", fontSize = 11.sp, color = if (bill.isPaid) TextMuted else ErrorRed)
-                            Text(bill.dueDate.ifBlank { "Not available" }, fontSize = 13.sp, fontWeight = FontWeight.Bold, color = if (bill.isPaid) TextDark else ErrorRed)
+                            Text("Due Date", fontSize = 11.sp, color = if (bill.isPaid) MaterialTheme.colorScheme.onSurfaceVariant else SolarEaseSemanticColors.ErrorText)
+                            Text(bill.dueDate.ifBlank { "Not available" }, fontSize = 13.sp, fontWeight = FontWeight.Bold, color = if (bill.isPaid) MaterialTheme.colorScheme.onSurface else SolarEaseSemanticColors.ErrorText)
                         }
                     }
                 }
@@ -1082,7 +1027,7 @@ internal fun BillDetailsView(
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
             ) {
                 Column(modifier = Modifier.padding(18.dp)) {
-                    Text("METER READING & CONSUMPTION", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = SolarEaseEmerald, letterSpacing = 0.5.sp)
+                    Text("METER READING & CONSUMPTION", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary, letterSpacing = 0.5.sp)
                     Spacer(modifier = Modifier.height(12.dp))
 
                     Row(
@@ -1094,12 +1039,12 @@ internal fun BillDetailsView(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column {
-                            Text("Billed Consumption", fontSize = 11.sp, color = TextMuted)
-                            Text("${bill.units.ifBlank { "0" }} kWh", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = TextDark)
+                            Text("Billed Consumption", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text("${bill.units.ifBlank { "0" }} kWh", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                         }
                         val unitsD = bill.units.toDoubleOrNull() ?: 0.0
                         val dailyAvg = String.format(Locale.US, "%.1f", unitsD / 60.0)
-                        Text("$dailyAvg kWh / day", fontSize = 12.sp, color = TextMuted, fontWeight = FontWeight.Medium)
+                        Text("$dailyAvg kWh / day", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Medium)
                     }
 
                     Spacer(modifier = Modifier.height(12.dp))
@@ -1112,9 +1057,9 @@ internal fun BillDetailsView(
                             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
                         ) {
                             Column(modifier = Modifier.padding(10.dp)) {
-                                Text("METER READING (KWH)", fontSize = 10.sp, color = TextMuted)
-                                Text(bill.kwh.ifBlank { "Not available" }, fontSize = 15.sp, fontWeight = FontWeight.Bold, color = TextDark)
-                                Text(bill.assessmentDate.ifBlank { "Current cycle" }, fontSize = 10.sp, color = TextMuted)
+                                Text("METER READING (KWH)", fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text(bill.kwh.ifBlank { "Not available" }, fontSize = 15.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+                                Text(bill.assessmentDate.ifBlank { "Current cycle" }, fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                         }
                         Surface(
@@ -1124,9 +1069,9 @@ internal fun BillDetailsView(
                             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
                         ) {
                             Column(modifier = Modifier.padding(10.dp)) {
-                                Text("RECORDED DEMAND", fontSize = 10.sp, color = TextMuted)
-                                Text(bill.recordedDemand.ifBlank { "Not available" }, fontSize = 15.sp, fontWeight = FontWeight.Bold, color = TextDark)
-                                Text(if (bill.powerFactor.isNotBlank()) "PF: ${bill.powerFactor}" else "Entry: ${bill.entryDate.ifBlank { "Synced" }}", fontSize = 10.sp, color = TextMuted)
+                                Text("RECORDED DEMAND", fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text(bill.recordedDemand.ifBlank { "Not available" }, fontSize = 15.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+                                Text(if (bill.powerFactor.isNotBlank()) "PF: ${bill.powerFactor}" else "Entry: ${bill.entryDate.ifBlank { "Synced" }}", fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                         }
                     }
@@ -1143,7 +1088,7 @@ internal fun BillDetailsView(
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
             ) {
                 Column(modifier = Modifier.padding(18.dp)) {
-                    Text("BILL ASSESSMENT BREAKDOWN", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = SolarEaseEmerald, letterSpacing = 0.5.sp)
+                    Text("BILL ASSESSMENT BREAKDOWN", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary, letterSpacing = 0.5.sp)
                     Spacer(modifier = Modifier.height(12.dp))
 
                     BreakdownLineItem("Current Consumption Charges (CC)", "₹" + bill.ccCharges.ifBlank { "0.00" })
@@ -1173,14 +1118,14 @@ internal fun BillDetailsView(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(SolarEaseEmeraldContainer, RoundedCornerShape(10.dp))
+                            .background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(10.dp))
                             .padding(12.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("Net Total Payable", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = TextDark)
+                        Text("Net Total Payable", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
                         val totalPayable = bill.amountDue.ifBlank { bill.totalCharges }.ifBlank { "0" }
-                        Text(if (totalPayable.startsWith("₹")) totalPayable else "₹$totalPayable", fontWeight = FontWeight.ExtraBold, fontSize = 18.sp, color = SolarEaseEmerald)
+                        Text(if (totalPayable.startsWith("₹")) totalPayable else "₹$totalPayable", fontWeight = FontWeight.ExtraBold, fontSize = 18.sp, color = MaterialTheme.colorScheme.primary)
                     }
 
                     // Collection info if paid
@@ -1193,16 +1138,16 @@ internal fun BillDetailsView(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Column(modifier = Modifier.padding(12.dp)) {
-                                Text("COLLECTION DETAILS", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = TextMuted)
+                                Text("COLLECTION DETAILS", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 Spacer(modifier = Modifier.height(4.dp))
                                 if (bill.amountPaid.isNotBlank()) {
-                                    Text("Amount Paid: ₹${bill.amountPaid}", fontSize = 12.sp, color = TextDark, fontWeight = FontWeight.SemiBold)
+                                    Text("Amount Paid: ₹${bill.amountPaid}", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.SemiBold)
                                 }
                                 if (bill.receiptNumber.isNotBlank()) {
-                                    Text("Receipt No: ${bill.receiptNumber}", fontSize = 12.sp, color = TextDark)
+                                    Text("Receipt No: ${bill.receiptNumber}", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurface)
                                 }
                                 if (bill.paymentDate.isNotBlank()) {
-                                    Text("Payment Date: ${bill.paymentDate}", fontSize = 12.sp, color = TextDark)
+                                    Text("Payment Date: ${bill.paymentDate}", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurface)
                                 }
                             }
                         }
@@ -1243,10 +1188,10 @@ private fun QuickActionItem(
                     .background(MaterialTheme.colorScheme.surfaceVariant),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(icon, contentDescription = null, tint = SolarEaseEmerald, modifier = Modifier.size(18.dp))
+                Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(18.dp))
             }
             Spacer(modifier = Modifier.height(6.dp))
-            Text(label, fontSize = 11.sp, fontWeight = FontWeight.Medium, color = TextDark)
+            Text(label, fontSize = 11.sp, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface)
         }
     }
 }
@@ -1259,8 +1204,8 @@ private fun TechnicalRow(label: String, value: String) {
             .padding(vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(label, fontSize = 12.sp, color = TextMuted, modifier = Modifier.weight(1f))
-        Text(value, fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = TextDark, textAlign = androidx.compose.ui.text.style.TextAlign.End)
+        Text(label, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1f))
+        Text(value, fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface, textAlign = androidx.compose.ui.text.style.TextAlign.End)
     }
 }
 
@@ -1275,14 +1220,14 @@ private fun BreakdownLineItem(title: String, amount: String, isSubsidy: Boolean 
         Text(
             text = title,
             fontSize = 12.sp,
-            color = if (isSubsidy) SolarEaseEmerald else TextDark,
+            color = if (isSubsidy) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
             fontWeight = if (isSubsidy) FontWeight.SemiBold else FontWeight.Normal
         )
         Text(
             text = amount,
             fontSize = 13.sp,
             fontWeight = FontWeight.SemiBold,
-            color = if (isSubsidy) SolarEaseEmerald else TextDark
+            color = if (isSubsidy) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
         )
     }
 }

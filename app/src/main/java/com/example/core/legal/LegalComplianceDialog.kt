@@ -69,6 +69,7 @@ fun LegalComplianceDialog(
     ) {
         Surface(
             modifier = Modifier
+                .widthIn(max = 680.dp)
                 .fillMaxWidth(0.94f)
                 .fillMaxHeight(0.88f),
             shape = RoundedCornerShape(20.dp),
@@ -111,7 +112,10 @@ fun LegalComplianceDialog(
                             )
                         }
                     }
-                    IconButton(onClick = onDismiss) {
+                    IconButton(
+                        onClick = onDismiss,
+                        modifier = Modifier.size(48.dp)
+                    ) {
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = "Close legal dialog",

@@ -1,12 +1,9 @@
 package com.example.ui.theme
 
-import android.content.Context
-import android.provider.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -108,30 +105,5 @@ fun rememberSolarEaseWindowLayoutInfo(): SolarEaseWindowLayoutInfo {
             useTwoColumnGrid = sizeClass != SolarEaseWindowWidthSizeClass.COMPACT,
             useNavigationRail = sizeClass != SolarEaseWindowWidthSizeClass.COMPACT
         )
-    }
-}
-
-/**
- * Checks whether the user has requested reduced motion / disabled animations
- * via Android system accessibility settings (`ANIMATOR_DURATION_SCALE == 0f`).
- */
-@Composable
-fun rememberIsReducedMotionEnabled(): Boolean {
-    val context = LocalContext.current
-    return remember(context) {
-        isReducedMotionEnabled(context)
-    }
-}
-
-fun isReducedMotionEnabled(context: Context): Boolean {
-    return try {
-        val scale = Settings.Global.getFloat(
-            context.contentResolver,
-            Settings.Global.ANIMATOR_DURATION_SCALE,
-            1f
-        )
-        scale == 0f
-    } catch (_: Exception) {
-        false
     }
 }

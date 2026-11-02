@@ -18,7 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.ui.components.StepProgress
+import com.example.ui.components.SolarEaseStepProgressBar
 import com.example.ui.components.SelectableCard
 import com.example.feature.assessment.util.SolarEstimateResult
 import java.text.NumberFormat
@@ -40,6 +40,7 @@ import com.example.core.legal.LegalSection
 fun PaymentOptionRoute(
     estimateResult: SolarEstimateResult?,
     onNavigateNext: (String) -> Unit,
+    onNavigateBack: (() -> Unit)? = null,
     viewModel: PaymentViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -73,7 +74,13 @@ fun PaymentOptionRoute(
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
-            StepProgress(currentStep = 11, totalSteps = 11)
+            SolarEaseStepProgressBar(
+                currentStep = 10,
+                totalSteps = 12,
+                stepTitle = "Payment & Financing",
+                category = "Payment Method",
+                onBack = onNavigateBack
+            )
             
             Spacer(modifier = Modifier.height(24.dp))
             

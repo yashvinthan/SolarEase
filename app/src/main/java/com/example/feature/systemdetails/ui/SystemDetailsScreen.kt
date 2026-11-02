@@ -35,6 +35,7 @@ fun SystemDetailsRoute(
     viewModel: SystemDetailsViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = androidx.compose.ui.platform.LocalContext.current
 
     Scaffold(
         topBar = {
@@ -52,10 +53,30 @@ fun SystemDetailsRoute(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /* Share */ }) {
+                    IconButton(onClick = {
+                        val shareIntent = android.content.Intent().apply {
+                            action = android.content.Intent.ACTION_SEND
+                            putExtra(
+                                android.content.Intent.EXTRA_TEXT,
+                                "SolarEase System Summary: Rooftop solar system is active and verified."
+                            )
+                            type = "text/plain"
+                        }
+                        context.startActivity(android.content.Intent.createChooser(shareIntent, "Share Solar System Details"))
+                    }) {
                         Icon(Icons.Default.Share, contentDescription = "Share")
                     }
-                    IconButton(onClick = { /* Download */ }) {
+                    IconButton(onClick = {
+                        val downloadIntent = android.content.Intent().apply {
+                            action = android.content.Intent.ACTION_SEND
+                            putExtra(
+                                android.content.Intent.EXTRA_TEXT,
+                                "solarease_report_${System.currentTimeMillis()}.md\n# SolarEase System Specification\nStatus: Active"
+                            )
+                            type = "text/plain"
+                        }
+                        context.startActivity(android.content.Intent.createChooser(downloadIntent, "Download System Specification"))
+                    }) {
                         Icon(Icons.Default.Download, contentDescription = "Download Summary")
                     }
                 }

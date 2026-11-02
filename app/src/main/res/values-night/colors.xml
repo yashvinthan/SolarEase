@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Window background matching Compose BackgroundDark (#11140E) -->
+    <color name="window_background">#FF11140E</color>
+    <color name="splash_brand_emerald">#FF9AD2A8</color>
+    
+    <!-- Night Mode Base System Colors -->
+    <color name="color_primary">#FF9AD2A8</color>
+    <color name="color_on_primary">#FF00391A</color>
+    <color name="color_primary_container">#FF134E2F</color>
+    <color name="color_on_primary_container">#FFC2ECD0</color>
+
+    <color name="color_secondary">#FF9ACAD2</color>
+    <color name="color_on_secondary">#FF00363C</color>
+    <color name="color_secondary_container">#FF0B4F55</color>
+    <color name="color_on_secondary_container">#FFB2E7EF</color>
+
+    <color name="color_background">#FF11140E</color>
+    <color name="color_on_background">#FFE2E3DD</color>
+    <color name="color_surface">#FF1C1F19</color>
+    <color name="color_on_surface">#FFE2E3DD</color>
+    <color name="color_surface_variant">#FF292E25</color>
+    <color name="color_outline">#FF8C9388</color>
+</resources>

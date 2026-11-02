@@ -14,6 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.R
+import com.example.ui.components.SolarEaseStepProgressBar
 import com.example.ui.theme.*
 
 @Composable
@@ -47,11 +48,11 @@ fun CustomerCategoryScreen(
                     title = "Location Verification",
                     onNavigateBack = onNavigateBack
                 )
-                StitchStepProgressBar(
+                SolarEaseStepProgressBar(
                     currentStep = 2,
-                    totalSteps = 8,
-                    stepTitle = "Location Type",
-                    category = "25% Complete"
+                    totalSteps = 12,
+                    stepTitle = "Property Classification",
+                    category = "Location Type"
                 )
             }
         },

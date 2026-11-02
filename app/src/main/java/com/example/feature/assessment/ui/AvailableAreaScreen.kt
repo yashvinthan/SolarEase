@@ -29,6 +29,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.R
+import com.example.ui.components.SolarEaseStepProgressBar
 import com.example.ui.theme.*
 import kotlin.math.roundToInt
 
@@ -74,11 +75,11 @@ fun AvailableAreaScreen(
                     title = "System Requirements",
                     onNavigateBack = onNavigateBack
                 )
-                StitchStepProgressBar(
+                SolarEaseStepProgressBar(
                     currentStep = 6,
-                    totalSteps = 8,
-                    stepTitle = "Space Assessment",
-                    category = "75% Done"
+                    totalSteps = 12,
+                    stepTitle = "Available Rooftop Space",
+                    category = "Site Dimensions"
                 )
             }
         },

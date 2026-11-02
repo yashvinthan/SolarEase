@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.ui.components.SolarEaseStepProgressBar
 import com.example.ui.theme.*
 
 @Composable
@@ -65,10 +66,11 @@ fun RecommendationScreen(
                     title = "Solar Recommendation",
                     onNavigateBack = onNavigateBack
                 )
-                StitchStepProgressBar(
+                SolarEaseStepProgressBar(
                     currentStep = 7,
-                    totalSteps = 8,
-                    stepTitle = "Your Solar Recommendation"
+                    totalSteps = 12,
+                    stepTitle = "System Recommendation",
+                    category = "Engine Sizing"
                 )
             }
         },

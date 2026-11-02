@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.R
 import com.example.feature.assessment.ui.*
+import com.example.ui.components.SolarEaseStepProgressBar
 import com.example.ui.theme.*
 
 @Composable
@@ -72,10 +73,11 @@ fun EbServiceNumberScreen(
                     title = "Location Verification",
                     onNavigateBack = onNavigateBack
                 )
-                StitchStepProgressBar(
+                SolarEaseStepProgressBar(
                     currentStep = 1,
-                    totalSteps = 8,
-                    stepTitle = "Account Verification"
+                    totalSteps = 12,
+                    stepTitle = "EB Service Number",
+                    category = "Consumer Verification"
                 )
             }
         },

@@ -7,12 +7,12 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.Analytics
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Lightbulb
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -34,9 +34,62 @@ import com.example.ui.theme.*
 
 enum class SolarEaseNavTab {
     HOME,
-    ANALYTICS, // Preserved for future re-enabling
+    ANALYTICS,
     RECOMMENDS,
     PROFILE
+}
+
+@Composable
+fun SolarEaseTopBar(
+    title: String,
+    onBack: (() -> Unit)? = null,
+    actions: @Composable RowScope.() -> Unit = {},
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        modifier = modifier.fillMaxWidth(),
+        color = StitchSurface,
+        border = BorderStroke(1.dp, StitchOutline.copy(alpha = 0.5f)),
+        shadowElevation = 0.dp
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 64.dp)
+                .padding(horizontal = 8.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (onBack != null) {
+                IconButton(
+                    onClick = onBack,
+                    modifier = Modifier
+                        .defaultMinSize(minWidth = 48.dp, minHeight = 48.dp)
+                        .semantics { role = Role.Button }
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Navigate back",
+                        tint = StitchOnSurface
+                    )
+                }
+                Spacer(modifier = Modifier.width(4.dp))
+            } else {
+                Spacer(modifier = Modifier.width(8.dp))
+            }
+
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                color = StitchOnSurface,
+                modifier = Modifier.weight(1f),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+
+            actions()
+        }
+    }
 }
 
 @Composable
@@ -45,10 +98,53 @@ fun SolarEaseBottomNavigation(
     onNavigateToHome: () -> Unit,
     onNavigateToRecommends: () -> Unit,
     onNavigateToProfile: () -> Unit,
-    onNavigateToAnalytics: (() -> Unit)? = null
+    onNavigateToAnalytics: (() -> Unit)? = null,
+    modifier: Modifier = Modifier
+) {
+    SolarEaseBottomNavigationInternal(
+        currentTab = currentTab,
+        onNavigateToHome = onNavigateToHome,
+        onNavigateToRecommends = onNavigateToRecommends,
+        onNavigateToProfile = onNavigateToProfile,
+        onNavigateToAnalytics = onNavigateToAnalytics,
+        modifier = modifier
+    )
+}
+
+/**
+ * 5-parameter overload for backward compatibility with existing call sites.
+ */
+@JvmName("SolarEaseBottomNavigationWithAnalytics")
+@Composable
+fun SolarEaseBottomNavigation(
+    currentTab: SolarEaseNavTab,
+    onNavigateToHome: () -> Unit,
+    onNavigateToAnalytics: () -> Unit,
+    onNavigateToRecommends: () -> Unit,
+    onNavigateToProfile: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    SolarEaseBottomNavigationInternal(
+        currentTab = currentTab,
+        onNavigateToHome = onNavigateToHome,
+        onNavigateToRecommends = onNavigateToRecommends,
+        onNavigateToProfile = onNavigateToProfile,
+        onNavigateToAnalytics = onNavigateToAnalytics,
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun SolarEaseBottomNavigationInternal(
+    currentTab: SolarEaseNavTab,
+    onNavigateToHome: () -> Unit,
+    onNavigateToRecommends: () -> Unit,
+    onNavigateToProfile: () -> Unit,
+    onNavigateToAnalytics: (() -> Unit)?,
+    modifier: Modifier
 ) {
     Surface(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         color = StitchSurface.copy(alpha = 0.96f),
         border = BorderStroke(1.dp, StitchOutline)
     ) {
@@ -67,6 +163,17 @@ fun SolarEaseBottomNavigation(
                 onClick = onNavigateToHome,
                 modifier = Modifier.weight(1f)
             )
+
+            if (onNavigateToAnalytics != null) {
+                SolarEaseNavItem(
+                    icon = Icons.Outlined.Analytics,
+                    label = "Analytics",
+                    isSelected = currentTab == SolarEaseNavTab.ANALYTICS,
+                    onClick = onNavigateToAnalytics,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
             SolarEaseNavItem(
                 icon = Icons.Outlined.Lightbulb,
                 label = "Recommends",
@@ -74,6 +181,7 @@ fun SolarEaseBottomNavigation(
                 onClick = onNavigateToRecommends,
                 modifier = Modifier.weight(1f)
             )
+
             SolarEaseNavItem(
                 icon = Icons.Outlined.AccountCircle,
                 label = "Profile",
@@ -94,8 +202,50 @@ fun SolarEaseNavigationRail(
     onNavigateToHome: () -> Unit,
     onNavigateToRecommends: () -> Unit,
     onNavigateToProfile: () -> Unit,
-    onNavigateToAnalytics: () -> Unit = {},
+    onNavigateToAnalytics: (() -> Unit)? = null,
     modifier: Modifier = Modifier
+) {
+    SolarEaseNavigationRailInternal(
+        currentTab = currentTab,
+        onNavigateToHome = onNavigateToHome,
+        onNavigateToRecommends = onNavigateToRecommends,
+        onNavigateToProfile = onNavigateToProfile,
+        onNavigateToAnalytics = onNavigateToAnalytics,
+        modifier = modifier
+    )
+}
+
+/**
+ * 5-parameter overload for SolarEaseNavigationRail for backward compatibility.
+ */
+@JvmName("SolarEaseNavigationRailWithAnalytics")
+@Composable
+fun SolarEaseNavigationRail(
+    currentTab: SolarEaseNavTab,
+    onNavigateToHome: () -> Unit,
+    onNavigateToAnalytics: () -> Unit,
+    onNavigateToRecommends: () -> Unit,
+    onNavigateToProfile: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    SolarEaseNavigationRailInternal(
+        currentTab = currentTab,
+        onNavigateToHome = onNavigateToHome,
+        onNavigateToRecommends = onNavigateToRecommends,
+        onNavigateToProfile = onNavigateToProfile,
+        onNavigateToAnalytics = onNavigateToAnalytics,
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun SolarEaseNavigationRailInternal(
+    currentTab: SolarEaseNavTab,
+    onNavigateToHome: () -> Unit,
+    onNavigateToRecommends: () -> Unit,
+    onNavigateToProfile: () -> Unit,
+    onNavigateToAnalytics: (() -> Unit)?,
+    modifier: Modifier
 ) {
     Surface(
         modifier = modifier
@@ -117,12 +267,23 @@ fun SolarEaseNavigationRail(
                 isSelected = currentTab == SolarEaseNavTab.HOME,
                 onClick = onNavigateToHome
             )
+
+            if (onNavigateToAnalytics != null) {
+                SolarEaseNavItem(
+                    icon = Icons.Outlined.Analytics,
+                    label = "Analytics",
+                    isSelected = currentTab == SolarEaseNavTab.ANALYTICS,
+                    onClick = onNavigateToAnalytics
+                )
+            }
+
             SolarEaseNavItem(
                 icon = Icons.Outlined.Lightbulb,
                 label = "Recommends",
                 isSelected = currentTab == SolarEaseNavTab.RECOMMENDS,
                 onClick = onNavigateToRecommends
             )
+
             SolarEaseNavItem(
                 icon = Icons.Outlined.AccountCircle,
                 label = "Profile",
@@ -131,27 +292,6 @@ fun SolarEaseNavigationRail(
             )
         }
     }
-}
-
-/**
- * Overload for backward compatibility with 4-item caller signatures during transitional phases.
- * Analytics tab is omitted from the UI while keeping call-site compatibility.
- */
-@Composable
-fun SolarEaseBottomNavigation(
-    currentTab: SolarEaseNavTab,
-    onNavigateToHome: () -> Unit,
-    onNavigateToAnalytics: () -> Unit,
-    onNavigateToRecommends: () -> Unit,
-    onNavigateToProfile: () -> Unit
-) {
-    SolarEaseBottomNavigation(
-        currentTab = currentTab,
-        onNavigateToHome = onNavigateToHome,
-        onNavigateToRecommends = onNavigateToRecommends,
-        onNavigateToProfile = onNavigateToProfile,
-        onNavigateToAnalytics = onNavigateToAnalytics
-    )
 }
 
 @Composable

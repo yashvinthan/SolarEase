@@ -27,9 +27,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.feature.dashboard.domain.model.CustomerDashboard
+import com.example.ui.components.SolarEaseBottomNavigation
+import com.example.ui.components.SolarEaseNavigationRail
+import com.example.ui.components.SolarEaseNavTab
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -40,19 +44,46 @@ fun DashboardRoute(
     onNavigateToPerformance: () -> Unit = {},
     onNavigateToFinancial: () -> Unit = {},
     onNavigateToEnvironmental: () -> Unit = {},
+    onNavigateToHome: () -> Unit = {},
+    onNavigateToRecommends: () -> Unit = {},
+    onNavigateToProfile: () -> Unit = {},
     viewModel: DashboardViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val configuration = LocalConfiguration.current
+    val isWideScreen = configuration.screenWidthDp >= 600
 
     Scaffold(
-        bottomBar = { DashboardBottomNavigation() }
+        bottomBar = {
+            if (!isWideScreen) {
+                SolarEaseBottomNavigation(
+                    currentTab = SolarEaseNavTab.ANALYTICS,
+                    onNavigateToHome = onNavigateToHome,
+                    onNavigateToRecommends = onNavigateToRecommends,
+                    onNavigateToProfile = onNavigateToProfile
+                )
+            }
+        }
     ) { innerPadding ->
-        Box(
+        Row(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
                 .background(MaterialTheme.colorScheme.background)
         ) {
+            if (isWideScreen) {
+                SolarEaseNavigationRail(
+                    currentTab = SolarEaseNavTab.ANALYTICS,
+                    onNavigateToHome = onNavigateToHome,
+                    onNavigateToRecommends = onNavigateToRecommends,
+                    onNavigateToProfile = onNavigateToProfile
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+            ) {
             androidx.compose.animation.Crossfade(targetState = uiState, label = "DashboardStateTransition") { state ->
                 when (state) {
                     is DashboardUiState.Loading -> {
@@ -80,6 +111,9 @@ fun DashboardRoute(
         }
     }
 }
+}
+
+
 
 @Composable
 fun DashboardLoadingSkeleton() {
@@ -494,39 +528,6 @@ fun QuickActionCard(modifier: Modifier = Modifier, action: QuickAction) {
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(text = action.description, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
             }
-        }
-    }
-}
-
-@Composable
-fun DashboardBottomNavigation() {
-    var selectedItem by remember { mutableStateOf(0) }
-    val items = listOf(
-        Triple("Home", Icons.Default.Home, Icons.Default.Home),
-        Triple("Performance", Icons.Default.Analytics, Icons.Default.Analytics),
-        Triple("Documents", Icons.Default.Description, Icons.Default.Description),
-        Triple("Support", Icons.Default.SupportAgent, Icons.Default.SupportAgent),
-        Triple("Profile", Icons.Default.Person, Icons.Default.Person)
-    )
-
-    NavigationBar(
-        containerColor = MaterialTheme.colorScheme.surface,
-        tonalElevation = 8.dp
-    ) {
-        items.forEachIndexed { index, item ->
-            NavigationBarItem(
-                icon = { Icon(imageVector = item.second, contentDescription = item.first) },
-                label = { Text(text = item.first, style = MaterialTheme.typography.labelSmall) },
-                selected = selectedItem == index,
-                onClick = { selectedItem = index },
-                colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    selectedTextColor = MaterialTheme.colorScheme.primary,
-                    indicatorColor = MaterialTheme.colorScheme.primaryContainer,
-                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            )
         }
     }
 }

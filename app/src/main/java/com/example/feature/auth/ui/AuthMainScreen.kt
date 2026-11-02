@@ -18,6 +18,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.filled.WbSunny
@@ -618,6 +619,33 @@ fun AuthMainRoute(
                                     )
                                 }
 
+                                Spacer(modifier = Modifier.height(14.dp))
+
+                                OutlinedButton(
+                                    onClick = onNavigateToPhoneAuth,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .heightIn(min = 48.dp),
+                                    shape = RoundedCornerShape(12.dp),
+                                    border = BorderStroke(1.dp, outlineBorder),
+                                    colors = ButtonDefaults.outlinedButtonColors(
+                                        contentColor = textPrimary
+                                    )
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Phone,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(18.dp),
+                                        tint = primaryGreen
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(
+                                        text = "Sign in with Phone / OTP",
+                                        fontWeight = FontWeight.Medium,
+                                        fontSize = 14.sp
+                                    )
+                                }
+
                             } else {
                                 // =========================================
                                 // CREATE ACCOUNT FORM
@@ -815,6 +843,33 @@ fun AuthMainRoute(
                                             viewModel.resetState()
                                             authMode = AuthMode.SIGN_IN
                                         }
+                                    )
+                                }
+
+                                Spacer(modifier = Modifier.height(14.dp))
+
+                                OutlinedButton(
+                                    onClick = onNavigateToPhoneAuth,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .heightIn(min = 48.dp),
+                                    shape = RoundedCornerShape(12.dp),
+                                    border = BorderStroke(1.dp, outlineBorder),
+                                    colors = ButtonDefaults.outlinedButtonColors(
+                                        contentColor = textPrimary
+                                    )
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Phone,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(18.dp),
+                                        tint = primaryGreen
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(
+                                        text = "Sign up with Phone / OTP",
+                                        fontWeight = FontWeight.Medium,
+                                        fontSize = 14.sp
                                     )
                                 }
                             }

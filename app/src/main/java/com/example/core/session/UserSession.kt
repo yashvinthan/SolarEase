@@ -3,6 +3,10 @@ package com.example.core.session
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import com.example.ui.theme.ThemeMode
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -32,11 +36,48 @@ object UserSession {
     private const val TAG = "UserSession"
     private const val OLD_PLAINTEXT_PREFS = "SolarEaseSessionPrefs"
     private const val SECURE_PREFS_NAME = "SolarEaseSecureSessionPrefs"
+    private const val APP_PREFS_NAME = "SolarEaseAppPrefs"
+    private const val THEME_PREFS_NAME = "SolarEaseThemePrefs"
     private const val KEY_USER = "current_user"
     private const val KEY_ACCESS_TOKEN = "access_token"
     private const val KEY_REFRESH_TOKEN = "refresh_token"
     private const val KEY_EB_SERVICE_NUMBER = "eb_service_number"
     private const val KEY_TNEB_REGISTERED_MOBILE = "tneb_registered_mobile"
+    private const val KEY_THEME_MODE = "theme_mode"
+    private const val KEY_APP_THEME_MODE = "app_theme_mode"
+
+    private val _themeModeState = MutableStateFlow(ThemeMode.SYSTEM)
+    val themeModeFlow: StateFlow<ThemeMode> = _themeModeState.asStateFlow()
+
+    var themeMode: ThemeMode
+        get() = _themeModeState.value
+        set(value) {
+            setThemeMode(null, value)
+        }
+
+    fun getSavedThemeMode(context: Context? = null): ThemeMode {
+        val ctx = context?.applicationContext ?: appContext
+        if (ctx != null) {
+            val appPrefs = ctx.getSharedPreferences(APP_PREFS_NAME, Context.MODE_PRIVATE)
+            val themePrefs = ctx.getSharedPreferences(THEME_PREFS_NAME, Context.MODE_PRIVATE)
+            val saved = appPrefs.getString(KEY_THEME_MODE, null)
+                ?: themePrefs.getString(KEY_APP_THEME_MODE, ThemeMode.SYSTEM.name)
+            return ThemeMode.fromString(saved)
+        }
+        return _themeModeState.value
+    }
+
+    fun setThemeMode(context: Context? = null, mode: ThemeMode) {
+        _themeModeState.value = mode
+        val ctx = context?.applicationContext ?: appContext
+        ctx?.let {
+            val appPrefs = it.getSharedPreferences(APP_PREFS_NAME, Context.MODE_PRIVATE)
+            appPrefs.edit().putString(KEY_THEME_MODE, mode.name).apply()
+
+            val themePrefs = it.getSharedPreferences(THEME_PREFS_NAME, Context.MODE_PRIVATE)
+            themePrefs.edit().putString(KEY_APP_THEME_MODE, mode.name).apply()
+        }
+    }
 
     private val json = Json {
         ignoreUnknownKeys = true
@@ -55,6 +96,7 @@ object UserSession {
 
     fun init(context: Context) {
         appContext = context.applicationContext
+        _themeModeState.value = getSavedThemeMode(context)
         val prefs = getPrefs(context)
 
         // One-time migration from legacy plaintext SharedPreferences to EncryptedSharedPreferences

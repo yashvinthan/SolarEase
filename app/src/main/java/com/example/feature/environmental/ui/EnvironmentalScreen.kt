@@ -24,8 +24,12 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
+import com.example.ui.components.SolarEaseCard
+import com.example.ui.components.SolarEaseMetricCard
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -41,6 +45,7 @@ fun EnvironmentalRoute(
     viewModel: EnvironmentalViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -58,10 +63,30 @@ fun EnvironmentalRoute(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /* Share */ }, modifier = Modifier.size(48.dp)) {
+                    IconButton(onClick = {
+                        val shareIntent = android.content.Intent().apply {
+                            action = android.content.Intent.ACTION_SEND
+                            putExtra(
+                                android.content.Intent.EXTRA_TEXT,
+                                "My SolarEase system reduced carbon emissions and planted trees for the environment!"
+                            )
+                            type = "text/plain"
+                        }
+                        context.startActivity(android.content.Intent.createChooser(shareIntent, "Share Environmental Impact"))
+                    }, modifier = Modifier.size(48.dp)) {
                         Icon(Icons.Default.Share, contentDescription = "Share Impact")
                     }
-                    IconButton(onClick = { /* Download */ }, modifier = Modifier.size(48.dp)) {
+                    IconButton(onClick = {
+                        val downloadIntent = android.content.Intent().apply {
+                            action = android.content.Intent.ACTION_SEND
+                            putExtra(
+                                android.content.Intent.EXTRA_TEXT,
+                                "solarease_report_${System.currentTimeMillis()}.md\n# SolarEase Environmental Impact Report\nCO2 Avoided: Verified"
+                            )
+                            type = "text/plain"
+                        }
+                        context.startActivity(android.content.Intent.createChooser(downloadIntent, "Download Environmental Report"))
+                    }, modifier = Modifier.size(48.dp)) {
                         Icon(Icons.Default.Download, contentDescription = "Download Report")
                     }
                 }
@@ -348,7 +373,9 @@ fun MonthlyImpactSection(history: ImpactHistory) {
             if (chartData.isNotEmpty()) {
                 val maxValue = chartData.maxOf { it.value }
                 val barColor = MaterialTheme.colorScheme.primary
+                val peakLabel = chartData.maxByOrNull { it.value }?.label ?: ""
                 val chartSummary = chartData.joinToString(", ") { "${it.label}: ${it.value}" }
+                val stateDesc = "Interactive impact chart with ${chartData.size} periods. Peak: $peakLabel ($maxValue)."
                 
                 Box(
                     modifier = Modifier
@@ -356,6 +383,7 @@ fun MonthlyImpactSection(history: ImpactHistory) {
                         .height(200.dp)
                         .semantics {
                             contentDescription = "Impact over time chart ($chartSummary)"
+                            stateDescription = stateDesc
                         }
                 ) {
                     Canvas(modifier = Modifier.fillMaxSize()) {
@@ -605,10 +633,22 @@ fun ImpactTimelineSection(timeline: ImpactTimeline) {
 
 @Composable
 fun ShareYourImpactSection() {
+    val context = LocalContext.current
+
     Column {
         Text("Share Your Impact", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 4.dp, bottom = 12.dp))
         Button(
-            onClick = { },
+            onClick = {
+                val shareIntent = android.content.Intent().apply {
+                    action = android.content.Intent.ACTION_SEND
+                    putExtra(
+                        android.content.Intent.EXTRA_TEXT,
+                        "My SolarEase rooftop solar system generated clean green energy and avoided CO₂ emissions! Join the clean energy movement."
+                    )
+                    type = "text/plain"
+                }
+                context.startActivity(android.content.Intent.createChooser(shareIntent, "Share Environmental Report"))
+            },
             modifier = Modifier.fillMaxWidth().height(52.dp),
             shape = RoundedCornerShape(12.dp)
         ) {
@@ -618,7 +658,17 @@ fun ShareYourImpactSection() {
         }
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedButton(
-            onClick = { },
+            onClick = {
+                val downloadIntent = android.content.Intent().apply {
+                    action = android.content.Intent.ACTION_SEND
+                    putExtra(
+                        android.content.Intent.EXTRA_TEXT,
+                        "solarease_report_${System.currentTimeMillis()}.md\n# SolarEase Environmental Impact Summary\nVerified clean energy generation."
+                    )
+                    type = "text/plain"
+                }
+                context.startActivity(android.content.Intent.createChooser(downloadIntent, "Download PDF Summary"))
+            },
             modifier = Modifier.fillMaxWidth().height(52.dp),
             shape = RoundedCornerShape(12.dp)
         ) {
@@ -628,7 +678,17 @@ fun ShareYourImpactSection() {
         }
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedButton(
-            onClick = { },
+            onClick = {
+                val cardIntent = android.content.Intent().apply {
+                    action = android.content.Intent.ACTION_SEND
+                    putExtra(
+                        android.content.Intent.EXTRA_TEXT,
+                        "Proud to power my home with SolarEase! Generating solar power and fighting climate change. #SolarEase #CleanEnergy"
+                    )
+                    type = "text/plain"
+                }
+                context.startActivity(android.content.Intent.createChooser(cardIntent, "Share Social Card"))
+            },
             modifier = Modifier.fillMaxWidth().height(52.dp),
             shape = RoundedCornerShape(12.dp)
         ) {

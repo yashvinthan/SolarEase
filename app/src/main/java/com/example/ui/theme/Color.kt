@@ -1,280 +1,384 @@
 package com.example.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.graphics.Color
 
-// SolarEase unified citizen-friendly palette: calm, readable, and consistent.
-val PrimaryEnergy = Color(0xFF245B3A)
-val OnPrimaryEnergy = Color(0xFFFFFFFF)
-val PrimaryContainerEnergy = Color(0xFFDDEFD9)
-val OnPrimaryContainerEnergy = Color(0xFF123B27)
-val SecondaryBlue = Color(0xFFE7F2F3)
-val OnSecondaryBlue = Color(0xFF18324B)
-val SecondaryContainerBlue = Color(0xFF276A70)
-val OnSecondaryContainerBlue = Color(0xFFFFFFFF)
-val TertiaryPurple = Color(0xFF65558F)
-val OnTertiaryPurple = Color(0xFFFFFFFF)
-val TertiaryContainerYellow = Color(0xFFFFE7B0)
-val OnTertiaryContainerYellow = Color(0xFF3C2D00)
-val BackgroundLight = Color(0xFFF8F8F2)
-val OnBackgroundLight = Color(0xFF17201B)
-val SurfaceLight = Color(0xFFFFFFFF)
-val OnSurfaceLight = Color(0xFF191C18)
-val SurfaceVariantLight = Color(0xFFEEF2E9)
-val OnSurfaceVariantLight = Color(0xFF4F5A52)
-val OutlineLight = Color(0xFFD2DBD1)
+// ============================================================================
+// SolarEase Unified Commercial Design Tokens
+// WCAG 2.2 AA compliant across Light and Dark themes.
+// Primary: Deep Solar Emerald | Secondary: Clean Slate Cyan | Tertiary: Warm Sunrise Amber
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// 1. Primary Palette: Deep Solar Emerald
+// ----------------------------------------------------------------------------
+val PrimaryLight = Color(0xFF245B3A)
+val OnPrimaryLight = Color(0xFFFFFFFF)
+val PrimaryContainerLight = Color(0xFFDDEFD9)
+val OnPrimaryContainerLight = Color(0xFF0F3820)
+val PrimaryFixedLight = Color(0xFFDDEFD9)
+val PrimaryFixedDimLight = Color(0xFFC9E1C5)
+val OnPrimaryFixedLight = Color(0xFF0F3820)
+val OnPrimaryFixedVariantLight = Color(0xFF1E4C32)
+
 val PrimaryDark = Color(0xFFB0D49A)
 val OnPrimaryDark = Color(0xFF1A370B)
-val PrimaryContainerDark = Color(0xFF2F521C)
-val OnPrimaryContainerDark = Color(0xFFD0EDBC)
+val PrimaryContainerDark = Color(0xFF1E4E30) // Remediated: Deep emerald container (7.04:1 AAA contrast)
+val OnPrimaryContainerDark = Color(0xFFA6EDB4) // Remediated: Crisp pastel mint
+val PrimaryFixedDark = Color(0xFF1E4E30)
+val PrimaryFixedDimDark = Color(0xFF1E4E30)
+val OnPrimaryFixedDark = Color(0xFFA6EDB4)
+val OnPrimaryFixedVariantDark = Color(0xFF9AD2A8)
+
+// ----------------------------------------------------------------------------
+// 2. Secondary Palette: Clean Slate Cyan
+// ----------------------------------------------------------------------------
+val SecondaryLight = Color(0xFF276A70)
+val OnSecondaryLight = Color(0xFFFFFFFF)
+val SecondaryContainerLight = Color(0xFFCEEFF3)
+val OnSecondaryContainerLight = Color(0xFF002024)
+val SecondaryFixedLight = Color(0xFFCEEFF3)
+val SecondaryFixedDimLight = Color(0xFFB2E7EF)
+val OnSecondaryFixedLight = Color(0xFF002024)
+val OnSecondaryFixedVariantLight = Color(0xFF0E4F55)
+
 val SecondaryDark = Color(0xFF9ACAD2)
-val OnSecondaryDark = Color(0xFF00363D)
-val SecondaryContainerDark = Color(0xFF174E56)
-val OnSecondaryContainerDark = Color(0xFFB5E7EF)
-val TertiaryDark = Color(0xFFD0BDF7)
-val OnTertiaryDark = Color(0xFF35245D)
-val TertiaryContainerDark = Color(0xFF4D3B75)
-val OnTertiaryContainerDark = Color(0xFFEBDDFF)
+val OnSecondaryDark = Color(0xFF00363C)
+val SecondaryContainerDark = Color(0xFF1E4549) // Remediated: Slate cyan container (7.92:1 AAA contrast)
+val OnSecondaryContainerDark = Color(0xFFB0EAEF)
+val SecondaryFixedDark = Color(0xFF1E4549)
+val SecondaryFixedDimDark = Color(0xFF1E4549)
+val OnSecondaryFixedDark = Color(0xFFB0EAEF)
+val OnSecondaryFixedVariantDark = Color(0xFF9ACAD2)
+
+// ----------------------------------------------------------------------------
+// 3. Tertiary Palette: Warm Sunrise Amber
+// ----------------------------------------------------------------------------
+val TertiaryLight = Color(0xFFAA5418)
+val OnTertiaryLight = Color(0xFFFFFFFF)
+val TertiaryContainerLight = Color(0xFFFFDBC8)
+val OnTertiaryContainerLight = Color(0xFF381400)
+val TertiaryFixedLight = Color(0xFFFFDBC8)
+val TertiaryFixedDimLight = Color(0xFFFFB77C)
+val OnTertiaryFixedLight = Color(0xFF381400)
+val OnTertiaryFixedVariantLight = Color(0xFF8B3E00)
+
+val TertiaryDark = Color(0xFFFFB77C)
+val OnTertiaryDark = Color(0xFF4E2600)
+val TertiaryContainerDark = Color(0xFF5C2800) // Remediated: Deep amber container (9.22:1 AAA contrast)
+val OnTertiaryContainerDark = Color(0xFFFFDBC8)
+val TertiaryFixedDark = Color(0xFF5C2800)
+val TertiaryFixedDimDark = Color(0xFF5C2800)
+val OnTertiaryFixedDark = Color(0xFFFFDBC8)
+val OnTertiaryFixedVariantDark = Color(0xFFFFB77C)
+
+// ----------------------------------------------------------------------------
+// 4. Neutral Palette: Surfaces & Backgrounds (Non-Inverted, Calibrated)
+// ----------------------------------------------------------------------------
+val BackgroundLight = Color(0xFFF8F8F2)
+val OnBackgroundLight = Color(0xFF17201B)
+val SurfaceLight = Color(0xFFF8F8F2)
+val OnSurfaceLight = Color(0xFF17201B)
+val SurfaceVariantLight = Color(0xFFEEF2E9)
+val OnSurfaceVariantLight = Color(0xFF4F5A52)
+val SurfaceDimLight = Color(0xFFE6EBE2)
+val SurfaceBrightLight = Color(0xFFF8F8F2)
+val SurfaceContainerLowestLight = Color(0xFFFFFFFF)
+val SurfaceContainerLowLight = Color(0xFFF4F6F0)
+val SurfaceContainerMediumLight = Color(0xFFEEF2E9)
+val SurfaceContainerHighLight = Color(0xFFE6ECE1)
+val SurfaceContainerHighestLight = Color(0xFFDDE5D9)
+val OutlineLight = Color(0xFF727970) // Remediated: >= 3.48:1 on all surfaces
+val OutlineVariantLight = Color(0xFFC5CFC3)
+val InverseSurfaceLight = Color(0xFF2E352A)
+val InverseOnSurfaceLight = Color(0xFFF1F5E9)
+
 val BackgroundDark = Color(0xFF11140E)
 val OnBackgroundDark = Color(0xFFE2E3DD)
-val SurfaceDark = Color(0xFF1C1F19)
+val SurfaceDark = Color(0xFF11140E)
 val OnSurfaceDark = Color(0xFFE2E3DD)
 val SurfaceVariantDark = Color(0xFF292E25)
 val OnSurfaceVariantDark = Color(0xFFC0C8B9)
-val OutlineDark = Color(0xFF454B40)
+val SurfaceDimDark = Color(0xFF11140E)
+val SurfaceBrightDark = Color(0xFF292E25)
+val SurfaceContainerLowestDark = Color(0xFF171B14)
+val SurfaceContainerLowDark = Color(0xFF1C2119)
+val SurfaceContainerMediumDark = Color(0xFF20251D)
+val SurfaceContainerHighDark = Color(0xFF2B3127)
+val SurfaceContainerHighestDark = Color(0xFF353C31)
+val OutlineDark = Color(0xFF8C9388) // Remediated: >= 3.61:1 on all surfaces
+val OutlineVariantDark = Color(0xFF454B40)
+val InverseSurfaceDark = Color(0xFFE2E3DD)
+val InverseOnSurfaceDark = Color(0xFF17201B)
 
-// Centralized static token palettes for JVM testing and design system auditing
+// ----------------------------------------------------------------------------
+// 5. Semantic Error Palette
+// ----------------------------------------------------------------------------
+val ErrorLight = Color(0xFFBA1A1A)
+val OnErrorLight = Color(0xFFFFFFFF)
+val ErrorContainerLight = Color(0xFFFFDAD6)
+val OnErrorContainerLight = Color(0xFF410002)
+
+val ErrorDark = Color(0xFFFFB4AB)
+val OnErrorDark = Color(0xFF690005)
+val ErrorContainerDark = Color(0xFF93000A)
+val OnErrorContainerDark = Color(0xFFFFDAD6)
+
+// ============================================================================
+// Legacy Top-Level Constant Aliases (Backward Compatibility)
+// ============================================================================
+val PrimaryEnergy = PrimaryLight
+val OnPrimaryEnergy = OnPrimaryLight
+val PrimaryContainerEnergy = PrimaryContainerLight
+val OnPrimaryContainerEnergy = OnPrimaryContainerLight
+val SecondaryBlue = SecondaryContainerLight
+val OnSecondaryBlue = OnSecondaryLight
+val SecondaryContainerBlue = SecondaryLight
+val OnSecondaryContainerBlue = OnSecondaryLight
+val TertiaryPurple = TertiaryLight
+val OnTertiaryPurple = OnTertiaryLight
+val TertiaryContainerYellow = TertiaryContainerLight
+val OnTertiaryContainerYellow = OnTertiaryContainerLight
+
+// ============================================================================
+// Stitch Static Tokens (Preserved for JVM unit tests & design system auditing)
+// ============================================================================
 object StitchLightTokens {
-    val Primary = PrimaryEnergy
-    val PrimaryContainer = PrimaryEnergy
-    val PrimaryFixed = Color(0xFFDDEFD9)
-    val PrimaryFixedDim = Color(0xFFC9E1C5)
-    val OnPrimary = Color(0xFFFFFFFF)
-    val OnPrimaryContainer = Color(0xFFE5F2D9)
-    val OnPrimaryFixed = Color(0xFF123B27)
-    val OnPrimaryFixedVariant = Color(0xFF1E4C32)
-    val Surface = Color(0xFFF8F8F2)
-    val Background = Color(0xFFF8F8F2)
-    val SurfaceDim = Color(0xFFE6EBE2)
-    val SurfaceBright = Color(0xFFF8F8F2)
-    val SurfaceContainerLowest = Color(0xFFFFFFFF)
-    val SurfaceContainerLow = Color(0xFFF4F6F0)
-    val SurfaceContainer = Color(0xFFEEF2E9)
-    val SurfaceContainerHigh = Color(0xFFE6ECE1)
-    val SurfaceContainerHighest = Color(0xFFDDE5D9)
-    val OnSurface = Color(0xFF17201B)
-    val OnSurfaceVariant = Color(0xFF4F5A52)
-    val InverseSurface = Color(0xFF2E352A)
-    val InverseOnSurface = Color(0xFFF1F5E9)
-    val Tertiary = Color(0xFF276A70)
-    val TertiaryContainer = Color(0xFF1F7378)
-    val Secondary = Color(0xFF525651)
-    val SecondaryContainer = Color(0xFFE5F2D9)
-    val Outline = Color(0xFFDDE4D5)
-    val OutlineVariant = Color(0xFFC9D3C0)
-    val Error = Color(0xFFBA1A1A)
-    val ErrorContainer = Color(0xFFFFDAD6)
-    val OnErrorContainer = Color(0xFF93000A)
+    val Primary = PrimaryLight
+    val PrimaryContainer = PrimaryContainerLight
+    val PrimaryFixed = PrimaryFixedLight
+    val PrimaryFixedDim = PrimaryFixedDimLight
+    val OnPrimary = OnPrimaryLight
+    val OnPrimaryContainer = OnPrimaryContainerLight
+    val OnPrimaryFixed = OnPrimaryFixedLight
+    val OnPrimaryFixedVariant = OnPrimaryFixedVariantLight
+    val Surface = SurfaceLight
+    val Background = BackgroundLight
+    val SurfaceDim = SurfaceDimLight
+    val SurfaceBright = SurfaceBrightLight
+    val SurfaceContainerLowest = SurfaceContainerLowestLight
+    val SurfaceContainerLow = SurfaceContainerLowLight
+    val SurfaceContainer = SurfaceContainerMediumLight
+    val SurfaceContainerHigh = SurfaceContainerHighLight
+    val SurfaceContainerHighest = SurfaceContainerHighestLight
+    val OnSurface = OnSurfaceLight
+    val OnSurfaceVariant = OnSurfaceVariantLight
+    val InverseSurface = InverseSurfaceLight
+    val InverseOnSurface = InverseOnSurfaceLight
+    val Tertiary = TertiaryLight
+    val TertiaryContainer = TertiaryContainerLight
+    val Secondary = SecondaryLight
+    val SecondaryContainer = SecondaryContainerLight
+    val Outline = OutlineLight
+    val OutlineVariant = OutlineVariantLight
+    val Error = ErrorLight
+    val ErrorContainer = ErrorContainerLight
+    val OnErrorContainer = OnErrorContainerLight
 }
 
 object StitchDarkTokens {
     val Primary = PrimaryDark
-    val PrimaryContainer = PrimaryDark
-    val PrimaryFixed = PrimaryContainerDark
-    val PrimaryFixedDim = PrimaryContainerDark
+    val PrimaryContainer = PrimaryContainerDark // Remediated: was PrimaryDark (1.3:1 contrast defect eliminated)
+    val PrimaryFixed = PrimaryFixedDark
+    val PrimaryFixedDim = PrimaryFixedDimDark
     val OnPrimary = OnPrimaryDark
-    val OnPrimaryContainer = OnPrimaryContainerDark
-    val OnPrimaryFixed = OnPrimaryContainerDark
-    val OnPrimaryFixedVariant = OnPrimaryDark
-    val Surface = BackgroundDark
+    val OnPrimaryContainer = OnPrimaryContainerDark // Remediated: 7.04:1 contrast against PrimaryContainerDark
+    val OnPrimaryFixed = OnPrimaryFixedDark
+    val OnPrimaryFixedVariant = OnPrimaryFixedVariantDark
+    val Surface = SurfaceDark
     val Background = BackgroundDark
-    val SurfaceDim = SurfaceDark
-    val SurfaceBright = SurfaceVariantDark
-    val SurfaceContainerLowest = SurfaceDark
-    val SurfaceContainerLow = Color(0xFF20251D)
-    val SurfaceContainer = SurfaceVariantDark
-    val SurfaceContainerHigh = Color(0xFF292F25)
-    val SurfaceContainerHighest = Color(0xFF333B2E)
-    val OnSurface = OnBackgroundDark
+    val SurfaceDim = SurfaceDimDark
+    val SurfaceBright = SurfaceBrightDark
+    val SurfaceContainerLowest = SurfaceContainerLowestDark
+    val SurfaceContainerLow = SurfaceContainerLowDark
+    val SurfaceContainer = SurfaceContainerMediumDark
+    val SurfaceContainerHigh = SurfaceContainerHighDark
+    val SurfaceContainerHighest = SurfaceContainerHighestDark
+    val OnSurface = OnSurfaceDark
     val OnSurfaceVariant = OnSurfaceVariantDark
-    val InverseSurface = Color(0xFFE2E3DD)
-    val InverseOnSurface = Color(0xFF17201B)
-    val Tertiary = SecondaryDark
-    val TertiaryContainer = SecondaryContainerDark
-    val Secondary = OnSurfaceVariantDark
+    val InverseSurface = InverseSurfaceDark
+    val InverseOnSurface = InverseOnSurfaceDark
+    val Tertiary = TertiaryDark
+    val TertiaryContainer = TertiaryContainerDark
+    val Secondary = SecondaryDark
     val SecondaryContainer = SecondaryContainerDark
     val Outline = OutlineDark
-    val OutlineVariant = OutlineDark.copy(alpha = 0.5f)
-    val Error = Color(0xFFFFB4AB)
-    val ErrorContainer = Color(0xFF93000A)
-    val OnErrorContainer = Color(0xFFFFDAD6)
+    val OutlineVariant = OutlineVariantDark
+    val Error = ErrorDark
+    val ErrorContainer = ErrorContainerDark
+    val OnErrorContainer = OnErrorContainerDark
 }
 
-// Shared component tokens: fully theme-aware with high contrast in both Light and Dark modes.
+// ============================================================================
+// 33 Backward-Compatible Composable Getters
+// Bound directly to MaterialTheme.colorScheme and LocalIsDarkTheme.
+// Resolves decoupling defect while preserving caller source-compatibility.
+// ============================================================================
+
 val StitchPrimary: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.Primary else StitchLightTokens.Primary
+    get() = MaterialTheme.colorScheme.primary
 
 val StitchPrimaryContainer: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.PrimaryContainer else StitchLightTokens.PrimaryContainer
+    get() = MaterialTheme.colorScheme.primaryContainer
 
 val StitchPrimaryFixed: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.PrimaryFixed else StitchLightTokens.PrimaryFixed
+    get() = if (LocalIsDarkTheme.current) StitchDarkTokens.PrimaryFixed else StitchLightTokens.PrimaryFixed
 
 val StitchPrimaryFixedDim: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.PrimaryFixedDim else StitchLightTokens.PrimaryFixedDim
+    get() = if (LocalIsDarkTheme.current) StitchDarkTokens.PrimaryFixedDim else StitchLightTokens.PrimaryFixedDim
 
 val StitchOnPrimary: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.OnPrimary else StitchLightTokens.OnPrimary
+    get() = MaterialTheme.colorScheme.onPrimary
 
 val StitchOnPrimaryContainer: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.OnPrimaryContainer else StitchLightTokens.OnPrimaryContainer
+    get() = MaterialTheme.colorScheme.onPrimaryContainer
 
 val StitchOnPrimaryFixed: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.OnPrimaryFixed else StitchLightTokens.OnPrimaryFixed
+    get() = if (LocalIsDarkTheme.current) StitchDarkTokens.OnPrimaryFixed else StitchLightTokens.OnPrimaryFixed
 
 val StitchOnPrimaryFixedVariant: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.OnPrimaryFixedVariant else StitchLightTokens.OnPrimaryFixedVariant
+    get() = if (LocalIsDarkTheme.current) StitchDarkTokens.OnPrimaryFixedVariant else StitchLightTokens.OnPrimaryFixedVariant
 
 val StitchSurface: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.Surface else StitchLightTokens.Surface
+    get() = MaterialTheme.colorScheme.surface
 
 val StitchBackground: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.Background else StitchLightTokens.Background
+    get() = MaterialTheme.colorScheme.background
 
 val StitchSurfaceDim: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.SurfaceDim else StitchLightTokens.SurfaceDim
+    get() = if (LocalIsDarkTheme.current) StitchDarkTokens.SurfaceDim else StitchLightTokens.SurfaceDim
 
 val StitchSurfaceBright: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.SurfaceBright else StitchLightTokens.SurfaceBright
+    get() = if (LocalIsDarkTheme.current) StitchDarkTokens.SurfaceBright else StitchLightTokens.SurfaceBright
 
 val StitchSurfaceContainerLowest: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.SurfaceContainerLowest else StitchLightTokens.SurfaceContainerLowest
+    get() = MaterialTheme.colorScheme.surfaceContainerLowest
 
 val StitchSurfaceLowest: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.SurfaceContainerLowest else StitchLightTokens.SurfaceContainerLowest
+    get() = MaterialTheme.colorScheme.surfaceContainerLowest
 
 val StitchSurfaceContainerLow: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.SurfaceContainerLow else StitchLightTokens.SurfaceContainerLow
+    get() = MaterialTheme.colorScheme.surfaceContainerLow
 
 val StitchSurfaceLow: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.SurfaceContainerLow else StitchLightTokens.SurfaceContainerLow
+    get() = MaterialTheme.colorScheme.surfaceContainerLow
 
 val StitchSurfaceContainer: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.SurfaceContainer else StitchLightTokens.SurfaceContainer
+    get() = MaterialTheme.colorScheme.surfaceContainer
 
 val StitchSurfaceContainerHigh: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.SurfaceContainerHigh else StitchLightTokens.SurfaceContainerHigh
+    get() = MaterialTheme.colorScheme.surfaceContainerHigh
 
 val StitchSurfaceHigh: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.SurfaceContainerHigh else StitchLightTokens.SurfaceContainerHigh
+    get() = MaterialTheme.colorScheme.surfaceContainerHigh
 
 val StitchSurfaceContainerHighest: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.SurfaceContainerHighest else StitchLightTokens.SurfaceContainerHighest
+    get() = MaterialTheme.colorScheme.surfaceContainerHighest
 
 val StitchOnSurface: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.OnSurface else StitchLightTokens.OnSurface
+    get() = MaterialTheme.colorScheme.onSurface
 
 val StitchOnSurfaceVariant: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.OnSurfaceVariant else StitchLightTokens.OnSurfaceVariant
+    get() = MaterialTheme.colorScheme.onSurfaceVariant
 
 val StitchInverseSurface: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.InverseSurface else StitchLightTokens.InverseSurface
+    get() = MaterialTheme.colorScheme.inverseSurface
 
 val StitchInverseOnSurface: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.InverseOnSurface else StitchLightTokens.InverseOnSurface
+    get() = MaterialTheme.colorScheme.inverseOnSurface
 
 val StitchTertiary: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.Tertiary else StitchLightTokens.Tertiary
+    get() = MaterialTheme.colorScheme.tertiary
 
 val StitchTertiaryContainer: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.TertiaryContainer else StitchLightTokens.TertiaryContainer
+    get() = MaterialTheme.colorScheme.tertiaryContainer
 
 val StitchSecondary: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.Secondary else StitchLightTokens.Secondary
+    get() = MaterialTheme.colorScheme.secondary
 
 val StitchSecondaryContainer: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.SecondaryContainer else StitchLightTokens.SecondaryContainer
+    get() = MaterialTheme.colorScheme.secondaryContainer
 
 val StitchOutline: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.Outline else StitchLightTokens.Outline
+    get() = MaterialTheme.colorScheme.outline
 
 val StitchOutlineVariant: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.OutlineVariant else StitchLightTokens.OutlineVariant
+    get() = MaterialTheme.colorScheme.outlineVariant
 
 val StitchError: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.Error else StitchLightTokens.Error
+    get() = MaterialTheme.colorScheme.error
 
 val StitchErrorContainer: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.ErrorContainer else StitchLightTokens.ErrorContainer
+    get() = MaterialTheme.colorScheme.errorContainer
 
 val StitchOnErrorContainer: Color
     @Composable
     @ReadOnlyComposable
-    get() = if (isSystemInDarkTheme()) StitchDarkTokens.OnErrorContainer else StitchLightTokens.OnErrorContainer
-
+    get() = MaterialTheme.colorScheme.onErrorContainer

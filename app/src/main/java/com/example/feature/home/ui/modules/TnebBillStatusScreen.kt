@@ -37,19 +37,11 @@ import com.example.core.legal.LegalComplianceDialog
 import com.example.core.legal.LegalSection
 import com.example.feature.ebservice.util.formatConsumerNumber
 import com.example.ui.theme.*
+import com.example.ui.components.SolarEaseButton
+import com.example.ui.components.SolarEaseButtonVariant
+import com.example.ui.theme.SolarEaseSemanticColors
 
-// Official SolarEase Design Palette with dark mode responsiveness
-private val SolarEaseEmerald: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) PrimaryDark else Color(0xFF245B3A)
-private val SolarEaseEmeraldDark: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) PrimaryContainerDark else Color(0xFF1E4C32)
-private val SolarEaseEmeraldContainer: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) PrimaryContainerDark else Color(0xFFDDEFD9)
-private val SoftBackground: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) BackgroundDark else Color(0xFFF8F8F2)
-private val InfoBlueContainer: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) SecondaryContainerDark else Color(0xFFE7F2F3)
-private val InfoBlueText: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OnSecondaryContainerDark else Color(0xFF1D5156)
-private val CardBorderColor: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OutlineDark else Color(0xFFD2DBD1)
-private val TextDark: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OnBackgroundDark else Color(0xFF17201B)
-private val TextMuted: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) OnSurfaceVariantDark else Color(0xFF4F5A52)
-private val ErrorContainer: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFF93000A) else Color(0xFFFFDAD6)
-private val ErrorText: Color @Composable @ReadOnlyComposable get() = if (isSystemInDarkTheme()) Color(0xFFFFDAD6) else Color(0xFFBA1A1A)
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -174,14 +166,14 @@ fun TnebBillStatusEntryScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = SoftBackground,
-                    titleContentColor = TextDark,
-                    navigationIconContentColor = TextDark,
-                    actionIconContentColor = TextDark
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
+                    actionIconContentColor = MaterialTheme.colorScheme.onSurface
                 )
             )
         },
-        containerColor = SoftBackground
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         Column(
             modifier = Modifier
@@ -199,13 +191,13 @@ fun TnebBillStatusEntryScreen(
                     modifier = Modifier
                         .size(52.dp)
                         .clip(RoundedCornerShape(16.dp))
-                        .background(InfoBlueContainer),
+                        .background(MaterialTheme.colorScheme.secondaryContainer),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Icons.Default.ReceiptLong,
                         contentDescription = null,
-                        tint = InfoBlueText,
+                        tint = MaterialTheme.colorScheme.onSecondaryContainer,
                         modifier = Modifier.size(28.dp)
                     )
                 }
@@ -215,13 +207,13 @@ fun TnebBillStatusEntryScreen(
                         text = "Check Your Bill Status",
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Bold,
-                        color = TextDark
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = "Instant TNPDCL utility ledger synchronization",
                         fontSize = 13.sp,
-                        color = TextMuted
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -252,12 +244,12 @@ fun TnebBillStatusEntryScreen(
                             text = "Service Connection Number",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = TextDark
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
                             text = if (serviceConnectionNumber.length in 11..12) "${serviceConnectionNumber.length} Digits" else "${serviceConnectionNumber.length}/12 Digits",
                             fontSize = 11.sp,
-                            color = if (serviceConnectionNumber.length in 11..12) SolarEaseEmerald else TextMuted,
+                            color = if (serviceConnectionNumber.length in 11..12) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                             fontWeight = FontWeight.Medium
                         )
                     }
@@ -269,7 +261,7 @@ fun TnebBillStatusEntryScreen(
                         onValueChange = { viewModel.updateServiceConnectionNumber(it) },
                         placeholder = { Text("e.g. 042345678901", color = inputPlaceholder) },
                         leadingIcon = {
-                            Icon(Icons.Default.Bolt, contentDescription = null, tint = SolarEaseEmerald)
+                            Icon(Icons.Default.Bolt, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                         },
                         trailingIcon = {
                             androidx.compose.animation.AnimatedVisibility(
@@ -277,7 +269,7 @@ fun TnebBillStatusEntryScreen(
                                 enter = androidx.compose.animation.fadeIn(androidx.compose.animation.core.tween(150)) + androidx.compose.animation.scaleIn(androidx.compose.animation.core.tween(150)),
                                 exit = androidx.compose.animation.fadeOut(androidx.compose.animation.core.tween(150)) + androidx.compose.animation.scaleOut(androidx.compose.animation.core.tween(150))
                             ) {
-                                Icon(Icons.Default.CheckCircle, contentDescription = "Valid", tint = SolarEaseEmerald)
+                                Icon(Icons.Default.CheckCircle, contentDescription = "Valid", tint = MaterialTheme.colorScheme.primary)
                             }
                         },
                         modifier = Modifier.fillMaxWidth(),
@@ -298,7 +290,7 @@ fun TnebBillStatusEntryScreen(
                     Text(
                         text = "Found on your physical electricity bill or meter card",
                         fontSize = 12.sp,
-                        color = TextMuted,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(top = 4.dp)
                     )
 
@@ -314,12 +306,12 @@ fun TnebBillStatusEntryScreen(
                             text = "Registered Mobile Number",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = TextDark
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
                             text = "${registeredMobileNumber.length}/10 Digits",
                             fontSize = 11.sp,
-                            color = if (registeredMobileNumber.length == 10) SolarEaseEmerald else TextMuted,
+                            color = if (registeredMobileNumber.length == 10) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                             fontWeight = FontWeight.Medium
                         )
                     }
@@ -339,7 +331,7 @@ fun TnebBillStatusEntryScreen(
                                     text = "+91",
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 14.sp,
-                                    color = TextDark
+                                    color = MaterialTheme.colorScheme.onSurface
                                 )
                                 Spacer(modifier = Modifier.width(6.dp))
                                 Box(
@@ -356,7 +348,7 @@ fun TnebBillStatusEntryScreen(
                                 enter = androidx.compose.animation.fadeIn(androidx.compose.animation.core.tween(150)) + androidx.compose.animation.scaleIn(androidx.compose.animation.core.tween(150)),
                                 exit = androidx.compose.animation.fadeOut(androidx.compose.animation.core.tween(150)) + androidx.compose.animation.scaleOut(androidx.compose.animation.core.tween(150))
                             ) {
-                                Icon(Icons.Default.CheckCircle, contentDescription = "Valid", tint = SolarEaseEmerald)
+                                Icon(Icons.Default.CheckCircle, contentDescription = "Valid", tint = MaterialTheme.colorScheme.primary)
                             }
                         },
                         modifier = Modifier.fillMaxWidth(),
@@ -420,13 +412,13 @@ fun TnebBillStatusEntryScreen(
                 Icon(
                     imageVector = Icons.Default.Search,
                     contentDescription = null,
-                    tint = SolarEaseEmerald,
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(16.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = "Don't know your Consumer Number? How to find it",
-                    color = SolarEaseEmerald,
+                    color = MaterialTheme.colorScheme.primary,
                     fontSize = 13.sp,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -435,38 +427,16 @@ fun TnebBillStatusEntryScreen(
             Spacer(modifier = Modifier.height(28.dp))
 
             // Primary CTA Button
-            Button(
+            SolarEaseButton(
                 onClick = { viewModel.checkBillStatus() },
+                text = if (isChecking) "Loading TNPDCL Portal..." else "Get Security CAPTCHA",
+                enabled = isValid && !isChecking,
+                isLoading = isChecking,
+                trailingIcon = if (!isChecking) Icons.AutoMirrored.Filled.ArrowForward else null,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(52.dp),
-                enabled = isValid && !isChecking,
-                shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary,
-                    disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                    disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-                )
-            ) {
-                if (isChecking) {
-                    CircularProgressIndicator(
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.size(22.dp),
-                        strokeWidth = 2.dp
-                    )
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Text("Loading TNPDCL Portal...", fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                } else {
-                    Text("Get Security CAPTCHA", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                        contentDescription = null,
-                        modifier = Modifier.size(18.dp)
-                    )
-                }
-            }
+                    .heightIn(min = 48.dp)
+            )
 
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -505,7 +475,7 @@ fun TnebBillStatusEntryScreen(
                 Text(
                     text = "Cookie & Data Minimization Policy",
                     fontSize = 11.sp,
-                    color = SolarEaseEmerald,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold,
                     textDecoration = TextDecoration.Underline,
                     modifier = Modifier.clickable { activeLegalSection = LegalSection.COOKIE_STORAGE }
@@ -535,7 +505,7 @@ fun TnebBillStatusEntryScreen(
             },
             confirmButton = {
                 TextButton(onClick = { showHelpDialog = false }) {
-                    Text("Got It", color = SolarEaseEmerald, fontWeight = FontWeight.Bold)
+                    Text("Got It", color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
                 }
             }
         )
@@ -568,17 +538,17 @@ fun TnebCaptchaVerificationScreen(
                 },
                 actions = {
                     TextButton(onClick = onNavigateBack) {
-                        Text("Cancel", color = SolarEaseEmerald, fontWeight = FontWeight.SemiBold)
+                        Text("Cancel", color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = SoftBackground,
-                    titleContentColor = TextDark,
-                    navigationIconContentColor = TextDark
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onSurface
                 )
             )
         },
-        containerColor = SoftBackground
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         Column(
             modifier = Modifier
@@ -599,7 +569,7 @@ fun TnebCaptchaVerificationScreen(
                     modifier = Modifier
                         .size(16.dp)
                         .clip(CircleShape)
-                        .background(SolarEaseEmerald),
+                        .background(MaterialTheme.colorScheme.primary),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
@@ -614,7 +584,7 @@ fun TnebCaptchaVerificationScreen(
                     text = "Step 2 of 2 • TNPDCL Portal Sync",
                     fontSize = 12.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = TextDark
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
@@ -639,10 +609,10 @@ fun TnebCaptchaVerificationScreen(
                             modifier = Modifier
                                 .size(40.dp)
                                 .clip(RoundedCornerShape(10.dp))
-                                .background(SolarEaseEmeraldContainer),
+                                .background(MaterialTheme.colorScheme.primaryContainer),
                             contentAlignment = Alignment.Center
                         ) {
-                            Icon(Icons.Default.Person, contentDescription = null, tint = SolarEaseEmerald)
+                            Icon(Icons.Default.Person, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                         }
                         Spacer(modifier = Modifier.width(12.dp))
                         Column {
@@ -650,20 +620,20 @@ fun TnebCaptchaVerificationScreen(
                                 text = "Service: ${formatConsumerNumber(serviceConnectionNumber)}",
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 14.sp,
-                                color = TextDark
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                             Text(
                                 text = "Mobile: +91 ${registeredMobileNumber.take(5)} ${registeredMobileNumber.takeLast(5)}",
                                 fontSize = 12.sp,
-                                color = TextMuted
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     }
 
                     TextButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.Edit, contentDescription = "Edit", modifier = Modifier.size(16.dp), tint = SolarEaseEmerald)
+                        Icon(Icons.Default.Edit, contentDescription = "Edit", modifier = Modifier.size(16.dp), tint = MaterialTheme.colorScheme.primary)
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("Edit", color = SolarEaseEmerald, fontWeight = FontWeight.SemiBold)
+                        Text("Edit", color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
                     }
                 }
             }
@@ -675,18 +645,18 @@ fun TnebCaptchaVerificationScreen(
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
-                    colors = CardDefaults.cardColors(containerColor = ErrorContainer),
+                    colors = CardDefaults.cardColors(containerColor = SolarEaseSemanticColors.ErrorContainer),
                     border = BorderStroke(1.dp, Color(0xFFFFCDD2))
                 ) {
                     Row(
                         modifier = Modifier.padding(14.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(Icons.Default.ErrorOutline, contentDescription = null, tint = ErrorText)
+                        Icon(Icons.Default.ErrorOutline, contentDescription = null, tint = SolarEaseSemanticColors.ErrorText)
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
                             text = "Invalid CAPTCHA code entered. Please tap reload to get a new code and try again.",
-                            color = ErrorText,
+                            color = SolarEaseSemanticColors.ErrorText,
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Medium,
                             lineHeight = 18.sp
@@ -715,13 +685,13 @@ fun TnebCaptchaVerificationScreen(
                         text = "Enter Security Code",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
-                        color = TextDark
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = "Type the characters shown in the security image below.",
                         fontSize = 13.sp,
-                        color = TextMuted,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         textAlign = TextAlign.Center
                     )
 
@@ -760,7 +730,7 @@ fun TnebCaptchaVerificationScreen(
                                     contentScale = androidx.compose.ui.layout.ContentScale.Fit
                                 )
                             } else {
-                                CircularProgressIndicator(color = SolarEaseEmerald, modifier = Modifier.size(24.dp))
+                                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary, modifier = Modifier.size(24.dp))
                             }
                         }
 
@@ -776,7 +746,7 @@ fun TnebCaptchaVerificationScreen(
                             Icon(
                                 imageVector = Icons.Default.Refresh,
                                 contentDescription = "Reload CAPTCHA",
-                                tint = SolarEaseEmerald,
+                                tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(26.dp)
                             )
                         }
@@ -800,7 +770,7 @@ fun TnebCaptchaVerificationScreen(
                         ),
                         shape = RoundedCornerShape(12.dp),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = SolarEaseEmerald,
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
                             unfocusedBorderColor = captchaInputBorder,
                             focusedContainerColor = captchaInputBg,
                             unfocusedContainerColor = captchaInputBg,
@@ -814,7 +784,7 @@ fun TnebCaptchaVerificationScreen(
                     Text(
                         text = "Code is case-sensitive • Numbers & Letters",
                         fontSize = 12.sp,
-                        color = TextMuted
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -822,24 +792,16 @@ fun TnebCaptchaVerificationScreen(
             Spacer(modifier = Modifier.height(28.dp))
 
             // Primary Check Bill Status Button
-            Button(
+            SolarEaseButton(
                 onClick = { viewModel.checkBillStatus() },
+                text = "Check Bill Status",
+                enabled = captchaInput.isNotBlank() && submitState != SubmitState.SUBMITTING,
+                isLoading = submitState == SubmitState.SUBMITTING,
+                trailingIcon = Icons.AutoMirrored.Filled.ArrowForward,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(52.dp),
-                enabled = captchaInput.isNotBlank() && submitState != SubmitState.SUBMITTING,
-                shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary,
-                    disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                    disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-                )
-            ) {
-                Text("Check Bill Status", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                Spacer(modifier = Modifier.width(8.dp))
-                Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, modifier = Modifier.size(18.dp))
-            }
+                    .heightIn(min = 48.dp)
+            )
         }
     }
 }
@@ -860,12 +822,12 @@ fun TnebBillLoadingScreen(
             TopAppBar(
                 title = { Text("Retrieving Bill Details", fontWeight = FontWeight.Bold) },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = SoftBackground,
-                    titleContentColor = TextDark
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface
                 )
             )
         },
-        containerColor = SoftBackground
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         Column(
             modifier = Modifier
@@ -878,20 +840,20 @@ fun TnebBillLoadingScreen(
             // Consumer pill
             Surface(
                 shape = RoundedCornerShape(20.dp),
-                color = InfoBlueContainer,
+                color = MaterialTheme.colorScheme.secondaryContainer,
                 modifier = Modifier.padding(bottom = 24.dp)
             ) {
                 Row(
                     modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(Icons.Default.Verified, contentDescription = null, tint = InfoBlueText, modifier = Modifier.size(16.dp))
+                    Icon(Icons.Default.Verified, contentDescription = null, tint = MaterialTheme.colorScheme.onSecondaryContainer, modifier = Modifier.size(16.dp))
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = "Service: ${serviceConnectionNumber.take(4)} • TNPDCL Sync",
                         fontSize = 12.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = InfoBlueText
+                        color = MaterialTheme.colorScheme.onSecondaryContainer
                     )
                 }
             }
@@ -912,15 +874,15 @@ fun TnebBillLoadingScreen(
                         modifier = Modifier
                             .size(72.dp)
                             .clip(CircleShape)
-                            .background(SolarEaseEmeraldContainer),
+                            .background(MaterialTheme.colorScheme.primaryContainer),
                         contentAlignment = Alignment.Center
                     ) {
                         CircularProgressIndicator(
-                            color = SolarEaseEmerald,
+                            color = MaterialTheme.colorScheme.primary,
                             strokeWidth = 3.dp,
                             modifier = Modifier.size(60.dp)
                         )
-                        Icon(Icons.Default.Bolt, contentDescription = null, tint = SolarEaseEmerald, modifier = Modifier.size(28.dp))
+                        Icon(Icons.Default.Bolt, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(28.dp))
                     }
 
                     Spacer(modifier = Modifier.height(20.dp))
@@ -929,7 +891,7 @@ fun TnebBillLoadingScreen(
                         text = "Connecting to TNPDCL Portal...",
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
-                        color = TextDark
+                        color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Spacer(modifier = Modifier.height(6.dp))
@@ -937,7 +899,7 @@ fun TnebBillLoadingScreen(
                     Text(
                         text = "Securely synchronizing your latest utility billing ledger and tariff slab.",
                         fontSize = 13.sp,
-                        color = TextMuted,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         textAlign = TextAlign.Center
                     )
 
@@ -952,19 +914,19 @@ fun TnebBillLoadingScreen(
                             verticalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(Icons.Default.CheckCircle, contentDescription = null, tint = SolarEaseEmerald, modifier = Modifier.size(18.dp))
+                            Icon(Icons.Default.CheckCircle, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(18.dp))
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text("Security verification validated", fontSize = 13.sp, fontWeight = FontWeight.Medium, color = TextDark)
+                            Text("Security verification validated", fontSize = 13.sp, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface)
                         }
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            CircularProgressIndicator(color = SolarEaseEmerald, modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
+                            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary, modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
                             Spacer(modifier = Modifier.width(10.dp))
-                            Text("Fetching bi-monthly ledger...", fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = SolarEaseEmerald)
+                            Text("Fetching bi-monthly ledger...", fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                         }
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Box(modifier = Modifier.size(18.dp).clip(CircleShape).background(MaterialTheme.colorScheme.outlineVariant))
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text("Computing Solar Rooftop savings", fontSize = 13.sp, color = TextMuted)
+                            Text("Computing Solar Rooftop savings", fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
 
@@ -973,7 +935,7 @@ fun TnebBillLoadingScreen(
                     Text(
                         text = "This typically takes 3 to 5 seconds depending on official utility server response.",
                         fontSize = 12.sp,
-                        color = TextMuted,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         textAlign = TextAlign.Center
                     )
                 }
@@ -982,7 +944,7 @@ fun TnebBillLoadingScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             TextButton(onClick = onCancel) {
-                Text("Cancel & Return", color = SolarEaseEmerald, fontWeight = FontWeight.SemiBold)
+                Text("Cancel & Return", color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
             }
         }
     }
@@ -1032,12 +994,12 @@ fun TnebBillErrorScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = SoftBackground,
-                    titleContentColor = TextDark
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface
                 )
             )
         },
-        containerColor = SoftBackground
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         Column(
             modifier = Modifier
@@ -1061,10 +1023,10 @@ fun TnebBillErrorScreen(
                         modifier = Modifier
                             .size(64.dp)
                             .clip(CircleShape)
-                            .background(ErrorContainer),
+                            .background(SolarEaseSemanticColors.ErrorContainer),
                         contentAlignment = Alignment.Center
                     ) {
-                        Icon(errorIcon, contentDescription = null, tint = ErrorText, modifier = Modifier.size(32.dp))
+                        Icon(errorIcon, contentDescription = null, tint = SolarEaseSemanticColors.ErrorText, modifier = Modifier.size(32.dp))
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -1073,7 +1035,7 @@ fun TnebBillErrorScreen(
                         text = titleText,
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
-                        color = TextDark
+                        color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -1081,7 +1043,7 @@ fun TnebBillErrorScreen(
                     Text(
                         text = descriptionText,
                         fontSize = 13.sp,
-                        color = TextMuted,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         textAlign = TextAlign.Center,
                         lineHeight = 18.sp
                     )
@@ -1100,12 +1062,12 @@ fun TnebBillErrorScreen(
                                 text = "Service No: ${serviceConnectionNumber.ifBlank { "Not available" }}",
                                 fontSize = 13.sp,
                                 fontWeight = FontWeight.SemiBold,
-                                color = TextDark
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                             Text(
                                 text = "Mobile: ${if (registeredMobileNumber.isNotBlank()) "+91 $registeredMobileNumber" else "Not available"}",
                                 fontSize = 12.sp,
-                                color = TextMuted
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     }
@@ -1114,34 +1076,26 @@ fun TnebBillErrorScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Button(
+            SolarEaseButton(
                 onClick = onRetry,
+                text = "Retry Retrieval",
+                leadingIcon = Icons.Default.Refresh,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(52.dp),
-                shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = SolarEaseEmerald)
-            ) {
-                Icon(Icons.Default.Refresh, contentDescription = null, modifier = Modifier.size(18.dp))
-                Spacer(modifier = Modifier.width(8.dp))
-                Text("Retry Retrieval", fontWeight = FontWeight.Bold, fontSize = 15.sp)
-            }
+                    .heightIn(min = 48.dp)
+            )
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            OutlinedButton(
+            SolarEaseButton(
                 onClick = onEditDetails,
+                text = "Edit Consumer Details",
+                variant = SolarEaseButtonVariant.OUTLINED,
+                leadingIcon = Icons.Default.Edit,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp),
-                shape = RoundedCornerShape(16.dp),
-                border = BorderStroke(1.dp, SolarEaseEmerald),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = SolarEaseEmerald)
-            ) {
-                Icon(Icons.Default.Edit, contentDescription = null, modifier = Modifier.size(16.dp))
-                Spacer(modifier = Modifier.width(8.dp))
-                Text("Edit Consumer Details", fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
-            }
+                    .heightIn(min = 48.dp)
+            )
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -1149,7 +1103,7 @@ fun TnebBillErrorScreen(
             Text(
                 text = "Need help? Contact TNEB Minnagam 1912 Helpline",
                 fontSize = 12.sp,
-                color = SolarEaseEmerald,
+                color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.Medium
             )
         }

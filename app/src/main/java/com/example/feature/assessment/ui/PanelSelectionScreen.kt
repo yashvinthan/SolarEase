@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.R
+import com.example.ui.components.SolarEaseStepProgressBar
 import com.example.ui.theme.*
 
 @Composable
@@ -60,10 +61,11 @@ fun PanelSelectionScreen(
                     title = "Solar Estimation",
                     onNavigateBack = onNavigateBack
                 )
-                StitchStepProgressBar(
+                SolarEaseStepProgressBar(
                     currentStep = 8,
-                    totalSteps = 8,
-                    stepTitle = "Panel Specification"
+                    totalSteps = 12,
+                    stepTitle = "Panel Specification",
+                    category = "DCR vs Non-DCR"
                 )
             }
         },

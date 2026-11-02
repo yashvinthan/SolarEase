@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.R
+import com.example.ui.components.SolarEaseStepProgressBar
 import com.example.ui.theme.*
 
 @Composable
@@ -48,10 +49,11 @@ fun SystemTypeScreen(
                     title = "System Requirements",
                     onNavigateBack = onNavigateBack
                 )
-                StitchStepProgressBar(
+                SolarEaseStepProgressBar(
                     currentStep = 3,
-                    totalSteps = 8,
-                    stepTitle = "System Configuration"
+                    totalSteps = 12,
+                    stepTitle = "Solar System Type",
+                    category = "Grid Configuration"
                 )
             }
         },

@@ -42,15 +42,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.core.session.UserSession
-import com.example.feature.lens.ui.theme.GeistFontFamily
-import com.example.feature.lens.ui.theme.HankenGroteskFontFamily
-import com.example.feature.lens.ui.theme.LensColors
-import com.example.feature.lens.ui.theme.LensTypography
+import com.example.ui.theme.*
+import androidx.compose.ui.text.font.FontFamily
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-private val ChatbotBlue = Color(0xFF2563EB)
+private val GeistFontFamily = FontFamily.Default
+private val HankenGroteskFontFamily = FontFamily.Default
+private val labelCaps = androidx.compose.ui.text.TextStyle(
+    fontFamily = FontFamily.Default,
+    fontWeight = FontWeight.Medium,
+    fontSize = 11.sp,
+    lineHeight = 14.sp,
+    letterSpacing = 0.2.sp
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -81,7 +87,7 @@ fun ElectricityChatbotRoute(
     }
 
     Scaffold(
-        containerColor = LensColors.Surface,
+        containerColor = StitchSurface,
         topBar = {
             TopAppBar(
                 title = {
@@ -91,13 +97,13 @@ fun ElectricityChatbotRoute(
                             fontFamily = HankenGroteskFontFamily,
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 18.sp,
-                            color = LensColors.OnSurface
+                            color = StitchOnSurface
                         )
                         Text(
                             text = if (uiState.showHistory) "ARCHIVED SESSIONS" else "AI Domain Expert",
                             fontFamily = GeistFontFamily,
                             fontSize = 11.sp,
-                            color = LensColors.OnSurfaceVariant
+                            color = StitchOnSurfaceVariant
                         )
                     }
                 },
@@ -114,7 +120,7 @@ fun ElectricityChatbotRoute(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = LensColors.OnSurface
+                            tint = StitchOnSurface
                         )
                     }
                 },
@@ -127,7 +133,7 @@ fun ElectricityChatbotRoute(
                             Icon(
                                 imageVector = Icons.Default.History,
                                 contentDescription = "History",
-                                tint = LensColors.Secondary
+                                tint = StitchSecondary
                             )
                         }
                         IconButton(
@@ -140,7 +146,7 @@ fun ElectricityChatbotRoute(
                             Icon(
                                 imageVector = Icons.Default.Add,
                                 contentDescription = "New Chat",
-                                tint = LensColors.PrimaryContainer
+                                tint = StitchPrimaryContainer
                             )
                         }
                     } else {
@@ -154,13 +160,13 @@ fun ElectricityChatbotRoute(
                             Icon(
                                 imageVector = Icons.Default.Add,
                                 contentDescription = "New Chat",
-                                tint = LensColors.PrimaryContainer
+                                tint = StitchPrimaryContainer
                             )
                         }
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = LensColors.Surface
+                    containerColor = StitchSurface
                 )
             )
         },
@@ -186,7 +192,7 @@ fun ElectricityChatbotRoute(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .background(LensColors.Surface)
+                .background(StitchSurface)
         ) {
             if (uiState.showHistory) {
                 ChatHistoryView(
@@ -293,7 +299,7 @@ private fun RealContextRibbon() {
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 4.dp),
         shape = RoundedCornerShape(8.dp),
-        color = LensColors.SurfaceContainerLow,
+        color = StitchSurfaceContainerLow,
         shadowElevation = 0.5.dp
     ) {
         Row(
@@ -309,24 +315,24 @@ private fun RealContextRibbon() {
                 Icon(
                     imageVector = Icons.Default.Bolt,
                     contentDescription = null,
-                    tint = LensColors.PrimaryContainer,
+                    tint = StitchPrimaryContainer,
                     modifier = Modifier.size(15.dp)
                 )
                 Text(
                     text = "CONTEXT SYNCED",
-                    style = LensTypography.labelCaps,
-                    color = LensColors.OnSurfaceVariant
+                    style = labelCaps,
+                    color = StitchOnSurfaceVariant
                 )
                 Text(
                     text = "•",
-                    color = LensColors.OutlineVariant,
+                    color = StitchOutlineVariant,
                     fontSize = 12.sp
                 )
                 Text(
                     text = contextInfo,
                     fontFamily = GeistFontFamily,
                     fontSize = 12.sp,
-                    color = LensColors.OnSurface,
+                    color = StitchOnSurface,
                     fontWeight = FontWeight.Medium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -341,14 +347,14 @@ private fun RealContextRibbon() {
                     modifier = Modifier
                         .size(6.dp)
                         .clip(CircleShape)
-                        .background(LensColors.PrimaryContainer.copy(alpha = pulseAlpha))
+                        .background(StitchPrimaryContainer.copy(alpha = pulseAlpha))
                 )
                 Text(
                     text = "LIVE",
                     fontFamily = GeistFontFamily,
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Bold,
-                    color = LensColors.Primary
+                    color = StitchPrimary
                 )
             }
         }
@@ -367,7 +373,7 @@ private fun ConfigurationBarStitch(
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = LensColors.SurfaceContainerLowest,
+        color = StitchSurfaceContainerLowest,
         shadowElevation = 1.dp
     ) {
         Column(
@@ -387,19 +393,19 @@ private fun ConfigurationBarStitch(
                     Icon(
                         imageVector = Icons.Default.Translate,
                         contentDescription = null,
-                        tint = LensColors.Secondary,
+                        tint = StitchSecondary,
                         modifier = Modifier.size(14.dp)
                     )
                     Text(
                         text = if (currentLanguage == "ta") "மொழி அமைப்புகள்" else "Language",
-                        style = LensTypography.labelCaps,
-                        color = LensColors.OnSurfaceVariant
+                        style = labelCaps,
+                        color = StitchOnSurfaceVariant
                     )
                 }
 
                 Surface(
                     shape = RoundedCornerShape(8.dp),
-                    color = LensColors.SurfaceContainerHigh
+                    color = StitchSurfaceContainerHigh
                 ) {
                     Row(modifier = Modifier.padding(2.dp)) {
                         LanguageTab(
@@ -433,8 +439,8 @@ private fun ConfigurationBarStitch(
             ) {
                 Text(
                     text = "PERSONA",
-                    style = LensTypography.labelCaps,
-                    color = LensColors.Secondary,
+                    style = labelCaps,
+                    color = StitchSecondary,
                     modifier = Modifier.padding(end = 2.dp)
                 )
 
@@ -461,7 +467,7 @@ private fun LanguageTab(
 ) {
     Surface(
         shape = RoundedCornerShape(6.dp),
-        color = if (isSelected) LensColors.PrimaryContainer else Color.Transparent,
+        color = if (isSelected) StitchPrimaryContainer else Color.Transparent,
         modifier = Modifier.clickable { onClick() }
     ) {
         Text(
@@ -469,7 +475,7 @@ private fun LanguageTab(
             fontFamily = GeistFontFamily,
             fontSize = 11.sp,
             fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-            color = if (isSelected) LensColors.OnPrimary else LensColors.OnSurfaceVariant,
+            color = if (isSelected) StitchOnPrimary else StitchOnSurfaceVariant,
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
         )
     }
@@ -484,15 +490,15 @@ private fun PersonaChip(
     onClick: () -> Unit
 ) {
     val backgroundColor = when {
-        isSelected && modeKey == "engineering" -> LensColors.InverseSurface
-        isSelected -> LensColors.PrimaryContainer
-        else -> LensColors.SurfaceContainerLow
+        isSelected && modeKey == "engineering" -> StitchInverseSurface
+        isSelected -> StitchPrimaryContainer
+        else -> StitchSurfaceContainerLow
     }
 
     val contentColor = when {
-        isSelected && modeKey == "engineering" -> LensColors.InverseOnSurface
-        isSelected -> LensColors.OnPrimary
-        else -> LensColors.Secondary
+        isSelected && modeKey == "engineering" -> StitchInverseOnSurface
+        isSelected -> StitchOnPrimary
+        else -> StitchSecondary
     }
 
     Surface(
@@ -509,7 +515,7 @@ private fun PersonaChip(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = if (isSelected && modeKey == "engineering") LensColors.PrimaryFixed else contentColor,
+                tint = if (isSelected && modeKey == "engineering") StitchPrimaryFixed else contentColor,
                 modifier = Modifier.size(14.dp)
             )
             Text(
@@ -523,7 +529,7 @@ private fun PersonaChip(
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(3.dp))
-                        .background(LensColors.Primary)
+                        .background(StitchPrimary)
                         .padding(horizontal = 4.dp, vertical = 1.dp)
                 ) {
                     Text(
@@ -531,7 +537,7 @@ private fun PersonaChip(
                         fontFamily = GeistFontFamily,
                         fontSize = 9.sp,
                         fontWeight = FontWeight.Bold,
-                        color = LensColors.OnPrimary
+                        color = StitchOnPrimary
                     )
                 }
             }
@@ -579,7 +585,7 @@ private fun EmptyWelcomeStateStitch(
             Surface(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
-                color = LensColors.SurfaceContainerLowest,
+                color = StitchSurfaceContainerLowest,
                 shadowElevation = 1.dp
             ) {
                 Column(
@@ -599,13 +605,13 @@ private fun EmptyWelcomeStateStitch(
                                 modifier = Modifier
                                     .size(38.dp)
                                     .clip(RoundedCornerShape(8.dp))
-                                    .background(LensColors.SurfaceContainer),
+                                    .background(StitchSurfaceContainer),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.SolarPower,
                                     contentDescription = null,
-                                    tint = LensColors.PrimaryContainer,
+                                    tint = StitchPrimaryContainer,
                                     modifier = Modifier.size(22.dp)
                                 )
                             }
@@ -615,27 +621,27 @@ private fun EmptyWelcomeStateStitch(
                                     fontFamily = HankenGroteskFontFamily,
                                     fontWeight = FontWeight.SemiBold,
                                     fontSize = 16.sp,
-                                    color = LensColors.OnSurface
+                                    color = StitchOnSurface
                                 )
                                 Text(
                                     text = "Residential & Commercial Advisory",
                                     fontFamily = GeistFontFamily,
                                     fontSize = 11.sp,
-                                    color = LensColors.OnSurfaceVariant
+                                    color = StitchOnSurfaceVariant
                                 )
                             }
                         }
 
                         Surface(
                             shape = RoundedCornerShape(6.dp),
-                            color = LensColors.PrimaryFixed.copy(alpha = 0.25f)
+                            color = StitchPrimaryFixed.copy(alpha = 0.25f)
                         ) {
                             Text(
                                 text = "Ready",
                                 fontFamily = GeistFontFamily,
                                 fontWeight = FontWeight.Medium,
                                 fontSize = 11.sp,
-                                color = LensColors.Primary,
+                                color = StitchPrimary,
                                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                             )
                         }
@@ -645,7 +651,7 @@ private fun EmptyWelcomeStateStitch(
                         text = welcomeDesc,
                         fontFamily = GeistFontFamily,
                         fontSize = 13.sp,
-                        color = LensColors.OnSurfaceVariant,
+                        color = StitchOnSurfaceVariant,
                         lineHeight = 18.sp
                     )
                 }
@@ -663,13 +669,13 @@ private fun EmptyWelcomeStateStitch(
             ) {
                 Text(
                     text = if (isTamil) "பரிந்துரைக்கப்பட்ட கேள்விகள்" else "SUGGESTED INQUIRIES",
-                    style = LensTypography.labelCaps,
-                    color = LensColors.OnSurfaceVariant
+                    style = labelCaps,
+                    color = StitchOnSurfaceVariant
                 )
                 Text(
                     text = "SELECT TO ASK",
-                    style = LensTypography.labelCaps,
-                    color = LensColors.Primary
+                    style = labelCaps,
+                    color = StitchPrimary
                 )
             }
         }
@@ -681,7 +687,7 @@ private fun EmptyWelcomeStateStitch(
                     .fillMaxWidth()
                     .clickable { onSuggestionClicked(title) },
                 shape = RoundedCornerShape(10.dp),
-                color = LensColors.SurfaceContainerLowest,
+                color = StitchSurfaceContainerLowest,
                 shadowElevation = 1.dp
             ) {
                 Row(
@@ -698,20 +704,20 @@ private fun EmptyWelcomeStateStitch(
                             fontFamily = HankenGroteskFontFamily,
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 14.sp,
-                            color = LensColors.OnSurface
+                            color = StitchOnSurface
                         )
                         Text(
                             text = subtitle,
                             fontFamily = GeistFontFamily,
                             fontSize = 12.sp,
-                            color = LensColors.OnSurfaceVariant,
+                            color = StitchOnSurfaceVariant,
                             lineHeight = 16.sp
                         )
                     }
                     Icon(
                         imageVector = Icons.Default.ChevronRight,
                         contentDescription = null,
-                        tint = LensColors.OutlineVariant,
+                        tint = StitchOutlineVariant,
                         modifier = Modifier.size(20.dp)
                     )
                 }
@@ -734,7 +740,7 @@ private fun UserMessageBubbleStitch(message: ChatMessage) {
     ) {
         Surface(
             shape = RoundedCornerShape(topStart = 14.dp, topEnd = 2.dp, bottomStart = 14.dp, bottomEnd = 14.dp),
-            color = LensColors.PrimaryContainer,
+            color = StitchPrimaryContainer,
             shadowElevation = 1.dp,
             modifier = Modifier.widthIn(max = 300.dp)
         ) {
@@ -742,7 +748,7 @@ private fun UserMessageBubbleStitch(message: ChatMessage) {
                 text = message.text,
                 fontFamily = GeistFontFamily,
                 fontSize = 14.sp,
-                color = LensColors.OnPrimary,
+                color = StitchOnPrimaryContainer,
                 lineHeight = 20.sp,
                 modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp)
             )
@@ -757,12 +763,12 @@ private fun UserMessageBubbleStitch(message: ChatMessage) {
                 text = timeStr,
                 fontFamily = GeistFontFamily,
                 fontSize = 10.sp,
-                color = LensColors.Secondary
+                color = StitchSecondary
             )
             Icon(
                 imageVector = Icons.Default.DoneAll,
                 contentDescription = null,
-                tint = LensColors.PrimaryContainer,
+                tint = StitchPrimaryContainer,
                 modifier = Modifier.size(13.dp)
             )
         }
@@ -810,7 +816,7 @@ private fun AssistantMessageCardStitch(
             .fillMaxWidth()
             .widthIn(max = 340.dp),
         shape = RoundedCornerShape(topStart = 2.dp, topEnd = 14.dp, bottomStart = 14.dp, bottomEnd = 14.dp),
-        color = LensColors.SurfaceContainerLowest,
+        color = StitchSurfaceContainerLowest,
         shadowElevation = 1.dp
     ) {
         Column(
@@ -831,13 +837,13 @@ private fun AssistantMessageCardStitch(
                         modifier = Modifier
                             .size(24.dp)
                             .clip(CircleShape)
-                            .background(LensColors.PrimaryFixed),
+                            .background(StitchPrimaryFixed),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             imageVector = personaIcon,
                             contentDescription = null,
-                            tint = LensColors.OnPrimaryFixed,
+                            tint = StitchOnPrimaryFixed,
                             modifier = Modifier.size(14.dp)
                         )
                     }
@@ -846,20 +852,20 @@ private fun AssistantMessageCardStitch(
                         fontFamily = HankenGroteskFontFamily,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 13.sp,
-                        color = LensColors.OnSurface
+                        color = StitchOnSurface
                     )
                 }
 
                 Surface(
                     shape = RoundedCornerShape(4.dp),
-                    color = LensColors.PrimaryFixed.copy(alpha = 0.35f)
+                    color = StitchPrimaryFixed.copy(alpha = 0.35f)
                 ) {
                     Text(
                         text = personaTag,
                         fontFamily = GeistFontFamily,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = LensColors.Primary,
+                        color = StitchPrimary,
                         modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                     )
                 }
@@ -870,7 +876,7 @@ private fun AssistantMessageCardStitch(
                 text = message.text,
                 fontFamily = GeistFontFamily,
                 fontSize = 13.sp,
-                color = LensColors.OnSurface,
+                color = StitchOnSurface,
                 lineHeight = 20.sp
             )
 
@@ -890,7 +896,7 @@ private fun AssistantMessageCardStitch(
                         Icon(
                             imageVector = Icons.Default.ContentCopy,
                             contentDescription = "Copy",
-                            tint = LensColors.Secondary,
+                            tint = StitchSecondary,
                             modifier = Modifier.size(16.dp)
                         )
                     }
@@ -901,7 +907,7 @@ private fun AssistantMessageCardStitch(
                         Icon(
                             imageVector = Icons.Default.ThumbUp,
                             contentDescription = "Helpful",
-                            tint = if (feedbackSelected == true) LensColors.PrimaryContainer else LensColors.Secondary,
+                            tint = if (feedbackSelected == true) StitchPrimaryContainer else StitchSecondary,
                             modifier = Modifier.size(16.dp)
                         )
                     }
@@ -912,7 +918,7 @@ private fun AssistantMessageCardStitch(
                         Icon(
                             imageVector = Icons.Default.ThumbDown,
                             contentDescription = "Not helpful",
-                            tint = if (feedbackSelected == false) LensColors.Error else LensColors.Secondary,
+                            tint = if (feedbackSelected == false) StitchError else StitchSecondary,
                             modifier = Modifier.size(16.dp)
                         )
                     }
@@ -949,7 +955,7 @@ private fun AssistantLoadingCardStitch(currentMode: String) {
             .fillMaxWidth()
             .widthIn(max = 340.dp),
         shape = RoundedCornerShape(topStart = 2.dp, topEnd = 14.dp, bottomStart = 14.dp, bottomEnd = 14.dp),
-        color = LensColors.SurfaceContainerLowest,
+        color = StitchSurfaceContainerLowest,
         shadowElevation = 1.dp
     ) {
         Row(
@@ -959,16 +965,16 @@ private fun AssistantLoadingCardStitch(currentMode: String) {
         ) {
             Surface(
                 shape = RoundedCornerShape(12.dp),
-                color = LensColors.SurfaceContainerLow
+                color = StitchSurfaceContainerLow
             ) {
                 Row(
                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp),
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Box(modifier = Modifier.size(6.dp).clip(CircleShape).background(LensColors.PrimaryContainer.copy(alpha = dot1)))
-                    Box(modifier = Modifier.size(6.dp).clip(CircleShape).background(LensColors.PrimaryContainer.copy(alpha = dot2)))
-                    Box(modifier = Modifier.size(6.dp).clip(CircleShape).background(LensColors.PrimaryContainer.copy(alpha = dot3)))
+                    Box(modifier = Modifier.size(6.dp).clip(CircleShape).background(StitchPrimaryContainer.copy(alpha = dot1)))
+                    Box(modifier = Modifier.size(6.dp).clip(CircleShape).background(StitchPrimaryContainer.copy(alpha = dot2)))
+                    Box(modifier = Modifier.size(6.dp).clip(CircleShape).background(StitchPrimaryContainer.copy(alpha = dot3)))
                 }
             }
 
@@ -978,13 +984,13 @@ private fun AssistantLoadingCardStitch(currentMode: String) {
                     fontFamily = GeistFontFamily,
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Medium,
-                    color = LensColors.OnSurface
+                    color = StitchOnSurface
                 )
                 Text(
                     text = "Synthesizing response for ${currentMode.replaceFirstChar { it.uppercase() }} Mode",
                     fontFamily = GeistFontFamily,
                     fontSize = 11.sp,
-                    color = LensColors.OnSurfaceVariant
+                    color = StitchOnSurfaceVariant
                 )
             }
         }
@@ -1002,7 +1008,7 @@ private fun ErrorRetryCardStitch(
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(10.dp),
-        color = LensColors.ErrorContainer,
+        color = StitchErrorContainer,
         shadowElevation = 1.dp
     ) {
         Column(
@@ -1016,7 +1022,7 @@ private fun ErrorRetryCardStitch(
                 Icon(
                     imageVector = Icons.Default.WifiOff,
                     contentDescription = null,
-                    tint = LensColors.Error,
+                    tint = StitchError,
                     modifier = Modifier.size(18.dp)
                 )
                 Text(
@@ -1024,7 +1030,7 @@ private fun ErrorRetryCardStitch(
                     fontFamily = HankenGroteskFontFamily,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 14.sp,
-                    color = LensColors.Error
+                    color = StitchError
                 )
             }
 
@@ -1032,15 +1038,15 @@ private fun ErrorRetryCardStitch(
                 text = errorMessage,
                 fontFamily = GeistFontFamily,
                 fontSize = 12.sp,
-                color = LensColors.OnSurface
+                color = StitchOnSurface
             )
 
             Button(
                 onClick = onRetry,
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = LensColors.PrimaryContainer,
-                    contentColor = LensColors.OnPrimary
+                    containerColor = StitchPrimaryContainer,
+                    contentColor = StitchOnPrimary
                 ),
                 contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
                 modifier = Modifier.heightIn(min = 48.dp)
@@ -1083,7 +1089,7 @@ private fun ChatInputBarStitch(
         modifier = Modifier
             .fillMaxWidth()
             .imePadding(),
-        color = LensColors.SurfaceContainerLowest,
+        color = StitchSurfaceContainerLowest,
         shadowElevation = 6.dp
     ) {
         Row(
@@ -1098,9 +1104,9 @@ private fun ChatInputBarStitch(
                 modifier = Modifier
                     .weight(1f)
                     .heightIn(min = 48.dp)
-                    .border(1.5.dp, ChatbotBlue, RoundedCornerShape(24.dp)),
+                    .border(1.5.dp, StitchPrimary, RoundedCornerShape(24.dp)),
                 shape = RoundedCornerShape(24.dp),
-                color = LensColors.SurfaceContainerLow
+                color = StitchSurfaceContainerLow
             ) {
                 Box(
                     modifier = Modifier
@@ -1117,13 +1123,13 @@ private fun ChatInputBarStitch(
                                 modifier = Modifier
                                     .size(6.dp)
                                     .clip(CircleShape)
-                                    .background(ChatbotBlue)
+                                    .background(StitchPrimary)
                             )
                             Text(
                                 text = if (isTamil) "உதவியாளர் பதிலளிக்கிறது..." else "Assistant is responding...",
                                 fontFamily = GeistFontFamily,
                                 fontSize = 13.sp,
-                                color = LensColors.OnSurfaceVariant
+                                color = StitchOnSurfaceVariant
                             )
                         }
                     } else {
@@ -1136,7 +1142,7 @@ private fun ChatInputBarStitch(
                                     text = if (isTamil) "ஆற்றல் பற்றி எதையும் கேளுங்கள்" else "Ask anything about energy",
                                     fontFamily = GeistFontFamily,
                                     fontSize = 13.sp,
-                                    color = LensColors.OutlineVariant,
+                                    color = StitchOutlineVariant,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
                                 )
@@ -1147,13 +1153,13 @@ private fun ChatInputBarStitch(
                                 textStyle = androidx.compose.ui.text.TextStyle(
                                     fontFamily = GeistFontFamily,
                                     fontSize = 13.sp,
-                                    color = LensColors.OnSurface
+                                    color = StitchOnSurface
                                 ),
                                 singleLine = true,
                                 maxLines = 1,
                                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
                                 keyboardActions = KeyboardActions(onSend = { onSend() }),
-                                cursorBrush = SolidColor(ChatbotBlue),
+                                cursorBrush = SolidColor(StitchPrimary),
                                 modifier = Modifier.fillMaxWidth()
                             )
                         }
@@ -1169,12 +1175,12 @@ private fun ChatInputBarStitch(
                 modifier = Modifier
                     .size(48.dp)
                     .clip(CircleShape)
-                    .background(if (canSend) ChatbotBlue else LensColors.SurfaceContainerHigh)
+                    .background(if (canSend) StitchPrimary else StitchSurfaceContainerHigh)
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.Send,
                     contentDescription = "Send",
-                    tint = if (canSend) Color.White else LensColors.Secondary.copy(alpha = 0.5f),
+                    tint = if (canSend) Color.White else StitchSecondary.copy(alpha = 0.5f),
                     modifier = Modifier.size(20.dp)
                 )
             }
@@ -1215,12 +1221,12 @@ private fun ChatHistoryView(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(LensColors.Surface)
+            .background(StitchSurface)
     ) {
         // Top Controls: Thread Count + New Chat Button
         Surface(
             modifier = Modifier.fillMaxWidth(),
-            color = LensColors.SurfaceContainerLow,
+            color = StitchSurfaceContainerLow,
             shadowElevation = 0.5.dp
         ) {
             Column(
@@ -1241,16 +1247,16 @@ private fun ChatHistoryView(
                             fontFamily = HankenGroteskFontFamily,
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 15.sp,
-                            color = LensColors.OnSurface
+                            color = StitchOnSurface
                         )
                         Surface(
                             shape = RoundedCornerShape(4.dp),
-                            color = LensColors.SurfaceContainer
+                            color = StitchSurfaceContainer
                         ) {
                             Text(
                                 text = "${uiState.sessions.size} THREADS",
-                                style = LensTypography.labelCaps,
-                                color = LensColors.OnSurfaceVariant,
+                                style = labelCaps,
+                                color = StitchOnSurfaceVariant,
                                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                             )
                         }
@@ -1260,8 +1266,8 @@ private fun ChatHistoryView(
                         onClick = onNewChat,
                         shape = RoundedCornerShape(6.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = LensColors.PrimaryContainer,
-                            contentColor = LensColors.OnPrimary
+                            containerColor = StitchPrimaryContainer,
+                            contentColor = StitchOnPrimary
                         ),
                         contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp),
                         modifier = Modifier.heightIn(min = 48.dp)
@@ -1282,7 +1288,7 @@ private fun ChatHistoryView(
                         .fillMaxWidth()
                         .heightIn(min = 48.dp),
                     shape = RoundedCornerShape(8.dp),
-                    color = LensColors.SurfaceContainerLowest,
+                    color = StitchSurfaceContainerLowest,
                     shadowElevation = 0.5.dp
                 ) {
                     Row(
@@ -1294,7 +1300,7 @@ private fun ChatHistoryView(
                         Icon(
                             imageVector = Icons.Default.Search,
                             contentDescription = "Search",
-                            tint = LensColors.OutlineVariant,
+                            tint = StitchOutlineVariant,
                             modifier = Modifier.size(18.dp)
                         )
                         TextField(
@@ -1305,7 +1311,7 @@ private fun ChatHistoryView(
                                     text = "Search conversations or topics...",
                                     fontFamily = GeistFontFamily,
                                     fontSize = 12.sp,
-                                    color = LensColors.OutlineVariant
+                                    color = StitchOutlineVariant
                                 )
                             },
                             singleLine = true,
@@ -1318,7 +1324,7 @@ private fun ChatHistoryView(
                             textStyle = androidx.compose.ui.text.TextStyle(
                                 fontFamily = GeistFontFamily,
                                 fontSize = 12.sp,
-                                color = LensColors.OnSurface
+                                color = StitchOnSurface
                             ),
                             modifier = Modifier.weight(1f)
                         )
@@ -1330,7 +1336,7 @@ private fun ChatHistoryView(
                                 Icon(
                                     imageVector = Icons.Default.Close,
                                     contentDescription = "Clear",
-                                    tint = LensColors.Secondary,
+                                    tint = StitchSecondary,
                                     modifier = Modifier.size(14.dp)
                                 )
                             }
@@ -1350,7 +1356,7 @@ private fun ChatHistoryView(
                         val isSelected = uiState.selectedHistoryCategory == catKey
                         Surface(
                             shape = RoundedCornerShape(12.dp),
-                            color = if (isSelected) LensColors.PrimaryContainer else LensColors.SurfaceContainer,
+                            color = if (isSelected) StitchPrimaryContainer else StitchSurfaceContainer,
                             modifier = Modifier.clickable { onCategoryChange(catKey) }
                         ) {
                             Text(
@@ -1358,7 +1364,7 @@ private fun ChatHistoryView(
                                 fontFamily = GeistFontFamily,
                                 fontSize = 11.sp,
                                 fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-                                color = if (isSelected) LensColors.OnPrimary else LensColors.OnSurfaceVariant,
+                                color = if (isSelected) StitchOnPrimary else StitchOnSurfaceVariant,
                                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
                             )
                         }
@@ -1382,7 +1388,7 @@ private fun ChatHistoryView(
                     Icon(
                         imageVector = Icons.Default.History,
                         contentDescription = null,
-                        tint = LensColors.OutlineVariant,
+                        tint = StitchOutlineVariant,
                         modifier = Modifier.size(48.dp)
                     )
                     Text(
@@ -1390,13 +1396,13 @@ private fun ChatHistoryView(
                         fontFamily = HankenGroteskFontFamily,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 15.sp,
-                        color = LensColors.OnSurface
+                        color = StitchOnSurface
                     )
                     Text(
                         text = "Send a question to start your first archived thread.",
                         fontFamily = GeistFontFamily,
                         fontSize = 12.sp,
-                        color = LensColors.OnSurfaceVariant,
+                        color = StitchOnSurfaceVariant,
                         textAlign = TextAlign.Center
                     )
                 }
@@ -1430,7 +1436,7 @@ private fun SessionCard(
             .fillMaxWidth()
             .clickable { onClick() },
         shape = RoundedCornerShape(10.dp),
-        color = LensColors.SurfaceContainerLowest,
+        color = StitchSurfaceContainerLowest,
         shadowElevation = 1.dp
     ) {
         Column(
@@ -1450,7 +1456,7 @@ private fun SessionCard(
                     Icon(
                         imageVector = Icons.Default.SolarPower,
                         contentDescription = null,
-                        tint = LensColors.PrimaryContainer,
+                        tint = StitchPrimaryContainer,
                         modifier = Modifier.size(16.dp)
                     )
                     Text(
@@ -1458,7 +1464,7 @@ private fun SessionCard(
                         fontFamily = HankenGroteskFontFamily,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 14.sp,
-                        color = LensColors.OnSurface,
+                        color = StitchOnSurface,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -1467,7 +1473,7 @@ private fun SessionCard(
                     text = timeStr,
                     fontFamily = GeistFontFamily,
                     fontSize = 10.sp,
-                    color = LensColors.Secondary
+                    color = StitchSecondary
                 )
             }
 
@@ -1475,7 +1481,7 @@ private fun SessionCard(
                 text = session.snippet,
                 fontFamily = GeistFontFamily,
                 fontSize = 12.sp,
-                color = LensColors.OnSurfaceVariant,
+                color = StitchOnSurfaceVariant,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 lineHeight = 16.sp
@@ -1491,27 +1497,27 @@ private fun SessionCard(
                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     Surface(
                         shape = RoundedCornerShape(4.dp),
-                        color = LensColors.SurfaceContainer
+                        color = StitchSurfaceContainer
                     ) {
                         Text(
                             text = "${session.mode.replaceFirstChar { it.uppercase() }} Mode • ${if (session.language == "ta") "தமிழ்" else "English"}",
                             fontFamily = GeistFontFamily,
                             fontSize = 10.sp,
-                            color = LensColors.OnSurfaceVariant,
+                            color = StitchOnSurfaceVariant,
                             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                         )
                     }
 
                     Surface(
                         shape = RoundedCornerShape(4.dp),
-                        color = LensColors.PrimaryFixed.copy(alpha = 0.25f)
+                        color = StitchPrimaryFixed.copy(alpha = 0.25f)
                     ) {
                         Text(
                             text = session.category.replaceFirstChar { it.uppercase() },
                             fontFamily = GeistFontFamily,
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Medium,
-                            color = LensColors.Primary,
+                            color = StitchPrimary,
                             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                         )
                     }
@@ -1520,7 +1526,7 @@ private fun SessionCard(
                 Icon(
                     imageVector = Icons.Default.ChevronRight,
                     contentDescription = null,
-                    tint = LensColors.OutlineVariant,
+                    tint = StitchOutlineVariant,
                     modifier = Modifier.size(18.dp)
                 )
             }

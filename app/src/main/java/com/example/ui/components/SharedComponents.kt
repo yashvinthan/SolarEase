@@ -26,50 +26,27 @@ import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
+@Deprecated(
+    message = "Use SolarEaseStepProgressBar instead",
+    replaceWith = ReplaceWith("SolarEaseStepProgressBar(currentStep = currentStep, totalSteps = totalSteps, modifier = modifier)")
+)
 @Composable
 fun StepProgress(
     currentStep: Int,
     totalSteps: Int,
     modifier: Modifier = Modifier
 ) {
-    Column(
+    SolarEaseStepProgressBar(
+        currentStep = currentStep,
+        totalSteps = totalSteps,
         modifier = modifier
-            .fillMaxWidth()
-            .clip(MaterialTheme.shapes.medium)
-            .padding(vertical = 12.dp)
-            .semantics(mergeDescendants = true) {
-                contentDescription = "Step $currentStep of $totalSteps"
-                stateDescription = "${((currentStep.toFloat() / totalSteps.toFloat()) * 100).toInt()} percent complete"
-            }
-    ) {
-        Surface(
-            modifier = Modifier.fillMaxWidth(),
-            color = MaterialTheme.colorScheme.primaryContainer,
-            shape = MaterialTheme.shapes.medium
-        ) {
-            Column(Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text("Your solar plan", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onPrimaryContainer, fontWeight = FontWeight.SemiBold)
-                    Text("$currentStep / $totalSteps", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
-                }
-                Spacer(Modifier.height(8.dp))
-                LinearProgressIndicator(
-                    progress = { currentStep.toFloat() / totalSteps.toFloat() },
-                    modifier = Modifier.fillMaxWidth().height(6.dp),
-                    color = MaterialTheme.colorScheme.primary,
-                    trackColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.14f),
-                    strokeCap = androidx.compose.ui.graphics.StrokeCap.Round
-                )
-            }
-        }
-    }
+    )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@Deprecated(
+    message = "Use SolarEaseSelectableCard instead",
+    replaceWith = ReplaceWith("SolarEaseSelectableCard(selected = selected, onClick = onClick, title = title, subtitle = description, icon = icon, modifier = modifier)")
+)
 @Composable
 fun SelectableCard(
     selected: Boolean,
@@ -79,76 +56,14 @@ fun SelectableCard(
     icon: ImageVector? = null,
     modifier: Modifier = Modifier
 ) {
-    val containerColor by animateColorAsState(
-        targetValue = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface,
-        label = "containerColor"
-    )
-    val contentColor by animateColorAsState(
-        targetValue = if (selected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant,
-        label = "contentColor"
-    )
-    val borderColor by animateColorAsState(
-        targetValue = if (selected) MaterialTheme.colorScheme.primary else androidx.compose.ui.graphics.Color.Transparent,
-        label = "borderColor"
-    )
-
-    Card(
+    SolarEaseSelectableCard(
+        selected = selected,
         onClick = onClick,
+        title = title,
+        subtitle = description,
+        icon = icon,
         modifier = modifier
-            .fillMaxWidth()
-            .heightIn(min = 56.dp)
-            .padding(vertical = 8.dp)
-            .semantics(mergeDescendants = true) {
-                role = Role.RadioButton
-                this.selected = selected
-                stateDescription = if (selected) "Selected" else "Not selected"
-            },
-        shape = MaterialTheme.shapes.medium,
-        colors = CardDefaults.cardColors(
-            containerColor = containerColor,
-            contentColor = contentColor
-        ),
-        border = BorderStroke(if (selected) 2.dp else 1.dp, if (selected) borderColor else MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)),
-        elevation = CardDefaults.cardElevation(defaultElevation = if (selected) 1.dp else 0.dp)
-    ) {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            if (icon != null) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = null,
-                    modifier = Modifier.size(32.dp),
-                    tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-            }
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = if (selected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface
-                )
-                if (description != null) {
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = description,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = contentColor
-                    )
-                }
-            }
-            RadioButton(
-                selected = selected,
-                onClick = null,
-                colors = RadioButtonDefaults.colors(
-                    selectedColor = MaterialTheme.colorScheme.primary
-                )
-            )
-        }
-    }
+    )
 }
 
 /**

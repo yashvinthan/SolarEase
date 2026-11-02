@@ -19,7 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.ui.components.StepProgress
+import com.example.ui.components.SolarEaseStepProgressBar
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -33,6 +33,7 @@ fun CostEstimationRoute(
     customerType: String,
     onNavigateNext: (com.example.feature.assessment.util.SolarEstimateResult) -> Unit,
     onNavigateBack: () -> Unit,
+    onNavigateToMarketplace: (() -> Unit)? = null,
     viewModel: EstimateViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -66,7 +67,13 @@ fun CostEstimationRoute(
                 .padding(horizontal = 20.dp, vertical = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            StepProgress(currentStep = 10, totalSteps = 11)
+            SolarEaseStepProgressBar(
+                currentStep = 9,
+                totalSteps = 12,
+                stepTitle = "Cost Estimation Breakdown",
+                category = "Subsidy & Financials",
+                onBack = onNavigateBack
+            )
             
             Spacer(modifier = Modifier.height(24.dp))
             
@@ -213,6 +220,21 @@ fun CostEstimationRoute(
                 enabled = uiState.result?.areaStatus != "Insufficient Area"
             ) {
                 Text("Proceed to Payment", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+            }
+
+            if (onNavigateToMarketplace != null) {
+                Spacer(modifier = Modifier.height(10.dp))
+
+                OutlinedButton(
+                    onClick = onNavigateToMarketplace,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(52.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
+                ) {
+                    Text("Explore Local Contractors", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
+                }
             }
 
             Spacer(modifier = Modifier.height(8.dp))

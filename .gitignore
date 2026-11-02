@@ -88,6 +88,7 @@ lib/
 lancedb/
 *.lance/
 *.zip
+*.db
 
 # Large binary documentation & datasets (belong in Cloud Storage / Team Drive)
 /*.pdf

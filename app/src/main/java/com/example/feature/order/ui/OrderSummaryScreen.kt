@@ -38,6 +38,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import com.example.feature.order.util.ReceiptPdfGenerator
+import com.example.ui.components.SolarEaseStepProgressBar
 
 @Composable
 fun OrderSummaryRoute(
@@ -50,6 +51,7 @@ fun OrderSummaryRoute(
     subsidyAmount: Double,
     netPayable: Double,
     onNavigateNext: () -> Unit,
+    onNavigateBack: (() -> Unit)? = null,
     viewModel: OrderConfirmationViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -124,7 +126,15 @@ fun OrderSummaryRoute(
                 .verticalScroll(androidx.compose.foundation.rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(32.dp))
+            SolarEaseStepProgressBar(
+                currentStep = 11,
+                totalSteps = 12,
+                stepTitle = "Order Summary & Review",
+                category = "Order Confirmation",
+                onBack = onNavigateBack
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
             
             Box(
                 modifier = Modifier
